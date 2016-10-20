@@ -5,7 +5,11 @@ Create A Thing
 {% block content %}
 <form id="createthingform" action ="{{url_for('submittedThing')}}" method = "POST">
   Thing Name <br>
-  <input type="text" name="thingname">
+  <input type="text" name = "thingname">
+  Thing Attribute Name <br>
+  <input type="text" name = "thingattributename">
+  Thing Attribute Type <br> 
+  <input type="text" name = "thingattributetypeid">
   <button type="submit">Submit</button>
 </form>
 

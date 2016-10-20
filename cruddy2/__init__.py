@@ -2,8 +2,7 @@ import os
 import psycopg2
 import urlparse
 from flask import Flask, render_template, request, redirect, url_for
-from model.User import User
-from model.Thing import Thing
+from model.Model import *
 from model.DBSessionManager import DBSessionManager
 from api import *
 
@@ -19,14 +18,15 @@ def index():
 
 @app.route('/creatething')
 def createThing():
-
     return render_template('creatething.html')
 
 @app.route('/submittedthing', methods=['POST'])
 def submittedThing():
-    name=request.form['thingname']
-    api.createThing(name)
-    return name
+    thingname=request.form['thingname']
+    thingattributename=request.form['thingattributename']
+    thingattributetypeid = request.form['thingattributetypeid']
+    api.createThing(thingname, [{'name': thingattributename, 'typeid': thingattributetypeid}])
+    return thingname
 
 
 @app.route('/databaseurl')

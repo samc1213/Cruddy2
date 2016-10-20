@@ -32,10 +32,10 @@ class DBSessionManager():
 
         return Session()
 
-    def CommitToSession(self, *args):
+    def CommitToSession(self, listofargs):
         session = self.GetSession()
 
-        for arg in args:
+        for arg in listofargs:
             session.add(arg)
 
         session.commit()

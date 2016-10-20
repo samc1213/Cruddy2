@@ -3,9 +3,10 @@
 Create A Thing
 {% endblock %}
 {% block content %}
-<form id="createthingform">
+<form id="createthingform" action ="{{url_for('submittedThing')}}" method = "POST">
   Thing Name <br>
   <input type="text" name="thingname">
   <button type="submit">Submit</button>
 </form>
+
 {% endblock %}

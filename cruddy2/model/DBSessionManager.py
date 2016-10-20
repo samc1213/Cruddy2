@@ -1,7 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
 import urlparse
 import os
+
+
+Base = declarative_base()
 
 
 class DBSessionManager():
@@ -16,7 +21,7 @@ class DBSessionManager():
         host = url.hostname
         port = url.port
 
-        print url
+
 
         return create_engine(
             'postgresql://{0}:{1}@{2}:{3}/{4}'.format(user, password, host, port, database))

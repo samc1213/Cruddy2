@@ -73,8 +73,8 @@ class WebApp():
     def __init__(self, administrator):
         self.Administrator = administrator
 
-class Administrator(User):
-    # Sam
-
-    def __init__(self):
+# class Administrator(User):
+#     # Sam
+#
+#     def __init__(self):
 # Base.metadata.create_all()

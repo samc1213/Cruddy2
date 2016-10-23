@@ -76,4 +76,5 @@ class WebApp():
 class Administrator(User):
     # Sam
 
+    def __init__(self):
 # Base.metadata.create_all()

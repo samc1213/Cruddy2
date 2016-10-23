@@ -13,7 +13,7 @@ api = api()
 def index():
     sessionManager = DBSessionManager()
     user = User('Sam', 'Cohen')
-    sessionManager.CommitToSession(user)
+    sessionManager.CommitToSession([user])
     return render_template('index.html')
 
 @app.route('/creatething')

@@ -51,7 +51,7 @@ class ThingAttribute(Base):
 
     def __init__(self, name, attributetype):
         self.thingattributename = name
-        self.thingattributetype = attributetype 
+        self.thingattributetype = attributetype
 
 class ThingInstance():
     # Johnny's 2002 Toyota Corolla
@@ -67,5 +67,13 @@ class ThingInstanceAttribute():
         self.ThingAttribute = thingAttribute
         self.Value = value
 
+class WebApp():
+    # Craigslist for Cars
+
+    def __init__(self, administrator):
+        self.Administrator = administrator
+
+class Administrator(User):
+    # Sam
 
 # Base.metadata.create_all()

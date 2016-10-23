@@ -1,4 +1,5 @@
 import os
+import logging
 import psycopg2
 import urlparse
 from flask import Flask, render_template, request, redirect, url_for
@@ -22,11 +23,13 @@ def createThing():
 
 @app.route('/submittedthing', methods=['POST'])
 def submittedThing():
-    thingname=request.form['thingname']
-    thingattributename=request.form['thingattributename']
-    thingattributetypeid = request.form['thingattributetypeid']
-    api.createThing(thingname, [{'name': thingattributename, 'typeid': thingattributetypeid}])
-    return thingname
+    thingName=request.form['thingname']
+    thingAttributeNames = request.form.getlist('thingattributename[]')
+    thingAttributeTypeIds = request.form.getlist('thingattributetypeid[]')
+    assert len(thingAttributeNames) == len(thingAttributeTypeIds)
+    app.logger.info(thingAttributeNames)
+    api.createThing(thingName, [{'name': thingAttributeNames[i], 'typeid': thingAttributeTypeIds[i]} for i in range(len(thingAttributeNames))])
+    return thingName
 
 
 @app.route('/databaseurl')

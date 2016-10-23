@@ -11,6 +11,7 @@ function addNewThingAttrGroup() {
   $newThingAttrGroup.attr('number', newThingAttrGroupNumber);
   $newThingAttrGroup.children().each(function() {
     $(this).attr('number', newThingAttrGroupNumber);
+    $(this).val('');
   });
   $newThingAttrGroup.insertAfter(".thingattr[number='" + thingAttrGroupCount +"']");
 

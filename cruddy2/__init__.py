@@ -5,6 +5,7 @@ import urlparse
 from flask import Flask, render_template, request, redirect, url_for
 from model.Model import *
 from model.DBSessionManager import DBSessionManager
+from model.Cruddy2Enums import ThingAttributeType
 from api import *
 
 app = Flask(__name__)
@@ -19,7 +20,7 @@ def index():
 
 @app.route('/creatething')
 def createThing():
-    return render_template('creatething.html')
+    return render_template('creatething.html', thingAttributeTypes=ThingAttributeType)
 
 @app.route('/submittedthing', methods=['POST'])
 def submittedThing():

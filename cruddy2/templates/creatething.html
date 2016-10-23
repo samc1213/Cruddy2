@@ -1,16 +1,27 @@
 {% extends "base.html" %}
+
 {% block title %}
 Create A Thing
 {% endblock %}
+
+{% block scripts %}
+<script src="{{url_for('static', filename='creatething.js')}}" type="text/javascript"></script>
+{{super()}}
+{% endblock %}
+
 {% block content %}
 <form id="createthingform" action ="{{url_for('submittedThing')}}" method = "POST">
-  Thing Name <br>
-  <input type="text" name = "thingname">
-  Thing Attribute Name <br>
-  <input type="text" name = "thingattributename">
-  Thing Attribute Type <br> 
-  <input type="text" name = "thingattributetypeid">
+  Thing Name:
+  <input name="thingname" type="text"> <br>
+
+  <fieldset id="thingattr1">
+    Thing Attribute Name:
+    <input name="thingattributename1" type="text"> <br>
+    Thing Attribute Type:
+    <input name="thingattributetypeid1" type="text"> <br>
+
+  </fieldset>
+  <button id="newThingAttrGroupBtn" type="button">new attribute!</button>
   <button type="submit">Submit</button>
 </form>
-
 {% endblock %}

@@ -4,26 +4,29 @@ from model.Model import *
 
 class api:
 
-	def createThing(self, thingname, thingattributes):
-	    thing = Thing(thingname)
-	    tattrs = []
-	    for thingattribute in thingattributes:
-	    	tattr = ThingAttribute(thingattribute['name'], thingattribute['typeid'])
-	    	tattr.thing = thing
-	    	tattrs.append(tattr)
-	    tattrs.append(thing)
-	    sessionManager = DBSessionManager()
-	    sessionManager.CommitToSession(tattrs)
+    def createThing(self, thingname, thingattributes):
+        newThing = Thing(thingname)
+        tattrs = []
+        for thingattribute in thingattributes:
+            tattr = ThingAttribute(
+                thingattribute['name'], thingattribute['typeid'])
+            tattr.thing = thing
+            tattrs.append(tattr)
+        tattrs.append(newThing)
 
+        sessionManager = DBSessionManager()
+        sessionManager.CommitToSession(tattrs)
 
+    def createThingInstance(self, thingInstanceInfo, thingId):
+        newThingInstance = ThingInstance(thingInstanceInfo)
+        newThingInstance.thingid = thingId
 
+        sessionManager = DBSessionManager()
+        sessionManager.CommitToSession([newThingInstance])
 
-
-
-
-	# def createThingAttribute(self, name, attributetype):
-	#     sessionManager = DBSessionManager()
-	#     thingattribute = ThingAttribute(name, attributetype)
-	#     # return thing.thingname
-	#     # return str(thing.UserId)
-	#     sessionManager.CommitToSession(thingattribute)
+    # def createThingAttribute(self, name, attributetype):
+    #     sessionManager = DBSessionManager()
+    #     thingattribute = ThingAttribute(name, attributetype)
+    #     # return thing.thingname
+    #     # return str(thing.UserId)
+    #     sessionManager.CommitToSession(thingattribute)

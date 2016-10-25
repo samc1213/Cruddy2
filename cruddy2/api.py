@@ -4,18 +4,20 @@ from model.Model import *
 
 class api:
 
-    def createThing(self, thingname, thingattributes):
-        newThing = Thing(thingname)
-        tattrs = []
-        for thingattribute in thingattributes:
+    def createThing(self, thingName, thingAttributes):
+        newThing = Thing(thingName)
+        objectsToCommitToDB = []
+
+        for thingAttribute in thingAttributes:
             tattr = ThingAttribute(
-                thingattribute['name'], thingattribute['typeid'])
-            tattr.thing = thing
-            tattrs.append(tattr)
-        tattrs.append(newThing)
+                thingAttribute['name'], thingAttribute['typeid'])
+            tattr.thing = newThing
+            objectsToCommitToDB.append(tattr)
+
+        objectsToCommitToDB.append(newThing)
 
         sessionManager = DBSessionManager()
-        sessionManager.CommitToSession(tattrs)
+        sessionManager.CommitToSession(objectsToCommitToDB)
 
     def createThingInstance(self, thingInstanceInfo, thingId):
         newThingInstance = ThingInstance(thingInstanceInfo)
@@ -24,6 +26,22 @@ class api:
         sessionManager = DBSessionManager()
         sessionManager.CommitToSession([newThingInstance])
 
+    def getThing(self, thingId):
+        sessionManager = DBSessionManager()
+        session = sessionManager.GetSession()
+        thing = session.query(Thing).get(thingId)
+
+        return thing
+
+    def getThingInstances(self, thing):
+        return thing.thinginstances
+
+    def getThingAttributeIdToNameDict(self, thing):
+        idToNameDict = {}
+        for thingAttribute in thing.thingattributes:
+            idToNameDict[thingAttribute.thingattributeid] = thingAttribute.thingattributename
+
+        return idToNameDict
     # def createThingAttribute(self, name, attributetype):
     #     sessionManager = DBSessionManager()
     #     thingattribute = ThingAttribute(name, attributetype)

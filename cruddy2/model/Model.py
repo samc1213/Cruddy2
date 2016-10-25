@@ -34,6 +34,7 @@ class Thing(Base):
     # user = relationship("User", back_populates="things")
     user = relationship('User', back_populates='things')
     thingattributes = relationship('ThingAttribute', back_populates="thing")
+    thinginstances = relationship('ThingInstance', back_populates='thing')
 
     def __init__(self, name):
         self.thingname = name

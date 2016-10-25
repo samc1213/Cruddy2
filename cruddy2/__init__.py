@@ -31,7 +31,10 @@ def submittedThing():
 
     assert len(thingAttributeNames) == len(thingAttributeTypeIds)
 
-    api.createThing(thingName, [{'name': thingAttributeNames[i], 'typeid': thingAttributeTypeIds[i]} for i in range(len(thingAttributeNames))])
+    api.createThing(thingName,
+        [{'name': thingAttributeNames[i],
+        'typeid': thingAttributeTypeIds[i]}
+            for i in range(len(thingAttributeNames))])
     return thingName
 
 @app.route('/createthinginstance/<thingid>')
@@ -57,8 +60,22 @@ def submittedThingInstance():
 
     return str(thingId)
 
-@app.route('/databaseurl')
-def dburl():
-    print 'ah!'
+@app.route('/viewthinginstancetable/<thingId>')
+def viewThingInstanceTable(thingId):
+    thing = api.getThing(thingId)
+    thingInstances = api.getThingInstances(thing)
+    thingInstanceInfos = [json.loads(ti.thinginstanceinfo) for ti in thingInstances]
+    thingAttributesConversionDict = api.getThingAttributeIdToNameDict(thing)
 
-    return 'dburl'
+    print thingAttributesConversionDict
+
+    thingInstancesAttributeNamesToAttributeValues = []
+
+    for tiInfo in thingInstanceInfos:
+        for thingAttributeId, thingInstanceAttribute in tiInfo.iteritems():
+            thingInstancesAttributeNamesToAttributeValues.append(
+                {thingAttributesConversionDict[int(thingAttributeId)]: thingInstanceAttribute})
+
+    return render_template('thinginstancetable.html',
+        thingName = thing.thingname,
+        thingInstances = thingInstancesAttributeNamesToAttributeValues)

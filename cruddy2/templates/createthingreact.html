@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block title %} Create A Thing {% endblock %} {% block scripts %}
+<script src="{{url_for('static', filename='createthingreact.js')}}" type="text/jsx"></script>
+{{super()}} {% endblock %} {% block content %}
+
+<div style = "display:inline-block; width:50%">
+  <div id="container">
+  </div>
+
+</div>
+<div style = "display:inline-block; width:50%">
+</div>
+{% endblock %}

@@ -6,7 +6,7 @@ import json
 from flask import Flask, render_template, request, redirect, url_for
 from model.Model import *
 from model.DBSessionManager import DBSessionManager
-from model.Cruddy2Enums import ThingAttributeType
+from model.Cruddy2Enums import ThingAttributeTypes
 from api import *
 
 app = Flask(__name__)
@@ -19,9 +19,35 @@ def index():
     sessionManager.CommitToSession([user])
     return render_template('index.html')
 
+@app.route('/getthingattributetypes')
+def getthingattributetypes():
+    print "GETTHINGS"
+    return json.dumps(ThingAttributeTypes)
+
 @app.route('/creatething')
 def createThing():
-    return render_template('creatething.html', thingAttributeTypes=ThingAttributeType)
+    return render_template('createthingreact.html', thingAttributeTypes=ThingAttributeTypes)
+
+@app.route('/postnewthing', methods=['POST'])
+def postNewThing():
+    form = request.form
+    print form
+
+    thingName=request.form['thingname']
+    thingAttributeNames = request.form.getlist('thingattributename[]')
+    thingAttributeTypeIds = request.form.getlist('thingattributetypeid[]')
+
+    assert len(thingAttributeNames) == len(thingAttributeTypeIds)
+
+    try:
+        api.createThing(thingName,
+            [{'name': thingAttributeNames[i],
+            'typeid': thingAttributeTypeIds[i]}
+                for i in range(len(thingAttributeNames))])
+    except Exception as e:
+        print "EXCEPTION"
+
+    return thingName + 'po'
 
 @app.route('/submittedthing', methods=['POST'])
 def submittedThing():

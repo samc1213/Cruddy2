@@ -14,10 +14,7 @@ api = api()
 
 @app.route('/')
 def index():
-    sessionManager = DBSessionManager()
-    user = User('Sam', 'Cohen')
-    sessionManager.CommitToSession([user])
-    return render_template('index.html')
+    return 'hi'
 
 @app.route('/getthingattributetypes')
 def getthingattributetypes():

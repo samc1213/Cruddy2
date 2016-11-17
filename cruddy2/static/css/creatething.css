@@ -1,0 +1,33 @@
+.container {
+  display:inline-block;
+  vertical-align: top;
+  width:50%;
+  padding-top:30px;
+  padding-bottom:30px;
+}
+
+.rightcontainer {
+  display:inline-block;
+  vertical-align: top;
+  width:60%;
+}
+
+.leftcontainer{
+  display: inline-block;
+  vertical-align: top;
+  width:40%;
+}
+
+.square {
+  width: 150px;
+  height: 150px;
+  background: red;
+  margin: 0 auto;
+
+}
+
+.incard{
+  margin: 0 auto;
+  text-align: center;
+  vertical-align: middle;
+}

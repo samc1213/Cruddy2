@@ -1,6 +1,3 @@
-from enum import Enum
+from collections import OrderedDict
 
-
-class ThingAttributeType(Enum):
-    string = 0
-    integer = 1
+ThingAttributeTypes = OrderedDict({'Text': 1, 'Integer Number': 2})

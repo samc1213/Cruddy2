@@ -4,26 +4,47 @@ from model.Model import *
 
 class api:
 
-	def createThing(self, thingname, thingattributes):
-	    thing = Thing(thingname)
-	    tattrs = []
-	    for thingattribute in thingattributes:
-	    	tattr = ThingAttribute(thingattribute['name'], thingattribute['typeid'])
-	    	tattr.thing = thing
-	    	tattrs.append(tattr)
-	    tattrs.append(thing)
-	    sessionManager = DBSessionManager()
-	    sessionManager.CommitToSession(tattrs)
+    def createThing(self, thingName, thingAttributes):
+        newThing = Thing(thingName)
+        objectsToCommitToDB = []
 
+        for thingAttribute in thingAttributes:
+            tattr = ThingAttribute(
+                thingAttribute['name'], thingAttribute['typeid'])
+            tattr.thing = newThing
+            objectsToCommitToDB.append(tattr)
 
+        objectsToCommitToDB.append(newThing)
 
+        sessionManager = DBSessionManager()
+        sessionManager.CommitToSession(objectsToCommitToDB)
 
+    def createThingInstance(self, thingInstanceInfo, thingId):
+        newThingInstance = ThingInstance(thingInstanceInfo)
+        newThingInstance.thingid = thingId
 
+        sessionManager = DBSessionManager()
+        sessionManager.CommitToSession([newThingInstance])
 
+    def getThing(self, thingId):
+        sessionManager = DBSessionManager()
+        session = sessionManager.GetSession()
+        thing = session.query(Thing).get(thingId)
 
-	# def createThingAttribute(self, name, attributetype):
-	#     sessionManager = DBSessionManager()
-	#     thingattribute = ThingAttribute(name, attributetype)
-	#     # return thing.thingname
-	#     # return str(thing.UserId)
-	#     sessionManager.CommitToSession(thingattribute)
+        return thing
+
+    def getThingInstances(self, thing):
+        return thing.thinginstances
+
+    def getThingAttributeIdToNameDict(self, thing):
+        idToNameDict = {}
+        for thingAttribute in thing.thingattributes:
+            idToNameDict[thingAttribute.thingattributeid] = thingAttribute.thingattributename
+
+        return idToNameDict
+    # def createThingAttribute(self, name, attributetype):
+    #     sessionManager = DBSessionManager()
+    #     thingattribute = ThingAttribute(name, attributetype)
+    #     # return thing.thingname
+    #     # return str(thing.UserId)
+    #     sessionManager.CommitToSession(thingattribute)

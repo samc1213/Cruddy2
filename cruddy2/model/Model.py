@@ -34,6 +34,7 @@ class Thing(Base):
     # user = relationship("User", back_populates="things")
     user = relationship('User', back_populates='things')
     thingattributes = relationship('ThingAttribute', back_populates="thing")
+    thinginstances = relationship('ThingInstance', back_populates='thing')
 
     def __init__(self, name):
         self.thingname = name
@@ -53,11 +54,17 @@ class ThingAttribute(Base):
         self.thingattributename = name
         self.thingattributetype = attributetype
 
-class ThingInstance():
+class ThingInstance(Base):
     # Johnny's 2002 Toyota Corolla
+    __tablename__ = 'thinginstances'
 
-    def __init__(self, thing):
-        self.Thing = thing
+    thinginstanceid = Column(Integer, Sequence('thinginstances_thinginstanceid_seq'), primary_key=True)
+    thinginstanceinfo = Column(String)
+    thingid = Column(Integer, ForeignKey('things.thingid'))
+    thing = relationship('Thing')
+
+    def __init__(self, thinginstanceinfo):
+        self.thinginstanceinfo = thinginstanceinfo
 
 
 class ThingInstanceAttribute():

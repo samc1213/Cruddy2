@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block title %} Create A ThingInstance {% endblock %}
+{% block scripts %}
+{{super()}}
+{% endblock %}
+
+{% block content %}
+<form id="createthinginstanceform" action="{{url_for('submittedThingInstance')}}" method="POST">
+  Create a new {{thingName}} <br>
+  <input name="thingid" value="{{thingId}}" type="hidden">
+  {% for thingAttribute in thingAttributes%}
+    {{thingAttribute.thingattributename}}:
+    <input name="thingattributeid.{{thingAttribute.thingattributeid}}"> <br>
+  {% endfor %}
+  <button type="submit">Submit</button>
+</form>
+{% endblock %}

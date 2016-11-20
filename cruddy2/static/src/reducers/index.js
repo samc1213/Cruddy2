@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form'
 import todos from './todos'
 import visibilityFilter from './visibilityFilter'
-import thingAttributes from './thingAttributes'
+
 
 const todoApp = combineReducers({
   todos,
   visibilityFilter,
-  thingAttributes
+  form: formReducer
 })
 
 export default todoApp

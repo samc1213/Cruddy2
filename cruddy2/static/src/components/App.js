@@ -1,11 +1,15 @@
 import React from 'react'
 import Footer from './Footer'
-import FieldArraysForm from '../components/ThingAttributeFieldset'
+import NewThingForm from '../components/NewThingForm'
 
-const App = () => (
-  <div>
-    <FieldArraysForm />
-  </div>
-)
+
+class App extends React.Component {
+  render(){
+      return(
+      <div>
+        <NewThingForm  />
+      </div>);
+    }
+  }
 
 export default App

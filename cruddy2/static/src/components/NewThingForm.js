@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, FieldArray } from 'redux-form';
+import ThingAttributeTypeOptions from '../containers/ThingAttributeTypeOptions'
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => (
+const renderTextField = ({ input, label, type, meta: { touched, error } }) => (
   <div>
     <label>{label}</label>
     <div>
@@ -27,14 +28,14 @@ const renderThingAttributes = ({ fields, meta: { touched, error } }) => (
         </button>
         <h4>ThingAttribute #{index + 1}</h4>
         <Field
-          name={`${thingAttribute}.thingattributename`}
+          name="thingattributename[]"
           type="text"
-          component={renderField}
+          component={renderTextField}
           label="ThingAttribute Name"/>
         <Field
-          name={`${thingAttribute}.thingattributetype`}
+          name="thingattributetypeid[]"
           type="text"
-          component={renderField}
+          component = {ThingAttributeTypeOptions}
           label="ThingAttribute Type"/>
       </li>
     )}
@@ -42,16 +43,22 @@ const renderThingAttributes = ({ fields, meta: { touched, error } }) => (
 )
 
 
-const FieldArraysForm = ({ handleSubmit, pristine, reset, submitting }) => {
+
+
+const NewThingForm = ({ handleSubmit, pristine, reset, submitting }) => {
   return (
-    <form onSubmit={handleSubmit}>
-      <Field name="thingname" type="text" component={renderField} label="Thing Name"/>
+    <form action="/postnewthing" method="post">
+      <Field name="thingname" type="text" component={renderTextField} label="Thing Name"/>
       <FieldArray name="members" component={renderThingAttributes}/>
+      <button type="submit" > Submit </button>
     </form>
    )
  }
 
 
+
+
+
 export default reduxForm({
    form: 'fieldArrays'     // a unique identifier for this form
- })(FieldArraysForm)
+ })(NewThingForm)

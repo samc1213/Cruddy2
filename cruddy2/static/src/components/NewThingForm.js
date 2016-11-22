@@ -12,7 +12,18 @@ const renderTextField = ({ input, label, type, meta: { touched, error } }) => (
   </div>
 )
 
-const renderThingAttributes = ({ fields, meta: { touched, error } }) => (
+function getOptions(thingAttributeTypes) {
+  var options = []
+  console.log(thingAttributeTypes);
+  for (var key in thingAttributeTypes) {
+    console.log(key);
+    console.log(thingAttributeTypes[key]);
+    options.push(<option value={thingAttributeTypes[key]}>{key}</option>)
+  }
+  console.log(options);
+}
+
+const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, error } }) => (
   <ul>
     <li>
       <button type="button" onClick={() => fields.push({})}>Add Thing Attribute</button>
@@ -28,37 +39,35 @@ const renderThingAttributes = ({ fields, meta: { touched, error } }) => (
         </button>
         <h4>ThingAttribute #{index + 1}</h4>
         <Field
-          name="thingattributename[]"
+          name={`${thingAttribute}.thingattributename`}
           type="text"
           component={renderTextField}
           label="ThingAttribute Name"/>
         <Field
-          name="thingattributetypeid[]"
+          name={`${thingAttribute}.thingattributetypeid`}
           type="text"
-          component = {ThingAttributeTypeOptions}
-          label="ThingAttribute Type"/>
+          component ="select"
+          label="ThingAttribute Type">
+          {getOptions(thingAttributeTypes)}
+        </Field>
       </li>
+
     )}
   </ul>
 )
 
 
-
-
-const NewThingForm = ({ handleSubmit, pristine, reset, submitting }) => {
+const NewThingForm = ({ handleSubmit, pristine, reset, submitting, thingAttributeTypes }) => {
   return (
     <form action="/postnewthing" method="post">
       <Field name="thingname" type="text" component={renderTextField} label="Thing Name"/>
-      <FieldArray name="members" component={renderThingAttributes}/>
+      <FieldArray name="members" component={renderThingAttributes} thingAttributeTypes={thingAttributeTypes}/>
       <button type="submit" > Submit </button>
     </form>
    )
  }
 
 
-
-
-
 export default reduxForm({
-   form: 'fieldArrays'     // a unique identifier for this form
+   form: 'newThingForm'     // a unique identifier for this form
  })(NewThingForm)

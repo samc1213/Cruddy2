@@ -8,14 +8,13 @@ const ThingAttributeTypes = ({ thingAttributeTypes, label }) => {
   }
 
   return (
-    <div>
-      <label>{label}</label>
-      <div>
-        <select>
-          {options}
-        </select>
-      </div>
-    </div>
+    <Field
+      name={`${thingAttribute}.thingattributetypeid`}
+      type="text"
+      component ="select"
+      label="ThingAttribute Type">
+      {getOptions(thingAttributeTypes)}
+    </Field>
   )
 }
 

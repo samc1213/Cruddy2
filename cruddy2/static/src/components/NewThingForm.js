@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, FieldArray } from 'redux-form';
-import ThingAttributeTypeOptions from '../containers/ThingAttributeTypeOptions'
 
 const renderTextField = ({ input, label, type, meta: { touched, error } }) => (
   <div>
@@ -11,17 +10,6 @@ const renderTextField = ({ input, label, type, meta: { touched, error } }) => (
     </div>
   </div>
 )
-
-function getOptions(thingAttributeTypes) {
-  var options = []
-  console.log(thingAttributeTypes);
-  for (var key in thingAttributeTypes) {
-    console.log(key);
-    console.log(thingAttributeTypes[key]);
-    options.push(<option value={thingAttributeTypes[key]}>{key}</option>)
-  }
-  console.log(options);
-}
 
 const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, error } }) => (
   <ul>
@@ -48,7 +36,9 @@ const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, e
           type="text"
           component ="select"
           label="ThingAttribute Type">
-          {getOptions(thingAttributeTypes)}
+          {Object.keys(thingAttributeTypes).map((key, index) =>
+            <option value={thingAttributeTypes[key]} key={index}>{key}</option>
+          )}
         </Field>
       </li>
 

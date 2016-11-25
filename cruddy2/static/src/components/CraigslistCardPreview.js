@@ -1,18 +1,19 @@
 import React, { PropTypes } from 'react'
 
 
-const CraigslistCardPreview = ({ thingAttributes }) => (
-  <div className="square">
-  {thingAttributes.map((thingAttribute, index) =>
-    <div className="incard" key={index}>
-      {thingAttribute.thingattributename}
+const CraigslistCardPreview = ({ thingAttributes }) => {
+  var rows = []
+  if (thingAttributes != null) {
+    rows = thingAttributes.map((thingAttribute, index) =>
+      <div className="incard" key={index}>
+        {thingAttribute.thingattributename}
+      </div>)
+  }
+  return (
+    <div className="square">
+      {rows}
     </div>
-  )}
-  </div>
-)
-
-CraigslistCardPreview.propTypes = {
-  thingAttributes: PropTypes.array.isRequired,
+  )
 }
 
 export default CraigslistCardPreview

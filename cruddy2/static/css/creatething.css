@@ -31,3 +31,10 @@
   text-align: center;
   vertical-align: middle;
 }
+
+.thingattributeformgroup {
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+}

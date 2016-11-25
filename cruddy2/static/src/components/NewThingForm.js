@@ -5,33 +5,44 @@ const renderTextField = ({ input, label, type, meta: { touched, error } }) => (
   <div>
     <label>{label}</label>
     <div>
-      <input {...input} type={type} placeholder={label}/>
+      <input {...input} type={type} placeholder={label} className="form-control"/>
       {touched && error && <span>{error}</span>}
     </div>
   </div>
 )
 
 const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, error } }) => (
-  <ul>
-    <li>
-      <button type="button" onClick={() => fields.push({})}>Add Thing Attribute</button>
+  <div>
+    <div>
+      <button className="btn btn-default" type="button" onClick={() => fields.push({})}>Add Thing Attribute</button>
       {touched && error && <span>{error}</span>}
-    </li>
+    </div>
     {fields.map((thingAttribute, index) =>
-      <li key={index}>
-        <button
-          type="button"
-          title="Remove ThingAttribute"
-          onClick={() => fields.remove(index)}>
-          Remove
-        </button>
-        <h4>ThingAttribute #{index + 1}</h4>
+      <div key={index} className="thingattributeformgroup">
+          <div>
+            <h4 style={{display: "inline-block"}}>ThingAttribute #{index + 1}</h4>
+            <button
+              style={{float: "right"}}
+              type="button"
+              className="btn btn-default"
+              type="button"
+              title="Remove ThingAttribute"
+              onClick={() => fields.remove(index)}
+              aria-label="Left Align">
+              <span
+                className="glyphicon glyphicon-remove-circle"
+                style={{color: "red"}} />
+            </button>
+          </div>
+
         <Field
           name={`${thingAttribute}.thingattributename`}
           type="text"
           component={renderTextField}
           label="ThingAttribute Name"/>
+        <label>ThingAttribute Type</label>
         <Field
+          className="form-control"
           name={`${thingAttribute}.thingattributetypeid`}
           type="text"
           component ="select"
@@ -40,17 +51,17 @@ const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, e
             <option value={thingAttributeTypes[key]} key={index}>{key}</option>
           )}
         </Field>
-      </li>
+      </div>
     )}
-  </ul>
+  </div>
 )
 
 const NewThingForm = ({ handleSubmit, pristine, reset, submitting, thingAttributeTypes, ...initialValues }) => {
   return (
-    <form action="/postnewthing" method="post">
+    <form action="/postnewthing" method="post" className="form-group">
       <Field name="thingname" type="text" component={renderTextField} label="Thing Name"/>
       <FieldArray name="members" component={renderThingAttributes} thingAttributeTypes={thingAttributeTypes}/>
-      <button type="submit" > Submit </button>
+      <button  className="btn btn-default" type="submit" > Submit </button>
     </form>
    )
  }

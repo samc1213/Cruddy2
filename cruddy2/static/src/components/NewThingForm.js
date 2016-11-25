@@ -41,13 +41,11 @@ const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, e
           )}
         </Field>
       </li>
-
     )}
   </ul>
 )
 
-
-const NewThingForm = ({ handleSubmit, pristine, reset, submitting, thingAttributeTypes }) => {
+const NewThingForm = ({ handleSubmit, pristine, reset, submitting, thingAttributeTypes, ...initialValues }) => {
   return (
     <form action="/postnewthing" method="post">
       <Field name="thingname" type="text" component={renderTextField} label="Thing Name"/>

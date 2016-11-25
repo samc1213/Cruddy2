@@ -8,15 +8,17 @@ class App extends React.Component {
   render(){
       return(
         <div>
-          <div>
-            <NewThingFormContainer  />
+          <div className="container">
+            <NewThingFormContainer />
           </div>
-          <div>
+          <div className="container">
             <ThingInstanceViewPreviewContainer />
           </div>
         </div>
     );
     }
   }
+
+
 
 export default App

@@ -108,13 +108,13 @@ var App = function (_React$Component) {
 exports.default = App;
 
 },{"../containers/NewThingFormContainer":9,"../containers/ThingInstanceViewPreviewContainer":10,"./Footer":4,"react":215}],3:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -124,19 +124,35 @@ var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
   var thingAttributes = _ref.thingAttributes;
 
   var rows = [];
+  console.log('oop');
+  console.log(thingAttributes);
   if (thingAttributes != null) {
     rows = thingAttributes.map(function (thingAttribute, index) {
       return _react2.default.createElement(
-        "div",
-        { className: "incard", key: index },
-        thingAttribute.thingattributename
+        'li',
+        { className: 'list-group-item', key: index },
+        _react2.default.createElement(
+          'b',
+          null,
+          thingAttribute.thingattributename
+        ),
+        ': ',
+        thingAttribute.thingattributeexample
       );
     });
   }
   return _react2.default.createElement(
-    "div",
-    { className: "square" },
-    rows
+    'div',
+    { className: 'card' },
+    _react2.default.createElement(
+      'div',
+      { className: 'card-block' },
+      _react2.default.createElement(
+        'ul',
+        { className: 'list-group list-group-flush' },
+        rows
+      )
+    )
   );
 };
 
@@ -305,7 +321,7 @@ var renderThingAttributes = function renderThingAttributes(_ref2) {
       null,
       _react2.default.createElement(
         'button',
-        { className: 'btn btn-default', type: 'button', onClick: function onClick() {
+        { className: 'btn btn-primary', type: 'button', onClick: function onClick() {
             return fields.push({});
           } },
         'Add Thing Attribute'
@@ -336,7 +352,7 @@ var renderThingAttributes = function renderThingAttributes(_ref2) {
             (_React$createElement = {
               style: { float: "right" },
               type: 'button',
-              className: 'btn btn-default'
+              className: 'btn btn-primary'
             }, _defineProperty(_React$createElement, 'type', 'button'), _defineProperty(_React$createElement, 'title', 'Remove ThingAttribute'), _defineProperty(_React$createElement, 'onClick', function onClick() {
               return fields.remove(index);
             }), _defineProperty(_React$createElement, 'aria-label', 'Left Align'), _React$createElement),
@@ -370,7 +386,12 @@ var renderThingAttributes = function renderThingAttributes(_ref2) {
               key
             );
           })
-        )
+        ),
+        _react2.default.createElement(_reduxForm.Field, {
+          name: thingAttribute + '.thingattributeexample',
+          type: 'text',
+          component: renderTextField,
+          label: 'ThingAttribute Example' })
       );
     })
   );
@@ -386,19 +407,35 @@ var NewThingForm = function NewThingForm(_ref3) {
 
   return _react2.default.createElement(
     'form',
-    { action: '/postnewthing', method: 'post', className: 'form-group' },
+    { role: 'form', action: '/postnewthing', method: 'post', className: 'form-group' },
     _react2.default.createElement(_reduxForm.Field, { name: 'thingname', type: 'text', component: renderTextField, label: 'Thing Name' }),
     _react2.default.createElement(_reduxForm.FieldArray, { name: 'members', component: renderThingAttributes, thingAttributeTypes: thingAttributeTypes }),
     _react2.default.createElement(
       'button',
-      { className: 'btn btn-default', type: 'submit' },
+      { className: 'btn btn-primary', type: 'submit' },
       ' Submit '
     )
   );
 };
 
 exports.default = (0, _reduxForm.reduxForm)({
-  form: 'newThingForm' // a unique identifier for this form
+  form: 'newThingForm',
+  initialValues: {
+    thingname: 'Car',
+    members: [{
+      thingattributename: 'Make',
+      thingattributetypeid: '1',
+      thingattributeexample: 'Toyota'
+    }, {
+      thingattributename: 'Model',
+      thingattributetypeid: '1',
+      thingattributeexample: 'Corolla'
+    }, {
+      thingattributename: 'Year',
+      thingattributetypeid: '2',
+      thingattributeexample: '1995'
+    }]
+  } // a unique identifier for this form
 })(NewThingForm);
 
 },{"react":215,"redux-form":245}],7:[function(require,module,exports){
@@ -421,10 +458,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var ThingInstanceViewPreview = function ThingInstanceViewPreview(_ref) {
   var thingattributes = _ref.thingattributes;
 
+  console.log(thingattributes);
   return _react2.default.createElement(
     'div',
     null,
-    _react2.default.createElement(_CraigslistCardPreview2.default, { thingAttributes: thingattributes })
+    _react2.default.createElement('div', { className: 'col-md-2' }),
+    _react2.default.createElement(
+      'div',
+      { className: 'col-md-8' },
+      _react2.default.createElement(
+        'h4',
+        null,
+        'Example Craigslist Card'
+      ),
+      _react2.default.createElement(
+        'p',
+        null,
+        'This is what your things will look like!'
+      ),
+      _react2.default.createElement(_CraigslistCardPreview2.default, { thingAttributes: thingattributes })
+    ),
+    _react2.default.createElement('div', { className: 'col-md-2' })
   );
 };
 

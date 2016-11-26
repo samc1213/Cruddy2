@@ -14,7 +14,7 @@ const renderTextField = ({ input, label, type, meta: { touched, error } }) => (
 const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, error } }) => (
   <div>
     <div>
-      <button className="btn btn-default" type="button" onClick={() => fields.push({})}>Add Thing Attribute</button>
+      <button className="btn btn-primary" type="button" onClick={() => fields.push({})}>Add Thing Attribute</button>
       {touched && error && <span>{error}</span>}
     </div>
     {fields.map((thingAttribute, index) =>
@@ -24,7 +24,7 @@ const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, e
             <button
               style={{float: "right"}}
               type="button"
-              className="btn btn-default"
+              className="btn btn-primary"
               type="button"
               title="Remove ThingAttribute"
               onClick={() => fields.remove(index)}
@@ -51,6 +51,11 @@ const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, e
             <option value={thingAttributeTypes[key]} key={index}>{key}</option>
           )}
         </Field>
+        <Field
+          name={`${thingAttribute}.thingattributeexample`}
+          type="text"
+          component={renderTextField}
+          label="ThingAttribute Example" />
       </div>
     )}
   </div>
@@ -58,15 +63,35 @@ const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, e
 
 const NewThingForm = ({ handleSubmit, pristine, reset, submitting, thingAttributeTypes, ...initialValues }) => {
   return (
-    <form action="/postnewthing" method="post" className="form-group">
+    <form role="form" action="/postnewthing" method="post" className="form-group">
       <Field name="thingname" type="text" component={renderTextField} label="Thing Name"/>
       <FieldArray name="members" component={renderThingAttributes} thingAttributeTypes={thingAttributeTypes}/>
-      <button  className="btn btn-default" type="submit" > Submit </button>
+      <button  className="btn btn-primary" type="submit" > Submit </button>
     </form>
    )
  }
 
 
 export default reduxForm({
-   form: 'newThingForm'     // a unique identifier for this form
+   form: 'newThingForm',
+   initialValues: {
+     thingname: 'Car',
+     members: [
+      {
+        thingattributename: 'Make',
+        thingattributetypeid: '1',
+        thingattributeexample: 'Toyota'
+      },
+      {
+        thingattributename: 'Model',
+        thingattributetypeid: '1',
+        thingattributeexample: 'Corolla'
+      },
+      {
+        thingattributename: 'Year',
+        thingattributetypeid: '2',
+        thingattributeexample: '1995'
+      }
+]
+   }    // a unique identifier for this form
  })(NewThingForm)

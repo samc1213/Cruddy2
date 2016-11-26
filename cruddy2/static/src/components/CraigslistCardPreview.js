@@ -3,15 +3,20 @@ import React, { PropTypes } from 'react'
 
 const CraigslistCardPreview = ({ thingAttributes }) => {
   var rows = []
+  console.log('oop')
+  console.log(thingAttributes);
   if (thingAttributes != null) {
     rows = thingAttributes.map((thingAttribute, index) =>
-      <div className="incard" key={index}>
-        {thingAttribute.thingattributename}
-      </div>)
+    <li className="list-group-item" key={index}><b>{thingAttribute.thingattributename}</b>: {thingAttribute.thingattributeexample}</li>
+    )
   }
   return (
-    <div className="square">
-      {rows}
+    <div className="card">
+      <div className="card-block">
+        <ul className="list-group list-group-flush">
+          {rows}
+        </ul>
+      </div>
     </div>
   )
 }

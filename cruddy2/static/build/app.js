@@ -124,8 +124,8 @@ var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
   var thingAttributes = _ref.thingAttributes;
 
   var rows = [];
-  console.log('oop');
-  console.log(thingAttributes);
+  var file;
+
   if (thingAttributes != null) {
     rows = thingAttributes.map(function (thingAttribute, index) {
       return _react2.default.createElement(
@@ -141,12 +141,26 @@ var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
       );
     });
   }
+
+  for (var i = 0; i < thingAttributes.length; i++) {
+    console.log(i);
+    if (thingAttributes[i].thingattributeexamplefile != null && thingAttributes[i].thingattributeexamplefile[0] != null) {
+      var reader = new FileReader();
+      var preview = document.querySelector('img');
+      reader.readAsDataURL(thingAttributes[i].thingattributeexamplefile[0]);
+      reader.addEventListener("load", function () {
+        preview.src = reader.result;
+      }, false);
+    }
+  }
+
   return _react2.default.createElement(
     'div',
     { className: 'card' },
     _react2.default.createElement(
       'div',
       { className: 'card-block' },
+      _react2.default.createElement('img', { className: 'card-img-top', src: '/exampleimage', alt: 'Card image cap', style: { maxWidth: "100%" } }),
       _react2.default.createElement(
         'ul',
         { className: 'list-group list-group-flush' },
@@ -265,6 +279,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _react = require('react');
@@ -278,6 +294,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var renderTextField = function renderTextField(_ref) {
   var input = _ref.input,
@@ -307,109 +329,139 @@ var renderTextField = function renderTextField(_ref) {
   );
 };
 
-var renderThingAttributes = function renderThingAttributes(_ref2) {
-  var fields = _ref2.fields,
-      thingAttributeTypes = _ref2.thingAttributeTypes,
-      _ref2$meta = _ref2.meta,
-      touched = _ref2$meta.touched,
-      error = _ref2$meta.error;
-  return _react2.default.createElement(
-    'div',
-    null,
-    _react2.default.createElement(
-      'div',
-      null,
-      _react2.default.createElement(
-        'button',
-        { className: 'btn btn-primary', type: 'button', onClick: function onClick() {
-            return fields.push({});
-          } },
-        'Add Thing Attribute'
-      ),
-      touched && error && _react2.default.createElement(
-        'span',
-        null,
-        error
-      )
-    ),
-    fields.map(function (thingAttribute, index) {
-      var _React$createElement;
+var thingAttributes = function (_React$Component) {
+  _inherits(thingAttributes, _React$Component);
+
+  function thingAttributes() {
+    _classCallCheck(this, thingAttributes);
+
+    return _possibleConstructorReturn(this, (thingAttributes.__proto__ || Object.getPrototypeOf(thingAttributes)).apply(this, arguments));
+  }
+
+  _createClass(thingAttributes, [{
+    key: 'createExampleField',
+    value: function createExampleField(exampleTypeId, thingAttribute) {
+      if (exampleTypeId != "3") {
+        return _react2.default.createElement(_reduxForm.Field, {
+          name: thingAttribute + '.thingattributeexample',
+          type: 'text',
+          component: renderTextField,
+          label: 'ThingAttribute Example' });
+      } else {
+        return _react2.default.createElement(_reduxForm.Field, {
+          name: thingAttribute + '.thingattributeexamplefile',
+          type: 'file',
+          className: 'form-control btn-file',
+          component: renderTextField,
+          label: 'ThingAttribute Example File',
+          accept: 'image/*' });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
 
       return _react2.default.createElement(
         'div',
-        { key: index, className: 'thingattributeformgroup' },
+        null,
         _react2.default.createElement(
           'div',
           null,
           _react2.default.createElement(
-            'h4',
-            { style: { display: "inline-block" } },
-            'ThingAttribute #',
-            index + 1
-          ),
-          _react2.default.createElement(
             'button',
-            (_React$createElement = {
-              style: { float: "right" },
-              type: 'button',
-              className: 'btn btn-primary'
-            }, _defineProperty(_React$createElement, 'type', 'button'), _defineProperty(_React$createElement, 'title', 'Remove ThingAttribute'), _defineProperty(_React$createElement, 'onClick', function onClick() {
-              return fields.remove(index);
-            }), _defineProperty(_React$createElement, 'aria-label', 'Left Align'), _React$createElement),
-            _react2.default.createElement('span', {
-              className: 'glyphicon glyphicon-remove-circle',
-              style: { color: "red" } })
+            { className: 'btn btn-primary', type: 'button', onClick: function onClick() {
+                return _this2.props.fields.push({});
+              } },
+            'Add Thing Attribute'
+          ),
+          this.props.touched && error && _react2.default.createElement(
+            'span',
+            null,
+            error
           )
         ),
-        _react2.default.createElement(_reduxForm.Field, {
-          name: thingAttribute + '.thingattributename',
-          type: 'text',
-          component: renderTextField,
-          label: 'ThingAttribute Name' }),
-        _react2.default.createElement(
-          'label',
-          null,
-          'ThingAttribute Type'
-        ),
-        _react2.default.createElement(
-          _reduxForm.Field,
-          {
-            className: 'form-control',
-            name: thingAttribute + '.thingattributetypeid',
-            type: 'text',
-            component: 'select',
-            label: 'ThingAttribute Type' },
-          Object.keys(thingAttributeTypes).map(function (key, index) {
-            return _react2.default.createElement(
-              'option',
-              { value: thingAttributeTypes[key], key: index },
-              key
-            );
-          })
-        ),
-        _react2.default.createElement(_reduxForm.Field, {
-          name: thingAttribute + '.thingattributeexample',
-          type: 'text',
-          component: renderTextField,
-          label: 'ThingAttribute Example' })
+        this.props.fields.map(function (thingAttribute, index) {
+          var _React$createElement;
+
+          return _react2.default.createElement(
+            'div',
+            { key: index, className: 'thingattributeformgroup' },
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'h4',
+                { style: { display: "inline-block" } },
+                'ThingAttribute #',
+                index + 1
+              ),
+              _react2.default.createElement(
+                'button',
+                (_React$createElement = {
+                  style: { float: "right" },
+                  type: 'button',
+                  className: 'btn btn-primary'
+                }, _defineProperty(_React$createElement, 'type', 'button'), _defineProperty(_React$createElement, 'title', 'Remove ThingAttribute'), _defineProperty(_React$createElement, 'onClick', function onClick() {
+                  return _this2.props.fields.remove(index);
+                }), _defineProperty(_React$createElement, 'aria-label', 'Left Align'), _React$createElement),
+                _react2.default.createElement('span', {
+                  className: 'glyphicon glyphicon-remove-circle',
+                  style: { color: "red" } })
+              )
+            ),
+            _react2.default.createElement(_reduxForm.Field, {
+              name: thingAttribute + '.thingattributename',
+              type: 'text',
+              component: renderTextField,
+              label: 'ThingAttribute Name' }),
+            _react2.default.createElement(
+              'label',
+              null,
+              'ThingAttribute Type'
+            ),
+            _react2.default.createElement(
+              _reduxForm.Field,
+              {
+                className: 'form-control',
+                name: thingAttribute + '.thingattributetypeid',
+                type: 'text',
+                component: 'select',
+                label: 'ThingAttribute Type' },
+              Object.keys(_this2.props.thingAttributeTypes).map(function (key, index) {
+                return _react2.default.createElement(
+                  'option',
+                  { value: _this2.props.thingAttributeTypes[key], key: index },
+                  key
+                );
+              })
+            ),
+            _this2.createExampleField(_this2.props.selectedExampleType[index], thingAttribute)
+          );
+        })
       );
-    })
-  );
-};
+    }
+  }]);
 
-var NewThingForm = function NewThingForm(_ref3) {
-  var handleSubmit = _ref3.handleSubmit,
-      pristine = _ref3.pristine,
-      reset = _ref3.reset,
-      submitting = _ref3.submitting,
-      thingAttributeTypes = _ref3.thingAttributeTypes,
-      initialValues = _objectWithoutProperties(_ref3, ['handleSubmit', 'pristine', 'reset', 'submitting', 'thingAttributeTypes']);
+  return thingAttributes;
+}(_react2.default.Component);
 
+var NewThingForm = function NewThingForm(_ref2) {
+  var handleSubmit = _ref2.handleSubmit,
+      pristine = _ref2.pristine,
+      reset = _ref2.reset,
+      submitting = _ref2.submitting,
+      thingAttributeTypes = _ref2.thingAttributeTypes,
+      selectedExampleType = _ref2.selectedExampleType,
+      initialValues = _objectWithoutProperties(_ref2, ['handleSubmit', 'pristine', 'reset', 'submitting', 'thingAttributeTypes', 'selectedExampleType']);
+
+  console.log('iro');
+  console.log(selectedExampleType);
   return _react2.default.createElement(
     'form',
     { role: 'form', action: '/postnewthing', method: 'post', className: 'form-group' },
     _react2.default.createElement(_reduxForm.Field, { name: 'thingname', type: 'text', component: renderTextField, label: 'Thing Name' }),
-    _react2.default.createElement(_reduxForm.FieldArray, { name: 'members', component: renderThingAttributes, thingAttributeTypes: thingAttributeTypes }),
+    _react2.default.createElement(_reduxForm.FieldArray, { name: 'members', component: thingAttributes, thingAttributeTypes: thingAttributeTypes, selectedExampleType: selectedExampleType }),
     _react2.default.createElement(
       'button',
       { className: 'btn btn-primary', type: 'submit' },
@@ -434,6 +486,10 @@ exports.default = (0, _reduxForm.reduxForm)({
       thingattributename: 'Year',
       thingattributetypeid: '2',
       thingattributeexample: '1995'
+    }, {
+      thingattributename: 'Picture',
+      thingattributetypeid: '3',
+      thingattributeexample: '2409'
     }]
   } // a unique identifier for this form
 })(NewThingForm);
@@ -538,7 +594,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    thingAttributeTypes: state.thingAttributeTypes
+    thingAttributeTypes: state.thingAttributeTypes,
+    selectedExampleType: state.form.newThingForm ? state.form.newThingForm.values.members.map(function (member) {
+      return member.thingattributetypeid;
+    }) : {}
   };
 };
 

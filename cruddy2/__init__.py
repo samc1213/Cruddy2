@@ -3,7 +3,7 @@ import logging
 import psycopg2
 import urlparse
 import json
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 from model.Model import *
 from model.DBSessionManager import DBSessionManager
 from model.Cruddy2Enums import ThingAttributeTypes
@@ -11,6 +11,10 @@ from api import *
 
 app = Flask(__name__)
 api = api()
+
+@app.route('/exampleimage')
+def exampleimg():
+    return send_file('./static/1.jpg')
 
 @app.route('/')
 def index():

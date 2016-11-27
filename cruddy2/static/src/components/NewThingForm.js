@@ -11,61 +11,87 @@ const renderTextField = ({ input, label, type, meta: { touched, error } }) => (
   </div>
 )
 
-const renderThingAttributes = ({ fields, thingAttributeTypes, meta: { touched, error } }) => (
-  <div>
-    <div>
-      <button className="btn btn-primary" type="button" onClick={() => fields.push({})}>Add Thing Attribute</button>
-      {touched && error && <span>{error}</span>}
-    </div>
-    {fields.map((thingAttribute, index) =>
-      <div key={index} className="thingattributeformgroup">
-          <div>
-            <h4 style={{display: "inline-block"}}>ThingAttribute #{index + 1}</h4>
-            <button
-              style={{float: "right"}}
-              type="button"
-              className="btn btn-primary"
-              type="button"
-              title="Remove ThingAttribute"
-              onClick={() => fields.remove(index)}
-              aria-label="Left Align">
-              <span
-                className="glyphicon glyphicon-remove-circle"
-                style={{color: "red"}} />
-            </button>
-          </div>
-
-        <Field
-          name={`${thingAttribute}.thingattributename`}
-          type="text"
-          component={renderTextField}
-          label="ThingAttribute Name"/>
-        <label>ThingAttribute Type</label>
-        <Field
-          className="form-control"
-          name={`${thingAttribute}.thingattributetypeid`}
-          type="text"
-          component ="select"
-          label="ThingAttribute Type">
-          {Object.keys(thingAttributeTypes).map((key, index) =>
-            <option value={thingAttributeTypes[key]} key={index}>{key}</option>
-          )}
-        </Field>
+class thingAttributes extends React.Component {
+  createExampleField(exampleTypeId, thingAttribute) {
+    if (exampleTypeId != "3") {
+      return (
         <Field
           name={`${thingAttribute}.thingattributeexample`}
           type="text"
           component={renderTextField}
           label="ThingAttribute Example" />
-      </div>
-    )}
-  </div>
-)
+      )
+    }
+    else {
+      return (
+        <Field
+         name={`${thingAttribute}.thingattributeexamplefile`}
+         type="file"
+         className="form-control btn-file"
+         component={renderTextField}
+         label="ThingAttribute Example File"
+         accept="image/*" />
+      )
+    }
+  }
 
-const NewThingForm = ({ handleSubmit, pristine, reset, submitting, thingAttributeTypes, ...initialValues }) => {
+  render() {
+    return (
+      <div>
+        <div>
+          <button className="btn btn-primary" type="button" onClick={() => this.props.fields.push({})}>Add Thing Attribute</button>
+          {this.props.touched && error && <span>{error}</span>}
+        </div>
+        {this.props.fields.map((thingAttribute, index) =>
+            <div key={index} className="thingattributeformgroup">
+                <div>
+                  <h4 style={{display: "inline-block"}}>ThingAttribute #{index + 1}</h4>
+                  <button
+                    style={{float: "right"}}
+                    type="button"
+                    className="btn btn-primary"
+                    type="button"
+                    title="Remove ThingAttribute"
+                    onClick={() => this.props.fields.remove(index)}
+                    aria-label="Left Align">
+                    <span
+                      className="glyphicon glyphicon-remove-circle"
+                      style={{color: "red"}} />
+                  </button>
+                </div>
+
+              <Field
+                name={`${thingAttribute}.thingattributename`}
+                type="text"
+                component={renderTextField}
+                label="ThingAttribute Name"/>
+              <label>ThingAttribute Type</label>
+              <Field
+                className="form-control"
+                name={`${thingAttribute}.thingattributetypeid`}
+                type="text"
+                component ="select"
+                label="ThingAttribute Type">
+                {Object.keys(this.props.thingAttributeTypes).map((key, index) =>
+                  <option value={this.props.thingAttributeTypes[key]} key={index}>{key}</option>
+                )}
+              </Field>
+              {this.createExampleField(this.props.selectedExampleType[index], thingAttribute)}
+
+          </div>
+        )}
+      </div>
+    )
+  }
+}
+
+const NewThingForm = ({ handleSubmit, pristine, reset, submitting, thingAttributeTypes, selectedExampleType, ...initialValues }) => {
+  console.log('iro');
+  console.log(selectedExampleType);
   return (
     <form role="form" action="/postnewthing" method="post" className="form-group">
       <Field name="thingname" type="text" component={renderTextField} label="Thing Name"/>
-      <FieldArray name="members" component={renderThingAttributes} thingAttributeTypes={thingAttributeTypes}/>
+      <FieldArray name="members" component={thingAttributes} thingAttributeTypes={thingAttributeTypes} selectedExampleType={selectedExampleType}/>
       <button  className="btn btn-primary" type="submit" > Submit </button>
     </form>
    )
@@ -91,6 +117,11 @@ export default reduxForm({
         thingattributename: 'Year',
         thingattributetypeid: '2',
         thingattributeexample: '1995'
+      },
+      {
+        thingattributename: 'Picture',
+        thingattributetypeid: '3',
+        thingattributeexample: '2409'
       }
 ]
    }    // a unique identifier for this form

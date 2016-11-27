@@ -77,7 +77,6 @@ class thingAttributes extends React.Component {
                 )}
               </Field>
               {this.createExampleField(this.props.selectedExampleType[index], thingAttribute)}
-
           </div>
         )}
       </div>
@@ -120,8 +119,7 @@ export default reduxForm({
       },
       {
         thingattributename: 'Picture',
-        thingattributetypeid: '3',
-        thingattributeexample: '2409'
+        thingattributetypeid: '3'
       }
 ]
    }    // a unique identifier for this form

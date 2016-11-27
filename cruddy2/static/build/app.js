@@ -108,13 +108,13 @@ var App = function (_React$Component) {
 exports.default = App;
 
 },{"../containers/NewThingFormContainer":9,"../containers/ThingInstanceViewPreviewContainer":10,"./Footer":4,"react":215}],3:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -126,21 +126,53 @@ var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
   var rows = [];
   var file;
 
+  var thingAttributesWithoutPhoto = [];
+
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = thingAttributes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var thingAttribute = _step.value;
+
+      if (thingAttribute.thingattributetypeid != "3") {
+        thingAttributesWithoutPhoto.push(thingAttribute);
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
   if (thingAttributes != null) {
-    rows = thingAttributes.map(function (thingAttribute, index) {
+    rows = thingAttributesWithoutPhoto.map(function (thingAttribute, index) {
       return _react2.default.createElement(
-        'li',
-        { className: 'list-group-item', key: index },
+        "li",
+        { className: "list-group-item", key: index },
         _react2.default.createElement(
-          'b',
+          "b",
           null,
           thingAttribute.thingattributename
         ),
-        ': ',
+        ": ",
         thingAttribute.thingattributeexample
       );
     });
   }
+
+  var imgStyle = { maxWidth: "100%", display: "none" };
+  var weHaveAnImg = false;
 
   for (var i = 0; i < thingAttributes.length; i++) {
     console.log(i);
@@ -152,18 +184,22 @@ var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
         preview.src = reader.result;
       }, false);
     }
+
+    if (thingAttributes[i].thingattributetypeid == "3") {
+      imgStyle.display = "inline-block";
+    }
   }
 
   return _react2.default.createElement(
-    'div',
-    { className: 'card' },
+    "div",
+    { className: "card" },
     _react2.default.createElement(
-      'div',
-      { className: 'card-block' },
-      _react2.default.createElement('img', { className: 'card-img-top', src: '/exampleimage', alt: 'Card image cap', style: { maxWidth: "100%" } }),
+      "div",
+      { className: "card-block" },
+      _react2.default.createElement("img", { className: "card-img-top", src: "/exampleimage", alt: "Card image cap", style: imgStyle }),
       _react2.default.createElement(
-        'ul',
-        { className: 'list-group list-group-flush' },
+        "ul",
+        { className: "list-group list-group-flush" },
         rows
       )
     )
@@ -488,8 +524,7 @@ exports.default = (0, _reduxForm.reduxForm)({
       thingattributeexample: '1995'
     }, {
       thingattributename: 'Picture',
-      thingattributetypeid: '3',
-      thingattributeexample: '2409'
+      thingattributetypeid: '3'
     }]
   } // a unique identifier for this form
 })(NewThingForm);

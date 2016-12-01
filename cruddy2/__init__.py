@@ -32,13 +32,17 @@ def createThing():
 @app.route('/postnewthing', methods=['POST'])
 def postNewThing():
     form = request.form
-    print form
 
-    thingName=request.form['thingname']
-    thingAttributeNames = request.form.getlist('thingattributename[]')
-    thingAttributeTypeIds = request.form.getlist('thingattributetypeid[]')
+    thingName=form['thingname']
+    thingAttributeNames = [None for i in range((len(form)-1)/3)]
+    thingAttributeTypeIds = [None for i in range((len(form)-1)/3)]
 
     assert len(thingAttributeNames) == len(thingAttributeTypeIds)
+    for key, value in form.iteritems():
+        if key[11:] == "thingattributetypeid":
+            thingAttributeTypeIds[int(key[8])] = value
+        elif key[11:] == "thingattributename":
+            thingAttributeNames[int(key[8])] = value
 
     try:
         api.createThing(thingName,

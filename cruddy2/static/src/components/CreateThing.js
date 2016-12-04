@@ -1,10 +1,9 @@
 import React from 'react'
-import Footer from './Footer'
 import NewThingFormContainer from '../containers/NewThingFormContainer'
 import ThingInstanceViewPreviewContainer from '../containers/ThingInstanceViewPreviewContainer'
 
 
-class App extends React.Component {
+class CreateThing extends React.Component {
   render(){
       return(
         <div>
@@ -21,4 +20,4 @@ class App extends React.Component {
 
 
 
-export default App
+export default CreateThing

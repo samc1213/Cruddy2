@@ -3,7 +3,7 @@ import logging
 import psycopg2
 import urlparse
 import json
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 from model.Model import *
 from model.DBSessionManager import DBSessionManager
 from model.Cruddy2Enums import ThingAttributeTypes
@@ -11,6 +11,10 @@ from api import *
 
 app = Flask(__name__)
 api = api()
+
+@app.route('/exampleimage')
+def exampleimg():
+    return send_file('./static/1.jpg')
 
 @app.route('/')
 def index():
@@ -28,13 +32,17 @@ def createThing():
 @app.route('/postnewthing', methods=['POST'])
 def postNewThing():
     form = request.form
-    print form
 
-    thingName=request.form['thingname']
-    thingAttributeNames = request.form.getlist('thingattributename[]')
-    thingAttributeTypeIds = request.form.getlist('thingattributetypeid[]')
+    thingName=form['thingname']
+    thingAttributeNames = [None for i in range((len(form)-1)/3)]
+    thingAttributeTypeIds = [None for i in range((len(form)-1)/3)]
 
     assert len(thingAttributeNames) == len(thingAttributeTypeIds)
+    for key, value in form.iteritems():
+        if key[11:] == "thingattributetypeid":
+            thingAttributeTypeIds[int(key[8])] = value
+        elif key[11:] == "thingattributename":
+            thingAttributeNames[int(key[8])] = value
 
     try:
         api.createThing(thingName,

@@ -12,9 +12,9 @@ from api import *
 app = Flask(__name__)
 api = api()
 
-# @app.route('/exampleimage')
-# def exampleimg():
-#     return send_file('./static/1.jpg')
+@app.route('/exampleimage')
+def exampleimg():
+    return send_file('./static/1.jpg')
 #
 # @app.route('/')
 # def index():
@@ -46,7 +46,7 @@ def postNewThing():
     thingName=form['thingname']
     thingAttributeNames = [None for i in range((len(form)-1)/3)]
     thingAttributeTypeIds = [None for i in range((len(form)-1)/3)]
-
+    print form
     assert len(thingAttributeNames) == len(thingAttributeTypeIds)
     for key, value in form.iteritems():
         if key[11:] == "thingattributetypeid":

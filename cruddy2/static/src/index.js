@@ -4,10 +4,12 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import CreateThing from './components/CreateThing'
 import CraigslistView from './components/CraigslistView'
+import App from './components/App'
+import Home from './components/Home'
 import reducer from './reducers'
 import 'whatwg-fetch'
 import { getThingAttributeTypes } from './actions'
-import { Router, Route, Link } from 'react-router'
+import { Router, Route, Link, browserHistory } from 'react-router'
 
 const store = createStore(reducer)
 
@@ -22,12 +24,14 @@ fetch('/api/getthingattributetypes')
   });
 
 render((
-  <Router history={browserHistory}>
-    <Route path="/" component={App}>
-      <Route path="creatething" component={CreateThing}/>
-      <Route path="viewcraigslistview" component={CraigslistView}>
-        <Route path="/viewcraigslistview/:thingId" component={CraigslistView} />
+  <Provider store = {store}>
+    <Router history={browserHistory}>
+      <Route path="/" component={App}>
+        <Route path="creatething" component={CreateThing}/>
+        <Route path="viewcraigslistview" component={CraigslistView}>
+          <Route path="/viewcraigslistview/:thingId" component={CraigslistView} />
+        </Route>
       </Route>
-    </Route>
-  </Router>
+    </Router>
+  </Provider>
 ), document.getElementById('root'))

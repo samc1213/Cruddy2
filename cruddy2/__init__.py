@@ -24,18 +24,22 @@ def exampleimg():
 def getThingAttributeTypes():
     return json.dumps(ThingAttributeTypes)
 
+@app.route('/api/getthingattributes/<thingId>')
+def getThingAttributes(thingId):
+    thingAttributes = api.getThingAttributes(thingId)
+    return json.dumps(thingAttributes)
+
 @app.route('/api/getthinginstances/<thingId>')
 def getThingInstances(thingId):
-    thing = api.getThing(thingId)
-    thingInstances = api.getThingInstances(thing)
-    thingAttributes = api.getThingAttributes(thing)
+    thingInstances = api.getThingInstances(thingId)
+    thingAttributes = api.getThingAttributes(thingId)
 
 
-    
+
     result = {}
     result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
     result['thingAttributes'] = thingAttributes
-    
+
     return json.dumps(result)
 
 @app.route('/postnewthing', methods=['POST'])
@@ -76,29 +80,12 @@ def submittedThing():
         'typeid': thingAttributeTypeIds[i]}
             for i in range(len(thingAttributeNames))])
     return thingName
-
-@app.route('/createthinginstance/<thingid>')
-def createThingInstance(thingid):
-    sessionManager = DBSessionManager()
-    session = sessionManager.GetSession()
-    myThing = session.query(Thing).get(thingid)
-
-    return render_template('createthinginstance.html', thingName=myThing.thingname, thingAttributes=myThing.thingattributes, thingId=thingid)
 #
-@app.route('/submittedthinginstance', methods=['POST'])
-def submittedThingInstance():
-    thingInstanceBlob = {}
-    thingId = int(request.form['thingid'])
-
-    for name in request.form:
-        if name.startswith('thingattributeid.'):
-            thingAttributeIdIndex = len('thingattributeid.')
-            thingAttributeId = name[thingAttributeIdIndex:]
-            thingInstanceBlob[thingAttributeId] = request.form[name]
-
-    api.createThingInstance(json.dumps(thingInstanceBlob), thingId)
-
-    return str(thingId)
+@app.route('/api/postnewthinginstance', methods=['POST'])
+def postNewThingInstance():
+    app.logger.debug(request.files)
+    api.createThingInstance(request.form, request.files)
+    return 'success' 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

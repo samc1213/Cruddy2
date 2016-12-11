@@ -33,7 +33,9 @@ class api:
 
         return thing
 
-    def getThingInstances(self, thing):
+    def getThingInstances(self, thingId):
+        thing = self.getThing(thingId)
+
         return thing.thinginstances
 
     def getThingAttributeIdToNameDict(self, thing):
@@ -43,7 +45,8 @@ class api:
 
         return idToNameDict
 
-    def getThingAttributes(self, thing):
+    def getThingAttributes(self, thingId):
+        thing = self.getThing(thingId)
         thingAttributes = {}
         for thingAttribute in thing.thingattributes:
             thingAttributes[thingAttribute.thingattributeid] = {

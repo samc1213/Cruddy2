@@ -1,4 +1,4 @@
-const thingAttributeIdsToNames =  (state = {}, action) =>{
+const thingAttributeIdsToNamesAndTypes =  (state = {}, action) =>{
   switch (action.type) {
     case 'THING_INSTANCES_RECEIVED':
       return action.data.thingAttributes;
@@ -7,4 +7,4 @@ const thingAttributeIdsToNames =  (state = {}, action) =>{
   }
 }
 
-export default thingAttributeIdsToNames
+export default thingAttributeIdsToNamesAndTypes

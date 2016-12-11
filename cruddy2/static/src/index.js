@@ -11,6 +11,8 @@ import reducer from './reducers'
 import 'whatwg-fetch'
 import { getThingAttributeTypes } from './actions'
 import { Router, Route, Link, browserHistory } from 'react-router'
+import CreateThingInstanceViewContainer from './containers/CreateThingInstanceViewContainer'
+
 
 const store = createStore(reducer,
   applyMiddleware(thunkMiddleware)
@@ -33,6 +35,9 @@ render((
         <Route path="creatething" component={CreateThing} />
         <Route path="viewcraigslistview" component={CraigslistViewContainer }>
           <Route path="/viewcraigslistview/:thingId" component={CraigslistViewContainer} />
+        </Route>
+        <Route path="createthinginstance" component={CreateThingInstanceViewContainer}>
+          <Route path="/createthinginstance/:thingId" component={CreateThingInstanceViewContainer} />
         </Route>
       </Route>
     </Router>

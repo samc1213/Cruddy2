@@ -24,18 +24,22 @@ def exampleimg():
 def getThingAttributeTypes():
     return json.dumps(ThingAttributeTypes)
 
+@app.route('/api/getthingattributes/<thingId>')
+def getThingAttributes(thingId):
+    thingAttributes = api.getThingAttributes(thingId)
+    return json.dumps(thingAttributes)
+
 @app.route('/api/getthinginstances/<thingId>')
 def getThingInstances(thingId):
-    thing = api.getThing(thingId)
-    thingInstances = api.getThingInstances(thing)
-    thingAttributes = api.getThingAttributes(thing)
+    thingInstances = api.getThingInstances(thingId)
+    thingAttributes = api.getThingAttributes(thingId)
 
 
-    
+
     result = {}
     result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
     result['thingAttributes'] = thingAttributes
-    
+
     return json.dumps(result)
 
 @app.route('/postnewthing', methods=['POST'])
@@ -76,14 +80,6 @@ def submittedThing():
         'typeid': thingAttributeTypeIds[i]}
             for i in range(len(thingAttributeNames))])
     return thingName
-
-@app.route('/createthinginstance/<thingid>')
-def createThingInstance(thingid):
-    sessionManager = DBSessionManager()
-    session = sessionManager.GetSession()
-    myThing = session.query(Thing).get(thingid)
-
-    return render_template('createthinginstance.html', thingName=myThing.thingname, thingAttributes=myThing.thingattributes, thingId=thingid)
 #
 @app.route('/submittedthinginstance', methods=['POST'])
 def submittedThingInstance():

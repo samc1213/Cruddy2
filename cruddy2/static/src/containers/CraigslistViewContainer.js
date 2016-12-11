@@ -5,7 +5,7 @@ import * as actions from '../actions/index'
 const mapStateToProps = (state) => ({
   thingAttributeTypes: state.thingAttributeTypes,
   thingInstances: state.thingInstances,
-  thingAttributeIdsToNames: state.thingAttributeIdsToNames,
+  thingAttributeIdsToNamesAndTypes: state.thingAttributeIdsToNamesAndTypes,
   selectedExampleType: state.form.newThingForm ? state.form.newThingForm.values.members.map((member) => member.thingattributetypeid) : {}
 })
 

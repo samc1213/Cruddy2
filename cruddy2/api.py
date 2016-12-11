@@ -42,6 +42,16 @@ class api:
             idToNameDict[thingAttribute.thingattributeid] = thingAttribute.thingattributename
 
         return idToNameDict
+
+    def getThingAttributes(self, thing):
+        thingAttributes = {}
+        for thingAttribute in thing.thingattributes:
+            thingAttributes[thingAttribute.thingattributeid] = {
+                    'name': thingAttribute.thingattributename,
+                    'typeid': thingAttribute.thingattributetype
+                }
+        return thingAttributes
+
     # def createThingAttribute(self, name, attributetype):
     #     sessionManager = DBSessionManager()
     #     thingattribute = ThingAttribute(name, attributetype)

@@ -1,9 +1,10 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunkMiddleware from 'redux-thunk'
 import { Provider } from 'react-redux'
 import CreateThing from './components/CreateThing'
-import CraigslistView from './components/CraigslistView'
+import CraigslistViewContainer from './containers/CraigslistViewContainer'
 import App from './components/App'
 import Home from './components/Home'
 import reducer from './reducers'
@@ -11,7 +12,9 @@ import 'whatwg-fetch'
 import { getThingAttributeTypes } from './actions'
 import { Router, Route, Link, browserHistory } from 'react-router'
 
-const store = createStore(reducer)
+const store = createStore(reducer,
+  applyMiddleware(thunkMiddleware)
+  )
 
 fetch('/api/getthingattributetypes')
   .then(function(response) {
@@ -27,9 +30,9 @@ render((
   <Provider store = {store}>
     <Router history={browserHistory}>
       <Route path="/" component={App}>
-        <Route path="creatething" component={CreateThing}/>
-        <Route path="viewcraigslistview" component={CraigslistView}>
-          <Route path="/viewcraigslistview/:thingId" component={CraigslistView} />
+        <Route path="creatething" component={CreateThing} />
+        <Route path="viewcraigslistview" component={CraigslistViewContainer }>
+          <Route path="/viewcraigslistview/:thingId" component={CraigslistViewContainer} />
         </Route>
       </Route>
     </Router>

@@ -3,7 +3,10 @@ import ThingInstanceViewPreview from '../components/ThingInstanceViewPreview'
 
 const mapStateToProps = (state) =>
 ({
-  thingattributes: state.form.newThingForm.values != null ? state.form.newThingForm.values.members : []
+  thingAttributeNames: state.form.newThingForm.values != null ? state.form.newThingForm.values.members.map((value) => value.thingattributename) : [],
+  thingAttributeExamples: state.form.newThingForm.values != null ? state.form.newThingForm.values.members.map((value) => value.thingattributeexample) : [],
+  thingAttributeTypeIds: state.form.newThingForm.values != null ? state.form.newThingForm.values.members.map((value) => value.thingattributetypeid) : [],
+  thingAttributeExampleFiles: state.form.newThingForm.values != null ? state.form.newThingForm.values.members.map((value) => value.thingattributeexamplefile) : []
 })
 
 const ThingInstanceViewPreviewContainer = connect(

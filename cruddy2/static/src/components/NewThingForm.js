@@ -25,7 +25,7 @@ class thingAttributes extends React.Component {
     else {
       return (
         <Field
-         name={`${thingAttribute}.thingattributeexamplefile`}
+         name={`${thingAttribute}.thingattributeexample`}
          type="file"
          className="form-control btn-file"
          component={renderTextField}
@@ -119,7 +119,8 @@ export default reduxForm({
       },
       {
         thingattributename: 'Picture',
-        thingattributetypeid: '3'
+        thingattributetypeid: '3',
+        'thingattributeexample': ''
       }
 ]
    }    // a unique identifier for this form

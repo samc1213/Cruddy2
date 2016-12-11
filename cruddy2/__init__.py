@@ -28,16 +28,15 @@ def getThingAttributeTypes():
 def getThingInstances(thingId):
     thing = api.getThing(thingId)
     thingInstances = api.getThingInstances(thing)
-    thingInstanceInfos = [json.loads(ti.thinginstanceinfo) for ti in thingInstances]
-    thingAttributesConversionDict = api.getThingAttributeIdToNameDict(thing)
-    thingInstancesAttributeNamesToAttributeValues = []
+    thingAttributes = api.getThingAttributes(thing)
 
-    for tiInfo in thingInstanceInfos:
-        for thingAttributeId, thingInstanceAttribute in tiInfo.iteritems():
-            thingInstancesAttributeNamesToAttributeValues.append(
-                {thingAttributesConversionDict[int(thingAttributeId)]: thingInstanceAttribute})
 
-    return json.dumps(thingInstancesAttributeNamesToAttributeValues)
+    
+    result = {}
+    result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
+    result['thingAttributes'] = thingAttributes
+    
+    return json.dumps(result)
 
 @app.route('/postnewthing', methods=['POST'])
 def postNewThing():
@@ -104,4 +103,5 @@ def submittedThingInstance():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
+    print path
     return render_template('createthingreact.html')

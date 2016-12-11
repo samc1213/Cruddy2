@@ -18,7 +18,14 @@ class CraigslistView extends React.Component {
 			{
 				thingAttributeNames.push(conversion[thingAttributeId].name);
 				thingAttributeTypeIds.push(conversion[thingAttributeId].typeid);
-				thingAttributeExamples.push(thingInstance[thingAttributeId]);
+				if (conversion[thingAttributeId].typeid == "3")
+				{
+					thingAttributeExamples.push([thingInstance[thingAttributeId], false]);
+				}
+				else
+				{
+					thingAttributeExamples.push(thingInstance[thingAttributeId]);
+				}
 			}
 			cards.push(
 				<div className="col-md-6">
@@ -27,7 +34,8 @@ class CraigslistView extends React.Component {
 						<CraigslistCardPreview key={index}
 						thingAttributeNames={thingAttributeNames}
 						thingAttributeTypeIds={thingAttributeTypeIds}
-						thingAttributeExamples={thingAttributeExamples} />
+						thingAttributeExamples={thingAttributeExamples}
+						isPreview={false} />
 					</div>
 					<div className="col-md-2" />
 				</div>

@@ -17,7 +17,7 @@ const mapStateToProps = (state) => {
   return{
     thingAttributeTypes: tempthingAttributeTypes,
     thingAttributeNames: tempthingAttributeNames,
-    thingAttributeIds: tempthingAttributeIds
+    thingAttributeIds: tempthingAttributeIds,
   }
 }
 

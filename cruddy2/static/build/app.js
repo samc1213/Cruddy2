@@ -111,12 +111,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
   var thingAttributeNames = _ref.thingAttributeNames,
       thingAttributeExamples = _ref.thingAttributeExamples,
-      thingAttributeTypeIds = _ref.thingAttributeTypeIds;
+      thingAttributeTypeIds = _ref.thingAttributeTypeIds,
+      isPreview = _ref.isPreview;
 
   var rows = [];
   var file;
   var imgStyle = { maxWidth: "100%", display: "none" };
   var weHaveAnImg = false;
+  var src = "/exampleimage";
 
   console.log(thingAttributeExamples);
   console.log('examples');
@@ -136,14 +138,23 @@ var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
       ));
     } else {
       imgStyle.display = "inline-block";
-      if (thingAttributeExamples[i][0]) {
-        var reader = new FileReader();
-        var preview = document.querySelector('img');
-        reader.readAsDataURL(thingAttributeExamples[i][0]);
-        reader.addEventListener("load", function () {
-          preview.src = reader.result;
-        }, false);
-      }
+      if (thingAttributeExamples[i][0] && isPreview == true)
+        //this is preview
+        {
+          var reader = new FileReader();
+          var preview = document.querySelector('img');
+          reader.readAsDataURL(thingAttributeExamples[i][0]);
+          reader.addEventListener("load", function () {
+            preview.src = reader.result;
+          }, false);
+        }
+
+      if (thingAttributeExamples[i][0] && isPreview == false)
+        //this is from the DB
+        {
+          var preview = document.querySelector('img');
+          src = "data:image/png;base64," + thingAttributeExamples[i][0];
+        }
     }
   }
 
@@ -153,7 +164,7 @@ var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
     _react2.default.createElement(
       "div",
       { className: "card-block" },
-      _react2.default.createElement("img", { className: "card-img-top", src: "/exampleimage", alt: "Card image cap", style: imgStyle }),
+      _react2.default.createElement("img", { className: "card-img-top", src: src, alt: "Card image cap", style: imgStyle }),
       _react2.default.createElement(
         "ul",
         { className: "list-group list-group-flush" },
@@ -217,7 +228,11 @@ var CraigslistView = function (_React$Component) {
 				for (var thingAttributeId in thingInstance) {
 					thingAttributeNames.push(conversion[thingAttributeId].name);
 					thingAttributeTypeIds.push(conversion[thingAttributeId].typeid);
-					thingAttributeExamples.push(thingInstance[thingAttributeId]);
+					if (conversion[thingAttributeId].typeid == "3") {
+						thingAttributeExamples.push([thingInstance[thingAttributeId], false]);
+					} else {
+						thingAttributeExamples.push(thingInstance[thingAttributeId]);
+					}
 				}
 				cards.push(_react2.default.createElement(
 					'div',
@@ -229,7 +244,8 @@ var CraigslistView = function (_React$Component) {
 						_react2.default.createElement(_CraigslistCardPreview2.default, { key: index,
 							thingAttributeNames: thingAttributeNames,
 							thingAttributeTypeIds: thingAttributeTypeIds,
-							thingAttributeExamples: thingAttributeExamples })
+							thingAttributeExamples: thingAttributeExamples,
+							isPreview: false })
 					),
 					_react2.default.createElement('div', { className: 'col-md-2' })
 				));
@@ -618,7 +634,7 @@ var ThingInstanceViewPreview = function ThingInstanceViewPreview(_ref) {
         'This is what your things will look like!'
       ),
       _react2.default.createElement(_CraigslistCardPreview2.default, { thingAttributeNames: thingAttributeNames, thingAttributeExamples: thingAttributeExamples,
-        thingAttributeTypeIds: thingAttributeTypeIds })
+        thingAttributeTypeIds: thingAttributeTypeIds, isPreview: true })
     ),
     _react2.default.createElement('div', { className: 'col-md-2' })
   );
@@ -856,9 +872,6 @@ var mapStateToProps = function mapStateToProps(state) {
     }) : [],
     thingAttributeTypeIds: state.form.newThingForm.values != null ? state.form.newThingForm.values.members.map(function (value) {
       return value.thingattributetypeid;
-    }) : [],
-    thingAttributeExampleFiles: state.form.newThingForm.values != null ? state.form.newThingForm.values.members.map(function (value) {
-      return value.thingattributeexamplefile;
     }) : []
   };
 };

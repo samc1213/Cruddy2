@@ -7,13 +7,17 @@ import * as actions from '../actions/index'
 const mapStateToProps = (state) => {
   var tempthingAttributeTypes = [];
   var tempthingAttributeNames = [];
+  var tempthingAttributeIds = [];
+
   for (var thingattributeid in state.thingAttributes){
-    tempthingAttributeNames.push(state.thingAttributes[thingattributeid].name)
-    tempthingAttributeTypes.push(state.thingAttributes[thingattributeid].typeid)
+    tempthingAttributeNames.push(state.thingAttributes[thingattributeid].name);
+    tempthingAttributeTypes.push(state.thingAttributes[thingattributeid].typeid);
+    tempthingAttributeIds.push(thingattributeid);
   }
   return{
     thingAttributeTypes: tempthingAttributeTypes,
-    thingAttributeNames: tempthingAttributeNames
+    thingAttributeNames: tempthingAttributeNames,
+    thingAttributeIds: tempthingAttributeIds
   }
 }
 

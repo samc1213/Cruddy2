@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Sequence, ForeignKey
+from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, LargeBinary
 from sqlalchemy.orm import relationship
 from DBSessionManager import Base
 from sqlalchemy.ext.declarative import declarative_base
@@ -19,8 +19,14 @@ class User(Base):
 
 
 
-# class Administrator(User):
-#     # Sam
+class Photo(Base):
+    __tablename__ = 'photos'
+
+    photoid = Column(Integer, Sequence('photos_photoid_seq'), primary_key=True)
+    photo = Column(LargeBinary)
+
+    def __init__(self, photo):
+        self.photo = photo
 
 
 class Thing(Base):

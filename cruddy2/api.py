@@ -1,5 +1,9 @@
 from model.DBSessionManager import DBSessionManager
 from model.Model import *
+import json
+import uuid
+import os
+import base64
 
 
 class api:
@@ -19,8 +23,25 @@ class api:
         sessionManager = DBSessionManager()
         sessionManager.CommitToSession(objectsToCommitToDB)
 
-    def createThingInstance(self, thingInstanceInfo, thingId):
-        newThingInstance = ThingInstance(thingInstanceInfo)
+    def savePhoto(self, fileStore):
+        self.saveFileToUploads()
+
+    def createThingInstance(self, form, files):
+        thingId = int(form['thingid'])
+        thingInstance = {}
+
+        for name in form:
+            if name.startswith('thingattributeid.'):
+                thingAttributeIdIndex = len('thingattributeid.')
+                thingAttributeId = name[thingAttributeIdIndex:]
+                thingInstance[thingAttributeId] = form[name]
+
+        for file, values in files.iteritems():
+            thingAttributeIdIndex = len('thingattributeid.')
+            thingAttributeId = file[thingAttributeIdIndex:]
+            thingInstance[thingAttributeId] = base64.b64encode(values.read())
+
+        newThingInstance = ThingInstance(json.dumps(thingInstance))
         newThingInstance.thingid = thingId
 
         sessionManager = DBSessionManager()

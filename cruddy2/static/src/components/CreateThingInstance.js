@@ -10,21 +10,24 @@ class CreateThingInstance extends React.Component {
 		console.log(this.props)
 		var thingAttributes = []
 		for (var i = 0; i < this.props.thingAttributeNames.length; i ++) {
-			var thingAttributeType = this.props.thingAttributeTypes[i] !="3" ? "text" : "file"
+			var name = `thingattributeid.${this.props.thingAttributeIds[i]}`;
+			var thingAttributeType = this.props.thingAttributeTypes[i] !="3" ? <input type="text" name={name}/> 
+				: <input type="file" accept="image/*" name={name} />
 
-				thingAttributes.push(
-					<div>
-						<label> {this.props.thingAttributeNames[i]} </label>
-						<input type={thingAttributeType} />
-					</div>
-				)
+			thingAttributes.push(
+				<div key={i}>
+					<label> {this.props.thingAttributeNames[i]} </label>
+					{thingAttributeType}
+				</div>
+			)
 		}
 
 		return(
 			<div>
-				poop
-				<form>
+				<form action="/api/postnewthinginstance" method="POST" encType="multipart/form-data">
+				<input type="hidden" name="thingid" value={this.props.params.thingId} />
 				{thingAttributes}
+				<button type="submit"> Submit </button>
 				</form>
 			</div>
 		)

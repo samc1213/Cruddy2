@@ -81,20 +81,11 @@ def submittedThing():
             for i in range(len(thingAttributeNames))])
     return thingName
 #
-@app.route('/submittedthinginstance', methods=['POST'])
-def submittedThingInstance():
-    thingInstanceBlob = {}
-    thingId = int(request.form['thingid'])
-
-    for name in request.form:
-        if name.startswith('thingattributeid.'):
-            thingAttributeIdIndex = len('thingattributeid.')
-            thingAttributeId = name[thingAttributeIdIndex:]
-            thingInstanceBlob[thingAttributeId] = request.form[name]
-
-    api.createThingInstance(json.dumps(thingInstanceBlob), thingId)
-
-    return str(thingId)
+@app.route('/api/postnewthinginstance', methods=['POST'])
+def postNewThingInstance():
+    app.logger.debug(request.files)
+    api.createThingInstance(request.form, request.files)
+    return 'success' 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

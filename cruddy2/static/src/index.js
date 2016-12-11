@@ -1,15 +1,22 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunkMiddleware from 'redux-thunk'
 import { Provider } from 'react-redux'
+import CreateThing from './components/CreateThing'
+import CraigslistViewContainer from './containers/CraigslistViewContainer'
 import App from './components/App'
+import Home from './components/Home'
 import reducer from './reducers'
 import 'whatwg-fetch'
 import { getThingAttributeTypes } from './actions'
+import { Router, Route, Link, browserHistory } from 'react-router'
 
-const store = createStore(reducer)
+const store = createStore(reducer,
+  applyMiddleware(thunkMiddleware)
+  )
 
-fetch('/getthingattributetypes')
+fetch('/api/getthingattributetypes')
   .then(function(response) {
     if (response.status >= 400) {
       throw new Error("Bad response from server");
@@ -19,9 +26,15 @@ fetch('/getthingattributetypes')
     store.dispatch(getThingAttributeTypes(data));
   });
 
-render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
-)
+render((
+  <Provider store = {store}>
+    <Router history={browserHistory}>
+      <Route path="/" component={App}>
+        <Route path="creatething" component={CreateThing} />
+        <Route path="viewcraigslistview" component={CraigslistViewContainer }>
+          <Route path="/viewcraigslistview/:thingId" component={CraigslistViewContainer} />
+        </Route>
+      </Route>
+    </Router>
+  </Provider>
+), document.getElementById('root'))

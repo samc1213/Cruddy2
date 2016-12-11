@@ -1,24 +1,13 @@
-import React from 'react'
-import Footer from './Footer'
-import NewThingFormContainer from '../containers/NewThingFormContainer'
-import ThingInstanceViewPreviewContainer from '../containers/ThingInstanceViewPreviewContainer'
+import React, { PropTypes } from 'react'
 
-
-class App extends React.Component {
+const App = React.createClass({
   render(){
-      return(
-        <div>
-          <div className="col-md-6">
-            <NewThingFormContainer />
-          </div>
-          <div className="col-md-6">
-            <ThingInstanceViewPreviewContainer />
-          </div>
-        </div>
-    );
-    }
+    return (
+      <div>
+        {this.props.children}
+      </div>
+    )
   }
-
-
+})
 
 export default App

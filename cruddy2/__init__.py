@@ -15,19 +15,28 @@ api = api()
 @app.route('/exampleimage')
 def exampleimg():
     return send_file('./static/1.jpg')
-
-@app.route('/')
-def index():
-    return 'hi'
-
-@app.route('/getthingattributetypes')
-def getthingattributetypes():
-    print "GETTHINGS"
+#
+# @app.route('/')
+# def index():
+#     return 'hi'
+#
+@app.route('/api/getthingattributetypes')
+def getThingAttributeTypes():
     return json.dumps(ThingAttributeTypes)
 
-@app.route('/creatething')
-def createThing():
-    return render_template('createthingreact.html', thingAttributeTypes=ThingAttributeTypes)
+@app.route('/api/getthinginstances/<thingId>')
+def getThingInstances(thingId):
+    thing = api.getThing(thingId)
+    thingInstances = api.getThingInstances(thing)
+    thingAttributes = api.getThingAttributes(thing)
+
+
+    
+    result = {}
+    result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
+    result['thingAttributes'] = thingAttributes
+    
+    return json.dumps(result)
 
 @app.route('/postnewthing', methods=['POST'])
 def postNewThing():
@@ -36,7 +45,7 @@ def postNewThing():
     thingName=form['thingname']
     thingAttributeNames = [None for i in range((len(form)-1)/3)]
     thingAttributeTypeIds = [None for i in range((len(form)-1)/3)]
-
+    print form
     assert len(thingAttributeNames) == len(thingAttributeTypeIds)
     for key, value in form.iteritems():
         if key[11:] == "thingattributetypeid":
@@ -53,7 +62,7 @@ def postNewThing():
         print "EXCEPTION"
 
     return thingName + 'po'
-
+#
 @app.route('/submittedthing', methods=['POST'])
 def submittedThing():
     thingName=request.form['thingname']
@@ -75,7 +84,7 @@ def createThingInstance(thingid):
     myThing = session.query(Thing).get(thingid)
 
     return render_template('createthinginstance.html', thingName=myThing.thingname, thingAttributes=myThing.thingattributes, thingId=thingid)
-
+#
 @app.route('/submittedthinginstance', methods=['POST'])
 def submittedThingInstance():
     thingInstanceBlob = {}
@@ -91,22 +100,8 @@ def submittedThingInstance():
 
     return str(thingId)
 
-@app.route('/viewthinginstancetable/<thingId>')
-def viewThingInstanceTable(thingId):
-    thing = api.getThing(thingId)
-    thingInstances = api.getThingInstances(thing)
-    thingInstanceInfos = [json.loads(ti.thinginstanceinfo) for ti in thingInstances]
-    thingAttributesConversionDict = api.getThingAttributeIdToNameDict(thing)
-
-    print thingAttributesConversionDict
-
-    thingInstancesAttributeNamesToAttributeValues = []
-
-    for tiInfo in thingInstanceInfos:
-        for thingAttributeId, thingInstanceAttribute in tiInfo.iteritems():
-            thingInstancesAttributeNamesToAttributeValues.append(
-                {thingAttributesConversionDict[int(thingAttributeId)]: thingInstanceAttribute})
-
-    return render_template('thinginstancetable.html',
-        thingName = thing.thingname,
-        thingInstances = thingInstancesAttributeNamesToAttributeValues)
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    print path
+    return render_template('createthingreact.html')

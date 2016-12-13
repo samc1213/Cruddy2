@@ -8,9 +8,19 @@ import bcrypt
 
 
 class api:
+
     def __init__(self):
         self.sessionManager = DBSessionManager()
         self.session = self.sessionManager.GetSession()
+
+    def createWebsite(self, form):
+        websiteTypeId = int(form['websitetypeid'])
+        websiteName = str(form['websitename'])
+        print websiteTypeId
+        print websiteName
+        newWebsite = Website(websiteName, websiteTypeId, 97)
+        sessionManager = DBSessionManager()
+        sessionManager.CommitToSession([newWebsite])
 
     def createThing(self, thingName, thingAttributes):
         newThing = Thing(thingName)
@@ -63,7 +73,7 @@ class api:
         try:
             password = bcrypt.hashpw(form['password'].encode('utf-8'), bcrypt.gensalt())
             user = User(form['firstname'], form['lastname'], form['username'], password)
-        
+
             self.sessionManager.CommitToSession([user])
             return True
         except:

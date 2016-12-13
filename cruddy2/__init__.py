@@ -12,6 +12,7 @@ from api import *
 app = Flask(__name__)
 api = api()
 
+
 @app.route('/exampleimage')
 def exampleimg():
     return send_file('./static/1.jpg')
@@ -41,6 +42,11 @@ def getThingInstances(thingId):
     result['thingAttributes'] = thingAttributes
 
     return json.dumps(result)
+
+@app.route('/api/postnewwebsite', methods=['POST'])
+def postNewWebsite():
+    api.createWebsite(request.form)
+    return request.form['websitename']
 
 @app.route('/postnewthing', methods=['POST'])
 def postNewThing():
@@ -99,7 +105,7 @@ def postLoginUser():
 def postNewThingInstance():
     app.logger.debug(request.files)
     api.createThingInstance(request.form, request.files)
-    return 'success' 
+    return 'success'
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

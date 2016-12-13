@@ -11,7 +11,7 @@ class User(Base):
     firstname = Column(String)
     lastname = Column(String)
     things = relationship('Thing', back_populates='user')
-
+    websites = relationship('Website', back_populates='user')
 
     def __init__(self, firstName, lastName):
         self.firstname = firstName
@@ -80,12 +80,21 @@ class ThingInstanceAttribute():
         self.ThingAttribute = thingAttribute
         self.Value = value
 
-class WebApp():
+class Website(Base):
     # Craigslist for Cars
+    __tablename__ = 'websites'
 
-    def __init__(self, administrator):
-        self.Administrator = administrator
+    websiteid = Column(Integer, Sequence('websites_websiteid_seq'), primary_key=True)
+    websitename = Column(String)
+    websitetypeid = Column(Integer)
+    userid = Column(Integer, ForeignKey('users.userid'))
+    user = relationship('User', back_populates='websites')
 
+
+    def __init__(self, websitename, websitetypeid, userid):
+        self.websitename = websitename
+        self.websitetypeid = websitetypeid
+        self.userid = userid
 # class Administrator(User):
 #     # Sam
 #

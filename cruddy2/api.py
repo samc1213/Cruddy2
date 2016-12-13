@@ -8,6 +8,15 @@ import base64
 
 class api:
 
+    def createWebsite(self, form):
+        websiteTypeId = int(form['websitetypeid'])
+        websiteName = str(form['websitename'])
+        print websiteTypeId
+        print websiteName
+        newWebsite = Website(websiteName, websiteTypeId, 97)
+        sessionManager = DBSessionManager()
+        sessionManager.CommitToSession([newWebsite])
+
     def createThing(self, thingName, thingAttributes):
         newThing = Thing(thingName)
         objectsToCommitToDB = []

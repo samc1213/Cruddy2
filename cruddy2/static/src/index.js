@@ -12,6 +12,7 @@ import 'whatwg-fetch'
 import { getThingAttributeTypes } from './actions'
 import { Router, Route, Link, browserHistory } from 'react-router'
 import CreateThingInstanceViewContainer from './containers/CreateThingInstanceViewContainer'
+import CreateWebsite from './components/CreateWebsite'
 
 
 const store = createStore(reducer,
@@ -32,6 +33,7 @@ render((
   <Provider store = {store}>
     <Router history={browserHistory}>
       <Route path="/" component={App}>
+        <Route path="createwebsite" component={CreateWebsite} />
         <Route path="creatething" component={CreateThing} />
         <Route path="viewcraigslistview" component={CraigslistViewContainer }>
           <Route path="/viewcraigslistview/:thingId" component={CraigslistViewContainer} />

@@ -33,14 +33,15 @@ def getThingAttributes(thingId):
 def getThingInstances(thingId):
     thingInstances = api.getThingInstances(thingId)
     thingAttributes = api.getThingAttributes(thingId)
-
-
-
     result = {}
     result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
     result['thingAttributes'] = thingAttributes
-
     return json.dumps(result)
+
+@app.route('/api/postnewwebsite', methods=['POST'])
+def postNewWebsite():
+    api.createWebsite(request.form)
+    return request.form['websitename']
 
 @app.route('/postnewthing', methods=['POST'])
 def postNewThing():
@@ -85,7 +86,7 @@ def submittedThing():
 def postNewThingInstance():
     app.logger.debug(request.files)
     api.createThingInstance(request.form, request.files)
-    return 'success' 
+    return 'success'
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

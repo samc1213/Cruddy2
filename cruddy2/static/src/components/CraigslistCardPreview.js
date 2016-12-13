@@ -8,9 +8,6 @@ const CraigslistCardPreview = ({ thingAttributeNames, thingAttributeExamples, th
   var weHaveAnImg = false;
   var src="/exampleimage";
   
-  console.log(thingAttributeExamples);
-  console.log('examples');
-
   for (var i = 0; i < thingAttributeNames.length; i++)
   {
 	  if (thingAttributeTypeIds[i] != "3")

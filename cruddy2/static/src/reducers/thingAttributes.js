@@ -1,4 +1,4 @@
-const thingAttributes =  (state = {}, action) =>{
+const thingAttributes =  (state = [], action) =>{
   switch (action.type) {
     case 'THING_ATTRIBUTES_RECEIVED':
       return action.data;

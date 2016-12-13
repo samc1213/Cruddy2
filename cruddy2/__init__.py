@@ -80,7 +80,21 @@ def submittedThing():
         'typeid': thingAttributeTypeIds[i]}
             for i in range(len(thingAttributeNames))])
     return thingName
-#
+
+@app.route('/api/postnewaccount', methods=['POST'])
+def postNewAccount():
+    if api.createUser(request.form) == True:
+        return json.dumps({'success': True, 'username': request.form['username']}), 200, {'ContentType':'application/json'}
+    else:
+        return json.dumps({'success': False, 'username': ''}), 200, {'ContentType':'application/json'}
+
+@app.route('/api/postloginuser', methods=['POST'])
+def postLoginUser():
+    if api.validateUser(request.form) == True:
+        return json.dumps({'success': True, 'username': request.form['username']}), 200, {'ContentType':'application/json'}
+    else:
+        return json.dumps({'success': False, 'username': ''}), 200, {'ContentType':'application/json'}
+
 @app.route('/api/postnewthinginstance', methods=['POST'])
 def postNewThingInstance():
     app.logger.debug(request.files)

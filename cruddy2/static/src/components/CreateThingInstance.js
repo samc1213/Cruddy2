@@ -7,7 +7,6 @@ class CreateThingInstance extends React.Component {
 	}
 
 	render(){
-		console.log(this.props)
 		var thingAttributes = []
 		for (var i = 0; i < this.props.thingAttributeNames.length; i ++) {
 			var name = `thingattributeid.${this.props.thingAttributeIds[i]}`;

@@ -4,9 +4,13 @@ import json
 import uuid
 import os
 import base64
+import bcrypt
 
 
 class api:
+    def __init__(self):
+        self.sessionManager = DBSessionManager()
+        self.session = self.sessionManager.GetSession()
 
     def createThing(self, thingName, thingAttributes):
         newThing = Thing(thingName)
@@ -20,8 +24,7 @@ class api:
 
         objectsToCommitToDB.append(newThing)
 
-        sessionManager = DBSessionManager()
-        sessionManager.CommitToSession(objectsToCommitToDB)
+        self.sessionManager.CommitToSession(objectsToCommitToDB)
 
     def savePhoto(self, fileStore):
         self.saveFileToUploads()
@@ -44,13 +47,10 @@ class api:
         newThingInstance = ThingInstance(json.dumps(thingInstance))
         newThingInstance.thingid = thingId
 
-        sessionManager = DBSessionManager()
-        sessionManager.CommitToSession([newThingInstance])
+        self.sessionManager.CommitToSession([newThingInstance])
 
     def getThing(self, thingId):
-        sessionManager = DBSessionManager()
-        session = sessionManager.GetSession()
-        thing = session.query(Thing).get(thingId)
+        thing = self.session.query(Thing).get(thingId)
 
         return thing
 
@@ -58,6 +58,27 @@ class api:
         thing = self.getThing(thingId)
 
         return thing.thinginstances
+
+    def createUser(self, form):
+        try:
+            password = bcrypt.hashpw(form['password'].encode('utf-8'), bcrypt.gensalt())
+            user = User(form['firstname'], form['lastname'], form['username'], password)
+        
+            self.sessionManager.CommitToSession([user])
+            return True
+        except:
+            return False
+
+    def validateUser(self, form):
+        try:
+            user = self.getUserFromUsername(form['username'])
+            if bcrypt.checkpw(form['password'].encode('utf-8'), user.password.encode('utf-8')):
+                return True
+            else:
+                return False
+        except:
+            return False
+
 
     def getThingAttributeIdToNameDict(self, thing):
         idToNameDict = {}
@@ -76,9 +97,6 @@ class api:
                 }
         return thingAttributes
 
-    # def createThingAttribute(self, name, attributetype):
-    #     sessionManager = DBSessionManager()
-    #     thingattribute = ThingAttribute(name, attributetype)
-    #     # return thing.thingname
-    #     # return str(thing.UserId)
-    #     sessionManager.CommitToSession(thingattribute)
+    def getUserFromUsername(self, username):
+        user = self.session.query(User).filter_by(username=username).first()
+        return user

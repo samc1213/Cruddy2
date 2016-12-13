@@ -3,6 +3,7 @@ import { reducer as formReducer } from 'redux-form'
 import thingAttributeTypes from './thingAttributeTypes'
 import thingInstances from './thingInstances'
 import thingAttributeIdsToNamesAndTypes from './thingAttributeIdsToNamesAndTypes'
+import loggedInUser from './loggedInUser'
 import thingAttributes from './thingAttributes'
 
 const todoApp = combineReducers({
@@ -10,6 +11,7 @@ const todoApp = combineReducers({
   thingInstances,
   thingAttributeIdsToNamesAndTypes,
   thingAttributes,
+  loggedInUser,
   form: formReducer
 })
 

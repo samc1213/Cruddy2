@@ -10,12 +10,16 @@ class User(Base):
     userid = Column(Integer, Sequence('users_userid_seq'), primary_key=True)
     firstname = Column(String)
     lastname = Column(String)
+    username = Column(String)
+    password = Column(String)
     things = relationship('Thing', back_populates='user')
 
 
-    def __init__(self, firstName, lastName):
+    def __init__(self, firstName, lastName, username, password):
         self.firstname = firstName
         self.lastname = lastName
+        self.username = username
+        self.password = password
 
 
 

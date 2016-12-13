@@ -85,8 +85,6 @@ class thingAttributes extends React.Component {
 }
 
 const NewThingForm = ({ handleSubmit, pristine, reset, submitting, thingAttributeTypes, selectedExampleType, ...initialValues }) => {
-  console.log('iro');
-  console.log(selectedExampleType);
   return (
     <form role="form" action="/postnewthing" method="post" className="form-group">
       <Field name="thingname" type="text" component={renderTextField} label="Thing Name"/>

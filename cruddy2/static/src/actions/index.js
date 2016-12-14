@@ -45,6 +45,17 @@ export const websitesReceived = (data) => ({
   data
 })
 
+export const rehydrateLoggedInUser = () => ({
+	type: "REHYDRATE_LOGGED_IN_USER"
+})
+
+export function rehydrateAndGetWebsites(username) {
+	return function (dispatch) {
+    	dispatch(rehydrateLoggedInUser())
+
+	    return dispatch(getWebsites(username))
+	}
+}
 
 
 export function getThingInstances(thingId) {
@@ -74,6 +85,8 @@ export function getThingAttributes(thingId) {
 }
 
 export function getWebsites(username) {
+	console.log("GETWEB");
+	console.log(username);
 	return function (dispatch) {
     	dispatch(websitesFetch(true))
 

@@ -26,7 +26,11 @@ const mapStateToProps = (state) => {
  const mapDispatchToProps = (dispatch) => (
   {
     getWebsites: (username) => {
-    	dispatch(actions.getWebsites(username))
+    	dispatch(actions.rehydrateAndGetWebsites(username))
+    },
+
+    rehydrate: () => {
+    	dispatch(actions.rehydrateLoggedInUser())
     }
   }
 )

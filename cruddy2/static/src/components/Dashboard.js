@@ -1,6 +1,10 @@
 import React, { PropTypes } from 'react'
 
 class Dashboard extends React.Component {
+  componentDidMount() {
+    this.props.getWebsites(this.props.loggedInUser);
+  }
+
   render(){
       if (this.props.loggedInUser == null)
       {

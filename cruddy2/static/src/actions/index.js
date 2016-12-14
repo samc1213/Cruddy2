@@ -35,6 +35,17 @@ export const userLoggedOut = () => ({
 	type: "USER_LOGGED_OUT"
 })
 
+export const websitesFetch = (isTrue) =>({
+  type: "WEBSITES_FETCH",
+  isTrue
+})
+
+export const websitesReceived = (data) => ({
+  type: "WEBSITES_RECEIVED",
+  data
+})
+
+
 
 export function getThingInstances(thingId) {
 	return function (dispatch) {
@@ -61,6 +72,20 @@ export function getThingAttributes(thingId) {
 	      .catch(err => console.log(err))
 	}
 }
+
+export function getWebsites(username) {
+	return function (dispatch) {
+    	dispatch(websitesFetch(true))
+
+	    return fetch(`/api/getwebsites/${username}`)
+	      .then(response => response.json())
+	      .then(json =>
+	        dispatch(websitesReceived(json))
+	      )
+	      .catch(err => console.log(err))
+	}
+}
+
 
 export function submitCreateAccount(firstname, lastname, username, password) {
 	function doFetch(data, dispatch) {

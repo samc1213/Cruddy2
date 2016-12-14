@@ -17,7 +17,7 @@ import 'whatwg-fetch'
 import { getThingAttributeTypes } from './actions'
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
 import CreateThingInstanceViewContainer from './containers/CreateThingInstanceViewContainer'
-import CreateWebsite from './components/CreateWebsite'
+import CreateWebsiteViewContainer from './containers/CreateWebsiteViewContainer'
 
 
 
@@ -43,7 +43,7 @@ render((
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer}>
         <IndexRoute component={Home} />
-        <Route path="createwebsite" component={CreateWebsite} />
+        <Route path="createwebsite" component={CreateWebsiteViewContainer} />
         <Route path="creatething" component={CreateThing} />
         <Route path="createaccount" component={CreateAccountFormContainer} />
         <Route path="login" component={LoginFormContainer} />

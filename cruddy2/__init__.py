@@ -43,6 +43,12 @@ def getThingInstances(thingId):
 
     return json.dumps(result)
 
+@app.route('/api/getwebsites/<username>')
+def getWebsites(username):
+    print "inhere"
+    websites = api.getWebsites(username)
+    return json.dumps(websites)
+
 @app.route('/api/postnewwebsite', methods=['POST'])
 def postNewWebsite():
     api.createWebsite(request.form)

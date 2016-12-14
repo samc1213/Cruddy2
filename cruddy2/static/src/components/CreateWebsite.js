@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 
 class CreateWebsite extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render(){
+
       return(
+
         <div>
           <div id="myCarousel" className="carousel slide">
             <ol className="carousel-indicators">
@@ -42,6 +48,7 @@ class CreateWebsite extends React.Component {
           <form action="/api/postnewwebsite" method="POST" encType="multipart/form-data">
             <label> Website Name </label>
             <input type="text" name="websitename"/>
+            <input type="hidden" name="username" value = {this.props.loggedInUser} />
             <input type="hidden" name="websitetypeid" value="0" />
             <button  className="btn btn-primary" type="submit" > Submit </button>
           </form>

@@ -16,9 +16,8 @@ class api:
     def createWebsite(self, form):
         websiteTypeId = int(form['websitetypeid'])
         websiteName = str(form['websitename'])
-        print websiteTypeId
-        print websiteName
-        newWebsite = Website(websiteName, websiteTypeId, 97)
+        user = self.getUserFromUsername(form['username'])
+        newWebsite = Website(websiteName, websiteTypeId, int(user.userid))
         sessionManager = DBSessionManager()
         sessionManager.CommitToSession([newWebsite])
 
@@ -63,6 +62,22 @@ class api:
         thing = self.session.query(Thing).get(thingId)
 
         return thing
+
+    def getWebsites(self, username):
+        user = self.getUserFromUsername(username)
+        websites = self.getWebsiteFromUserID(user.userid)
+        return websites
+
+    def getWebsiteFromUserID(self, id):
+        tempwebsites = self.session.query(Website).filter_by(userid=id)
+        websites = {}
+        for website in tempwebsites:
+            websites[website.websiteid] = {
+                'websitename': website.websitename,
+                'websitetypeid': website.websitetypeid
+            }
+        return websites
+
 
     def getThingInstances(self, thingId):
         thing = self.getThing(thingId)

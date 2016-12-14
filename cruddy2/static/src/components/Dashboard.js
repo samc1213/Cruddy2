@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 
 class Dashboard extends React.Component {
   componentDidMount() {
-    this.props.getWebsites();
+    this.props.getWebsites(localStorage.getItem('loggedinuser'));
   }
 
   render(){

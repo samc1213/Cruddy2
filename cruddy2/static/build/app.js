@@ -788,7 +788,7 @@ var CreateWebsite = function (_React$Component) {
 exports.default = CreateWebsite;
 
 },{"react":286}],8:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -796,7 +796,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -818,29 +818,29 @@ var Dashboard = function (_React$Component) {
     }
 
     _createClass(Dashboard, [{
-        key: "componentDidMount",
+        key: 'componentDidMount',
         value: function componentDidMount() {
-            this.props.getWebsites();
+            this.props.getWebsites(localStorage.getItem('loggedinuser'));
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             if (this.props.loggedInUser == null) {
                 return _react2.default.createElement(
-                    "div",
+                    'div',
                     null,
-                    "please login Dudda"
+                    'please login Dudda'
                 );
             } else {
                 return _react2.default.createElement(
-                    "div",
+                    'div',
                     null,
                     this.props.loggedInUser,
-                    "'s Dashboard",
+                    '\'s Dashboard',
                     _react2.default.createElement(
-                        "a",
-                        { className: "btn btn-primary", href: "/createwebsite", role: "button" },
-                        "Create New Website"
+                        'a',
+                        { className: 'btn btn-primary', href: '/createwebsite', role: 'button' },
+                        'Create New Website'
                     )
                 );
             }
@@ -1373,7 +1373,6 @@ var CreateThingInstance = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			console.log(this.props);
 			var thingAttributes = [];
 			for (var i = 0; i < this.props.thingAttributeNames.length; i++) {
 				var name = 'thingattributeid.' + this.props.thingAttributeIds[i];
@@ -1649,7 +1648,7 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		return {
 				getWebsites: function getWebsites(username) {
-						dispatch(actions.rehydrateAndGetWebsites(username));
+						dispatch(actions.getWebsites(username));
 				},
 
 				rehydrate: function rehydrate() {

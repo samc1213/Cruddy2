@@ -1,7 +1,7 @@
 const websites =  (state = {}, action) =>{
   switch (action.type) {
     case 'WEBSITES_RECEIVED':
-      return action.data.websites;
+      return action.data;
     default:
       return state;
   }

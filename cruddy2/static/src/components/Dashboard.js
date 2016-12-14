@@ -16,10 +16,22 @@ class Dashboard extends React.Component {
       }
       else
       {
+        var websitedivs = []
+        for (var i = 0; i < this.props.websiteIds.length; i ++) {
+          var name = `websiteid.${this.props.websiteIds[i]}`;
+          websitedivs.push(
+            <div key={name}>
+              <label> {this.props.websiteNames[i]} </label>
+            </div>
+          )
+        }
+ 
         return (
             <div>
                 {this.props.loggedInUser}'s Dashboard
+                {websitedivs}
                 <a className="btn btn-primary" href="/createwebsite" role="button">Create New Website</a>
+
             </div>
             )
       }

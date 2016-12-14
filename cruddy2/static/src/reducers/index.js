@@ -5,6 +5,7 @@ import thingInstances from './thingInstances'
 import thingAttributeIdsToNamesAndTypes from './thingAttributeIdsToNamesAndTypes'
 import loggedInUser from './loggedInUser'
 import thingAttributes from './thingAttributes'
+import websites from './websites'
 
 const todoApp = combineReducers({
   thingAttributeTypes,
@@ -12,6 +13,7 @@ const todoApp = combineReducers({
   thingAttributeIdsToNamesAndTypes,
   thingAttributes,
   loggedInUser,
+  websites,
   form: formReducer
 })
 

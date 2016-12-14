@@ -7,7 +7,7 @@ const mapStateToProps = (state) => {
 	var tempwebsitenames = [];
 	var tempwebsitetypeids = [];
 	var tempwebsiteids = [];
-
+	console.log( state.websites);
 
 	for (var websiteid in state.websites){
 		tempwebsitenames.push(state.websites[websiteid].websitename)

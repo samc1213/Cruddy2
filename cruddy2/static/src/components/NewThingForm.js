@@ -11,6 +11,12 @@ const renderTextField = ({ input, label, type, meta: { touched, error } }) => (
   </div>
 )
 
+const hiddenField = ({name}) =>(
+  <div>
+    <input name="websitename" type="hidden" value = {name}/>
+  </div>
+)
+
 class thingAttributes extends React.Component {
   createExampleField(exampleTypeId, thingAttribute) {
     if (exampleTypeId != "3") {
@@ -84,11 +90,12 @@ class thingAttributes extends React.Component {
   }
 }
 
-const NewThingForm = ({ handleSubmit, pristine, reset, submitting, thingAttributeTypes, selectedExampleType, ...initialValues }) => {
+const NewThingForm = ({ handleSubmit, pristine, reset, submitting, websiteName, thingAttributeTypes, selectedExampleType, ...initialValues }) => {
   return (
     <form role="form" action="/postnewthing" method="post" className="form-group">
       <Field name="thingname" type="text" component={renderTextField} label="Thing Name"/>
       <FieldArray name="members" component={thingAttributes} thingAttributeTypes={thingAttributeTypes} selectedExampleType={selectedExampleType}/>
+      <Field name={websiteName} component={hiddenField} />
       <button  className="btn btn-primary" type="submit" > Submit </button>
     </form>
    )

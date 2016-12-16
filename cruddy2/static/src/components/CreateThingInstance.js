@@ -3,7 +3,7 @@ import { Field, reduxForm, FieldArray } from 'redux-form';
 
 class CreateThingInstance extends React.Component {
 	componentDidMount() {
-		this.props.getThingAttributes(this.props.params.thingId);
+		this.props.getCurrentWebsiteName(this.props.params.thingId);
 	}
 
 	render(){

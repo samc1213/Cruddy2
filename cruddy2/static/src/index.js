@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { Provider } from 'react-redux'
 import {persistStore, autoRehydrate} from 'redux-persist'
-import CreateThing from './components/CreateThing'
+import CreateThingContainer from './containers/CreateThingContainer'
 import CraigslistViewContainer from './containers/CraigslistViewContainer'
 import AppContainer from './containers/AppContainer'
 import Home from './components/Home'
@@ -44,7 +44,7 @@ render((
       <Route path="/" component={AppContainer}>
         <IndexRoute component={Home} />
         <Route path="createwebsite" component={CreateWebsiteViewContainer} />
-        <Route path="creatething" component={CreateThing} />
+        <Route path=":websiteName/creatething" component={CreateThingContainer} />
         <Route path="createaccount" component={CreateAccountFormContainer} />
         <Route path="login" component={LoginFormContainer} />
         <Route path="viewcraigslistview" component={CraigslistViewContainer }>

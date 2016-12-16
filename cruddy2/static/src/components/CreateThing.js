@@ -4,7 +4,12 @@ import ThingInstanceViewPreviewContainer from '../containers/ThingInstanceViewPr
 
 
 class CreateThing extends React.Component {
+  componentDidMount() {
+    this.props.getCurrentWebsiteName(this.props.params.websiteName);
+  }
+
   render(){
+    console.log(this.props.params.websiteName)
       return(
         <div>
           <div className="col-md-6">

@@ -1,10 +1,16 @@
 import { connect } from 'react-redux'
 import NewThingForm from '../components/NewThingForm'
 
-const mapStateToProps = (state) => ({
-  thingAttributeTypes: state.thingAttributeTypes,
-  selectedExampleType: state.form.newThingForm ? state.form.newThingForm.values.members.map((member) => member.thingattributetypeid) : {}
-})
+const mapStateToProps = (state) => {
+	console.log(state.websiteName)
+	return{
+	  thingAttributeTypes: state.thingAttributeTypes,
+	  websiteName: state.websiteName,
+	  selectedExampleType: state.form.newThingForm ? state.form.newThingForm.values.members.map((member) => member.thingattributetypeid) : {}
+	}
+}
+
+
 
 const NewThingFormContainer = connect(
   mapStateToProps,

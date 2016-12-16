@@ -34,14 +34,16 @@ def getThingAttributes(thingId):
 def getThingInstances(thingId):
     thingInstances = api.getThingInstances(thingId)
     thingAttributes = api.getThingAttributes(thingId)
-
-
-
     result = {}
     result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
     result['thingAttributes'] = thingAttributes
 
     return json.dumps(result)
+
+@app.route('/api/getwebsiteidbyname/<websiteName>')
+def getWebsiteIDByName(websiteName):
+    website = api.getWebsiteIDByName(websiteName)
+    return json.dumps(website.websiteid)
 
 @app.route('/api/getwebsites/<username>')
 def getWebsites(username):
@@ -52,12 +54,15 @@ def getWebsites(username):
 @app.route('/api/postnewwebsite', methods=['POST'])
 def postNewWebsite():
     api.createWebsite(request.form)
-    return request.form['websitename']
+    redirectstring = '/'+str(request.form['websitename'])+'/creatething'
+    return redirect(redirectstring)
+
 
 @app.route('/postnewthing', methods=['POST'])
 def postNewThing():
     form = request.form
-
+    websiteName = form['websitename']
+    websiteID = api.getWebsiteIDByName(websiteName)
     thingName=form['thingname']
     thingAttributeNames = [None for i in range((len(form)-1)/3)]
     thingAttributeTypeIds = [None for i in range((len(form)-1)/3)]
@@ -70,7 +75,7 @@ def postNewThing():
             thingAttributeNames[int(key[8])] = value
 
     try:
-        api.createThing(thingName,
+        api.createThing(thingName, websiteID,
             [{'name': thingAttributeNames[i],
             'typeid': thingAttributeTypeIds[i]}
                 for i in range(len(thingAttributeNames))])

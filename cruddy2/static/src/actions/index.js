@@ -6,6 +6,11 @@ export const getThingAttributeTypes = (data) => ({
   data
 })
 
+export const getCurrentWebsiteName = (data) => ({
+  type: "GET_CURRENT_WEBSITE",
+  data
+})
+
 export const thingInstancesFetch = (isTrue) => ({
   type: "THING_INSTANCES_FETCH",
   isTrue

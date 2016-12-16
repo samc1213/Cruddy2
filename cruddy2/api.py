@@ -21,11 +21,14 @@ class api:
         sessionManager = DBSessionManager()
         sessionManager.CommitToSession([newWebsite])
 
-    def createThing(self, thingName, thingAttributes):
-        newThing = Thing(thingName)
+    def createThing(self, thingName, websiteID, thingAttributes):
+        newThing = Thing(thingName, websiteID)
         objectsToCommitToDB = []
+        print "inthisbitch"
 
         for thingAttribute in thingAttributes:
+            print "fuky"
+
             tattr = ThingAttribute(
                 thingAttribute['name'], thingAttribute['typeid'])
             tattr.thing = newThing
@@ -62,6 +65,11 @@ class api:
         thing = self.session.query(Thing).get(thingId)
 
         return thing
+
+    def getWebsiteIDByName(self, websiteName):
+        website = self.session.query(Website).filter_by(websitename=websiteName).first()
+        print website.websiteid
+        return int(website.websiteid)
 
     def getWebsites(self, username):
         user = self.getUserFromUsername(username)

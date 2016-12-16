@@ -12,7 +12,6 @@ class User(Base):
     lastname = Column(String)
     username = Column(String)
     password = Column(String)
-    things = relationship('Thing', back_populates='user')
     websites = relationship('Website', back_populates='user')
 
 
@@ -42,15 +41,15 @@ class Thing(Base):
 
     thingid = Column(Integer, Sequence('things_thingid_seq'), primary_key=True)
     thingname = Column(String)
-    userid = Column(Integer, ForeignKey('users.userid'))
-    # user = relationship("User", back_populates="things")
-    user = relationship('User', back_populates='things')
-    thingattributes = relationship('ThingAttribute', back_populates="thing")
+    websiteid = Column(Integer, ForeignKey('websites.websiteid'))
+    website = relationship('Website', back_populates='things')
+
+    thingattributes = relationship('ThingAttribute', back_populates='thing')
     thinginstances = relationship('ThingInstance', back_populates='thing')
 
-    def __init__(self, name):
+    def __init__(self, name, websiteid):
         self.thingname = name
-        self.userid = 2
+        self.websiteid = websiteid
 
 class ThingAttribute(Base):
     # String, Make
@@ -95,6 +94,8 @@ class Website(Base):
     websitetypeid = Column(Integer)
     userid = Column(Integer, ForeignKey('users.userid'))
     user = relationship('User', back_populates='websites')
+    things = relationship('Thing', back_populates='website')
+
 
 
     def __init__(self, websitename, websitetypeid, userid):

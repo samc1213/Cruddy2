@@ -143,7 +143,7 @@ export function submitLogin(username, password) {
 		  .then((json) => {
 		  	if (json.success == true) {
 		  		dispatch(userLoggedIn(json['username']));
-		  		browserHistory.push('/creatething');
+		  		browserHistory.push('/dashboard');
 		  	}
 		  	else {
 		  		console.log("bad login");

@@ -20,9 +20,8 @@ class App extends React.Component {
   	{
   		var login = <a className="dropdown-item" href="/login">Login</a>;
   	}
-  	console.log(this.props.location.pathname);
-  	console.log(['/creatething', '/login', '/dashboard'].indexOf(this.props.location.pathname));
-   	if (['/creatething', '/login', '/dashboard'].indexOf(this.props.location.pathname) >= 0)
+
+   	if (['/creatething', '/login', '/dashboard', '/'].indexOf(this.props.location.pathname) >= 0)
   	{
   		var nav = <li className="nav-item dropdown float-*-right">
 		      <a className="nav-link dropdown-toggle" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>

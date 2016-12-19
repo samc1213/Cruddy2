@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
 import NewThingForm from '../components/NewThingForm'
+import * as actions from '../actions/index'
+
 
 const mapStateToProps = (state) => {
 	console.log(state.websiteName)
@@ -10,11 +12,17 @@ const mapStateToProps = (state) => {
 	}
 }
 
-
+const mapDispatchToProps = (dispatch) => (
+  {
+    submitNewThing: (form) => {
+    	dispatch(actions.submitNewThing(form))
+    }
+  }
+)
 
 const NewThingFormContainer = connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(NewThingForm)
 
 export default NewThingFormContainer

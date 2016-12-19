@@ -17,7 +17,9 @@ const CraigslistCardPreview = ({ thingAttributeNames, thingAttributeExamples, th
     else
     {
       imgStyle.display = "inline-block";
-      if (thingAttributeExamples[i][0] && isPreview == true)
+
+      
+      if (thingAttributeExamples[i] != null && thingAttributeExamples[i][0] && isPreview == true)
       //this is preview
       {
         var reader = new FileReader();

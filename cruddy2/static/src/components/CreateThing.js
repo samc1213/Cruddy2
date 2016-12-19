@@ -9,9 +9,10 @@ class CreateThing extends React.Component {
   }
 
   render(){
-    console.log(this.props.params.websiteName)
+    console.log()
       return(
         <div>
+				<h1 className="text-xs-center">What Thing you want to represent in your website {this.props.params.websiteName}? </h1>
           <div className="col-md-6">
             <NewThingFormContainer />
           </div>

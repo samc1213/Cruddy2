@@ -3,8 +3,20 @@ import { Field, reduxForm, FieldArray } from 'redux-form';
 
 class CreateThingInstance extends React.Component {
 	componentDidMount() {
-		this.props.getCurrentWebsiteName(this.props.params.thingId);
+		this.props.getThingAttributes(this.props.params.thingId);
 	}
+	
+  constructor(props) {
+    super(props);
+		
+		this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    var form = document.getElementById('newThingInstanceForm');
+    this.props.submitNewThingInstance(form);
+  }
 
 	render(){
 		var thingAttributes = []
@@ -23,7 +35,8 @@ class CreateThingInstance extends React.Component {
 
 		return(
 			<div>
-				<form action="/api/postnewthinginstance" method="POST" encType="multipart/form-data">
+			<h2 className="text-xs-center">Create A New Instance of Your Thing</h2>
+				<form id="newThingInstanceForm" onSubmit={this.handleSubmit} encType="multipart/form-data">
 				<input type="hidden" name="thingid" value={this.props.params.thingId} />
 				{thingAttributes}
 				<button type="submit"> Submit </button>

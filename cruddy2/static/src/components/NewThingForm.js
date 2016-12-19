@@ -90,16 +90,29 @@ class thingAttributes extends React.Component {
   }
 }
 
-const NewThingForm = ({ handleSubmit, pristine, reset, submitting, websiteName, thingAttributeTypes, selectedExampleType, ...initialValues }) => {
-  return (
-    <form role="form" action="/postnewthing" method="post" className="form-group">
+class NewThingForm extends React.Component {
+  constructor(props) {
+    super(props);
+		
+		this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    var form = document.getElementById('newThingForm');
+    this.props.submitNewThing(form);
+  }
+  render() {
+    return (
+    <form role="form" onSubmit={this.handleSubmit} id="newThingForm" className="form-group">
       <Field name="thingname" type="text" component={renderTextField} label="Thing Name"/>
-      <FieldArray name="members" component={thingAttributes} thingAttributeTypes={thingAttributeTypes} selectedExampleType={selectedExampleType}/>
-      <Field name={websiteName} component={hiddenField} />
+      <FieldArray name="members" component={thingAttributes} thingAttributeTypes={this.props.thingAttributeTypes} selectedExampleType={this.props.selectedExampleType}/>
+      <Field name={this.props.websiteName} component={hiddenField} />
       <button  className="btn btn-primary" type="submit" > Submit </button>
     </form>
    )
- }
+  }
+}
 
 
 export default reduxForm({

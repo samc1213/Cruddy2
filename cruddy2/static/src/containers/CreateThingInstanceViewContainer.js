@@ -26,7 +26,11 @@ const mapDispatchToProps = (dispatch) => (
   {
     getThingAttributes: (thingId) => {
     	dispatch(actions.getThingAttributes(thingId))
-    }
+    },
+		
+		submitNewThingInstance: (form) => {
+			dispatch(actions.submitNewThingInstance(form))
+		}
   }
 )
 

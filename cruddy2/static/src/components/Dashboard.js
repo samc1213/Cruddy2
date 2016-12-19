@@ -21,14 +21,18 @@ class Dashboard extends React.Component {
           var name = `websiteid.${this.props.websiteIds[i]}`;
           websitedivs.push(
             <div key={name}>
-              <label> {this.props.websiteNames[i]} </label>
+              <span> {this.props.websiteNames[i]} </span> <span> <a href={`/${this.props.websiteNames[i]}/creatething`}> New thing </a> </span>
             </div>
           )
         }
- 
+				if (websitedivs.length == 0)
+				{
+					websitedivs.push(<div className="text-xs-center"> Your websites will appear here</div>)
+				}
+
         return (
-            <div>
-                {this.props.loggedInUser}'s Dashboard
+            <div className="text-xs-center">
+                <h2 className="text-xs-center">Welcome To Your Dashboard </h2>
                 {websitedivs}
                 <a className="btn btn-primary" href="/createwebsite" role="button">Create New Website</a>
 
@@ -37,5 +41,6 @@ class Dashboard extends React.Component {
       }
     }
 }
+
 
 export default Dashboard

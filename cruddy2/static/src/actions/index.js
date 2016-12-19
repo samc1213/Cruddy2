@@ -1,4 +1,5 @@
 import {browserHistory} from 'react-router'
+import 'whatwg-fetch'
 
 
 export const getThingAttributeTypes = (data) => ({
@@ -90,8 +91,6 @@ export function getThingAttributes(thingId) {
 }
 
 export function getWebsites(username) {
-	console.log("GETWEB");
-	console.log(username);
 	return function (dispatch) {
     	dispatch(websitesFetch(true))
 
@@ -158,5 +157,34 @@ export function submitLogin(username, password) {
 		data.append('password', password);
 
 		return doFetch(data, dispatch);
+	}
+}
+
+export function submitNewThing(form) {
+	return function (dispatch) {
+	    return fetch(`/postnewthing`, {
+	    	method: 'POST',
+	    	body: new FormData(form)
+	    })
+	      .then(response => response.json())
+	      .then(json =>
+	    	browserHistory.push(`/createthinginstance/${json.thingid}`)
+	      )
+	      .catch(err => console.log(err))
+	}
+}
+
+
+export function submitNewThingInstance(form) {
+	return function (dispatch) {
+	    return fetch(`/api/postnewthinginstance`, {
+	    	method: 'POST',
+	    	body: new FormData(form)
+	    })
+	      .then(response => response.json())
+	      .then(json =>
+	    	browserHistory.push(`/viewcraigslistview/${json.thingid}`)
+	      )
+	      .catch(err => console.log(err))
 	}
 }

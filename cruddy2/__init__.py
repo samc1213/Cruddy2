@@ -15,7 +15,7 @@ api = api()
 
 @app.route('/exampleimage')
 def exampleimg():
-    return send_file('./static/1.jpg')
+    return send_file('./static/car.jpg', mimetype='image/jpeg')
 #
 # @app.route('/')
 # def index():
@@ -80,9 +80,9 @@ def postNewThing():
             'typeid': thingAttributeTypeIds[i]}
                 for i in range(len(thingAttributeNames))])
     except Exception as e:
-        print "EXCEPTION"
-
-    return thingName + 'po'
+        return json.dumps({'success': False, 'thingid': '', 'thingname': request.form['thingname'], 'message': 'There was a problem processing your new Thing'}), 500, {'ContentType':'application/json'}
+    thing = api.getThingFromThingName(thingName)
+    return json.dumps({'success': False, 'thingid': str(thing.thingid), 'thingname': request.form['thingname'], 'websitename': websiteName}), 200, {'ContentType':'application/json'}
 #
 @app.route('/submittedthing', methods=['POST'])
 def submittedThing():
@@ -115,8 +115,8 @@ def postLoginUser():
 @app.route('/api/postnewthinginstance', methods=['POST'])
 def postNewThingInstance():
     app.logger.debug(request.files)
-    api.createThingInstance(request.form, request.files)
-    return 'success'
+    thingInstance = api.createThingInstance(request.form, request.files)
+    return json.dumps({'success': True, 'thingid': thingInstance.thing.thingid}), 200, {'ContentType':'application/json'}
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

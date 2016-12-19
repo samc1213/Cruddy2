@@ -60,6 +60,8 @@ class api:
         newThingInstance.thingid = thingId
 
         self.sessionManager.CommitToSession([newThingInstance])
+        
+        return newThingInstance
 
     def getThing(self, thingId):
         thing = self.session.query(Thing).get(thingId)
@@ -133,3 +135,7 @@ class api:
     def getUserFromUsername(self, username):
         user = self.session.query(User).filter_by(username=username).first()
         return user
+        
+    def getThingFromThingName(self, thingName):
+        thing = self.session.query(Thing).filter_by(thingname=thingName).first()
+        return thing

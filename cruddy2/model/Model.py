@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Sequence, ForeignKey
+from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, LargeBinary
 from sqlalchemy.orm import relationship
 from DBSessionManager import Base
 from sqlalchemy.ext.declarative import declarative_base
@@ -10,17 +10,28 @@ class User(Base):
     userid = Column(Integer, Sequence('users_userid_seq'), primary_key=True)
     firstname = Column(String)
     lastname = Column(String)
-    things = relationship('Thing', back_populates='user')
+    username = Column(String)
+    password = Column(String)
+    websites = relationship('Website', back_populates='user')
 
 
-    def __init__(self, firstName, lastName):
+
+    def __init__(self, firstName, lastName, username, password):
         self.firstname = firstName
         self.lastname = lastName
+        self.username = username
+        self.password = password
 
 
 
-# class Administrator(User):
-#     # Sam
+class Photo(Base):
+    __tablename__ = 'photos'
+
+    photoid = Column(Integer, Sequence('photos_photoid_seq'), primary_key=True)
+    photo = Column(LargeBinary)
+
+    def __init__(self, photo):
+        self.photo = photo
 
 
 class Thing(Base):
@@ -30,15 +41,15 @@ class Thing(Base):
 
     thingid = Column(Integer, Sequence('things_thingid_seq'), primary_key=True)
     thingname = Column(String)
-    userid = Column(Integer, ForeignKey('users.userid'))
-    # user = relationship("User", back_populates="things")
-    user = relationship('User', back_populates='things')
-    thingattributes = relationship('ThingAttribute', back_populates="thing")
+    websiteid = Column(Integer, ForeignKey('websites.websiteid'))
+    website = relationship('Website', back_populates='things')
+
+    thingattributes = relationship('ThingAttribute', back_populates='thing')
     thinginstances = relationship('ThingInstance', back_populates='thing')
 
-    def __init__(self, name):
+    def __init__(self, name, websiteid):
         self.thingname = name
-        self.userid = 2
+        self.websiteid = websiteid
 
 class ThingAttribute(Base):
     # String, Make
@@ -74,11 +85,23 @@ class ThingInstanceAttribute():
         self.ThingAttribute = thingAttribute
         self.Value = value
 
-class WebApp():
+class Website(Base):
     # Craigslist for Cars
+    __tablename__ = 'websites'
 
-    def __init__(self, administrator):
-        self.Administrator = administrator
+    websiteid = Column(Integer, Sequence('websites_websiteid_seq'), primary_key=True)
+    websitename = Column(String)
+    websitetypeid = Column(Integer)
+    userid = Column(Integer, ForeignKey('users.userid'))
+    user = relationship('User', back_populates='websites')
+    things = relationship('Thing', back_populates='website')
+
+
+
+    def __init__(self, websitename, websitetypeid, userid):
+        self.websitename = websitename
+        self.websitetypeid = websitetypeid
+        self.userid = userid
 
 # class Administrator(User):
 #     # Sam

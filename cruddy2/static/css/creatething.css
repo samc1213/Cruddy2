@@ -38,3 +38,9 @@
   padding: 5px;
   margin: 5px;
 }
+
+.carouselpic{
+  margin: auto;
+  vertical-align: middle;
+  display: block;
+}

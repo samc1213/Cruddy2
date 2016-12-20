@@ -7,25 +7,25 @@ class CraigslistView extends React.Component {
 	}
 	render() {
 		var cards = [];
-		var conversion = this.props.thingAttributeIdsToNames;
-		console.log("CONV");
-		console.log(conversion);
-		console.log(this.props);
+		var conversion = this.props.thingAttributeIdsToNamesAndTypes;
 		for (var index in this.props.thingInstances)
 		{
 			var thingInstance = this.props.thingInstances[index];
 			var thingAttributeNames = [];
 			var thingAttributeTypeIds = [];
 			var thingAttributeExamples = [];
-			console.log("thingInstance");
-			console.log(thingInstance);
 			for (var thingAttributeId in thingInstance)
 			{
-				console.log("tattrid");
-				console.log(thingAttributeId);
 				thingAttributeNames.push(conversion[thingAttributeId].name);
 				thingAttributeTypeIds.push(conversion[thingAttributeId].typeid);
-				thingAttributeExamples.push(thingInstance[thingAttributeId]);
+				if (conversion[thingAttributeId].typeid == "3")
+				{
+					thingAttributeExamples.push([thingInstance[thingAttributeId], false]);
+				}
+				else
+				{
+					thingAttributeExamples.push(thingInstance[thingAttributeId]);
+				}
 			}
 			cards.push(
 				<div className="col-md-6">
@@ -34,7 +34,8 @@ class CraigslistView extends React.Component {
 						<CraigslistCardPreview key={index}
 						thingAttributeNames={thingAttributeNames}
 						thingAttributeTypeIds={thingAttributeTypeIds}
-						thingAttributeExamples={thingAttributeExamples} />
+						thingAttributeExamples={thingAttributeExamples}
+						isPreview={false} />
 					</div>
 					<div className="col-md-2" />
 				</div>

@@ -1,14 +1,34 @@
 from model.DBSessionManager import DBSessionManager
 from model.Model import *
+import json
+import uuid
+import os
+import base64
+import bcrypt
 
 
 class api:
 
-    def createThing(self, thingName, thingAttributes):
-        newThing = Thing(thingName)
+    def __init__(self):
+        self.sessionManager = DBSessionManager()
+        self.session = self.sessionManager.GetSession()
+
+    def createWebsite(self, form):
+        websiteTypeId = int(form['websitetypeid'])
+        websiteName = str(form['websitename'])
+        user = self.getUserFromUsername(form['username'])
+        newWebsite = Website(websiteName, websiteTypeId, int(user.userid))
+        sessionManager = DBSessionManager()
+        sessionManager.CommitToSession([newWebsite])
+
+    def createThing(self, thingName, websiteID, thingAttributes):
+        newThing = Thing(thingName, websiteID)
         objectsToCommitToDB = []
+        print "inthisbitch"
 
         for thingAttribute in thingAttributes:
+            print "fuky"
+
             tattr = ThingAttribute(
                 thingAttribute['name'], thingAttribute['typeid'])
             tattr.thing = newThing
@@ -16,25 +36,84 @@ class api:
 
         objectsToCommitToDB.append(newThing)
 
-        sessionManager = DBSessionManager()
-        sessionManager.CommitToSession(objectsToCommitToDB)
+        self.sessionManager.CommitToSession(objectsToCommitToDB)
 
-    def createThingInstance(self, thingInstanceInfo, thingId):
-        newThingInstance = ThingInstance(thingInstanceInfo)
+    def savePhoto(self, fileStore):
+        self.saveFileToUploads()
+
+    def createThingInstance(self, form, files):
+        thingId = int(form['thingid'])
+        thingInstance = {}
+
+        for name in form:
+            if name.startswith('thingattributeid.'):
+                thingAttributeIdIndex = len('thingattributeid.')
+                thingAttributeId = name[thingAttributeIdIndex:]
+                thingInstance[thingAttributeId] = form[name]
+
+        for file, values in files.iteritems():
+            thingAttributeIdIndex = len('thingattributeid.')
+            thingAttributeId = file[thingAttributeIdIndex:]
+            thingInstance[thingAttributeId] = base64.b64encode(values.read())
+
+        newThingInstance = ThingInstance(json.dumps(thingInstance))
         newThingInstance.thingid = thingId
 
-        sessionManager = DBSessionManager()
-        sessionManager.CommitToSession([newThingInstance])
+        self.sessionManager.CommitToSession([newThingInstance])
+        
+        return newThingInstance
 
     def getThing(self, thingId):
-        sessionManager = DBSessionManager()
-        session = sessionManager.GetSession()
-        thing = session.query(Thing).get(thingId)
+        thing = self.session.query(Thing).get(thingId)
 
         return thing
 
-    def getThingInstances(self, thing):
+    def getWebsiteIDByName(self, websiteName):
+        website = self.session.query(Website).filter_by(websitename=websiteName).first()
+        print website.websiteid
+        return int(website.websiteid)
+
+    def getWebsites(self, username):
+        user = self.getUserFromUsername(username)
+        websites = self.getWebsiteFromUserID(user.userid)
+        return websites
+
+    def getWebsiteFromUserID(self, id):
+        tempwebsites = self.session.query(Website).filter_by(userid=id)
+        websites = {}
+        for website in tempwebsites:
+            websites[website.websiteid] = {
+                'websitename': website.websitename,
+                'websitetypeid': website.websitetypeid
+            }
+        return websites
+
+
+    def getThingInstances(self, thingId):
+        thing = self.getThing(thingId)
+
         return thing.thinginstances
+
+    def createUser(self, form):
+        try:
+            password = bcrypt.hashpw(form['password'].encode('utf-8'), bcrypt.gensalt())
+            user = User(form['firstname'], form['lastname'], form['username'], password)
+
+            self.sessionManager.CommitToSession([user])
+            return True
+        except:
+            return False
+
+    def validateUser(self, form):
+        try:
+            user = self.getUserFromUsername(form['username'])
+            if bcrypt.checkpw(form['password'].encode('utf-8'), user.password.encode('utf-8')):
+                return True
+            else:
+                return False
+        except:
+            return False
+
 
     def getThingAttributeIdToNameDict(self, thing):
         idToNameDict = {}
@@ -43,7 +122,8 @@ class api:
 
         return idToNameDict
 
-    def getThingAttributes(self, thing):
+    def getThingAttributes(self, thingId):
+        thing = self.getThing(thingId)
         thingAttributes = {}
         for thingAttribute in thing.thingattributes:
             thingAttributes[thingAttribute.thingattributeid] = {
@@ -52,9 +132,10 @@ class api:
                 }
         return thingAttributes
 
-    # def createThingAttribute(self, name, attributetype):
-    #     sessionManager = DBSessionManager()
-    #     thingattribute = ThingAttribute(name, attributetype)
-    #     # return thing.thingname
-    #     # return str(thing.UserId)
-    #     sessionManager.CommitToSession(thingattribute)
+    def getUserFromUsername(self, username):
+        user = self.session.query(User).filter_by(username=username).first()
+        return user
+        
+    def getThingFromThingName(self, thingName):
+        thing = self.session.query(Thing).filter_by(thingname=thingName).first()
+        return thing

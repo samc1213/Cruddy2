@@ -1,15 +1,13 @@
 import React, { PropTypes } from 'react'
 
 
-const CraigslistCardPreview = ({ thingAttributeNames, thingAttributeExamples, thingAttributeTypeIds }) => {
+const CraigslistCardPreview = ({ thingAttributeNames, thingAttributeExamples, thingAttributeTypeIds, isPreview }) => {
 	var rows = [];
   var file;
   var imgStyle = {maxWidth: "100%", display:"none"};
   var weHaveAnImg = false;
+  var src="/exampleimage";
   
-  console.log(thingAttributeExamples);
-  console.log('examples');
-
   for (var i = 0; i < thingAttributeNames.length; i++)
   {
 	  if (thingAttributeTypeIds[i] != "3")
@@ -19,7 +17,10 @@ const CraigslistCardPreview = ({ thingAttributeNames, thingAttributeExamples, th
     else
     {
       imgStyle.display = "inline-block";
-      if (thingAttributeExamples[i][0])
+
+      
+      if (thingAttributeExamples[i] != null && thingAttributeExamples[i][0] && isPreview == true)
+      //this is preview
       {
         var reader = new FileReader();
         var preview = document.querySelector('img');
@@ -28,13 +29,20 @@ const CraigslistCardPreview = ({ thingAttributeNames, thingAttributeExamples, th
           preview.src = reader.result;
         }, false);
       }
+
+      if (thingAttributeExamples[i][0] && isPreview == false)
+      //this is from the DB
+      {
+        var preview = document.querySelector('img');
+        src = "data:image/png;base64," + thingAttributeExamples[i][0];
+      }
     }
   }
 
   return (
     <div className="card">
       <div className="card-block">
-        <img className="card-img-top" src="/exampleimage" alt="Card image cap" style={imgStyle}/>
+        <img className="card-img-top" src={src} alt="Card image cap" style={imgStyle}/>
         <ul className="list-group list-group-flush">
           {rows}
         </ul>

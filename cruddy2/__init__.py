@@ -12,9 +12,10 @@ from api import *
 app = Flask(__name__)
 api = api()
 
+
 @app.route('/exampleimage')
 def exampleimg():
-    return send_file('./static/1.jpg')
+    return send_file('./static/car.jpg', mimetype='image/jpeg')
 #
 # @app.route('/')
 # def index():
@@ -24,24 +25,44 @@ def exampleimg():
 def getThingAttributeTypes():
     return json.dumps(ThingAttributeTypes)
 
+@app.route('/api/getthingattributes/<thingId>')
+def getThingAttributes(thingId):
+    thingAttributes = api.getThingAttributes(thingId)
+    return json.dumps(thingAttributes)
+
 @app.route('/api/getthinginstances/<thingId>')
 def getThingInstances(thingId):
-    thing = api.getThing(thingId)
-    thingInstances = api.getThingInstances(thing)
-    thingAttributes = api.getThingAttributes(thing)
-
-
-    
+    thingInstances = api.getThingInstances(thingId)
+    thingAttributes = api.getThingAttributes(thingId)
     result = {}
     result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
     result['thingAttributes'] = thingAttributes
-    
+
     return json.dumps(result)
+
+@app.route('/api/getwebsiteidbyname/<websiteName>')
+def getWebsiteIDByName(websiteName):
+    website = api.getWebsiteIDByName(websiteName)
+    return json.dumps(website.websiteid)
+
+@app.route('/api/getwebsites/<username>')
+def getWebsites(username):
+    print "inhere"
+    websites = api.getWebsites(username)
+    return json.dumps(websites)
+
+@app.route('/api/postnewwebsite', methods=['POST'])
+def postNewWebsite():
+    api.createWebsite(request.form)
+    redirectstring = '/'+str(request.form['websitename'])+'/creatething'
+    return redirect(redirectstring)
+
 
 @app.route('/postnewthing', methods=['POST'])
 def postNewThing():
     form = request.form
-
+    websiteName = form['websitename']
+    websiteID = api.getWebsiteIDByName(websiteName)
     thingName=form['thingname']
     thingAttributeNames = [None for i in range((len(form)-1)/3)]
     thingAttributeTypeIds = [None for i in range((len(form)-1)/3)]
@@ -54,14 +75,14 @@ def postNewThing():
             thingAttributeNames[int(key[8])] = value
 
     try:
-        api.createThing(thingName,
+        api.createThing(thingName, websiteID,
             [{'name': thingAttributeNames[i],
             'typeid': thingAttributeTypeIds[i]}
                 for i in range(len(thingAttributeNames))])
     except Exception as e:
-        print "EXCEPTION"
-
-    return thingName + 'po'
+        return json.dumps({'success': False, 'thingid': '', 'thingname': request.form['thingname'], 'message': 'There was a problem processing your new Thing'}), 500, {'ContentType':'application/json'}
+    thing = api.getThingFromThingName(thingName)
+    return json.dumps({'success': False, 'thingid': str(thing.thingid), 'thingname': request.form['thingname'], 'websitename': websiteName}), 200, {'ContentType':'application/json'}
 #
 @app.route('/submittedthing', methods=['POST'])
 def submittedThing():
@@ -77,28 +98,26 @@ def submittedThing():
             for i in range(len(thingAttributeNames))])
     return thingName
 
-@app.route('/createthinginstance/<thingid>')
-def createThingInstance(thingid):
-    sessionManager = DBSessionManager()
-    session = sessionManager.GetSession()
-    myThing = session.query(Thing).get(thingid)
+@app.route('/api/postnewaccount', methods=['POST'])
+def postNewAccount():
+    if api.createUser(request.form) == True:
+        return json.dumps({'success': True, 'username': request.form['username']}), 200, {'ContentType':'application/json'}
+    else:
+        return json.dumps({'success': False, 'username': ''}), 200, {'ContentType':'application/json'}
 
-    return render_template('createthinginstance.html', thingName=myThing.thingname, thingAttributes=myThing.thingattributes, thingId=thingid)
-#
-@app.route('/submittedthinginstance', methods=['POST'])
-def submittedThingInstance():
-    thingInstanceBlob = {}
-    thingId = int(request.form['thingid'])
+@app.route('/api/postloginuser', methods=['POST'])
+def postLoginUser():
+    if api.validateUser(request.form) == True:
+        return json.dumps({'success': True, 'username': request.form['username']}), 200, {'ContentType':'application/json'}
+    else:
+        return json.dumps({'success': False, 'username': ''}), 200, {'ContentType':'application/json'}
 
-    for name in request.form:
-        if name.startswith('thingattributeid.'):
-            thingAttributeIdIndex = len('thingattributeid.')
-            thingAttributeId = name[thingAttributeIdIndex:]
-            thingInstanceBlob[thingAttributeId] = request.form[name]
-
-    api.createThingInstance(json.dumps(thingInstanceBlob), thingId)
-
-    return str(thingId)
+@app.route('/api/postnewthinginstance', methods=['POST'])
+def postNewThingInstance():
+    app.logger.debug(request.files)
+    app.logger.debug(request.form)
+    thingInstance = api.createThingInstance(request.form, request.files)
+    return json.dumps({'success': True, 'thingid': thingInstance.thing.thingid, 'websitename': request.form['websitename'] }), 200, {'ContentType':'application/json'}
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

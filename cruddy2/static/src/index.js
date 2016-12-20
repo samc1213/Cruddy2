@@ -3,18 +3,30 @@ import { render } from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { Provider } from 'react-redux'
-import CreateThing from './components/CreateThing'
+import {persistStore, autoRehydrate} from 'redux-persist'
+import CreateThingContainer from './containers/CreateThingContainer'
 import CraigslistViewContainer from './containers/CraigslistViewContainer'
-import App from './components/App'
+import AppContainer from './containers/AppContainer'
 import Home from './components/Home'
+import LoginFormContainer from './containers/LoginFormContainer'
+import CreateAccountFormContainer from './containers/CreateAccountFormContainer'
+import FourOhFour from './components/FourOhFour'
+import DashboardContainer from './containers/DashboardContainer'
 import reducer from './reducers'
 import 'whatwg-fetch'
 import { getThingAttributeTypes } from './actions'
-import { Router, Route, Link, browserHistory } from 'react-router'
+import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
+import CreateThingInstanceViewContainer from './containers/CreateThingInstanceViewContainer'
+import CreateWebsiteViewContainer from './containers/CreateWebsiteViewContainer'
+
+
 
 const store = createStore(reducer,
-  applyMiddleware(thunkMiddleware)
+  applyMiddleware(thunkMiddleware),
+  autoRehydrate()
   )
+
+persistStore(store, {whitelist: ['loggedInUser']})
 
 fetch('/api/getthingattributetypes')
   .then(function(response) {
@@ -29,11 +41,20 @@ fetch('/api/getthingattributetypes')
 render((
   <Provider store = {store}>
     <Router history={browserHistory}>
-      <Route path="/" component={App}>
-        <Route path="creatething" component={CreateThing} />
-        <Route path="viewcraigslistview" component={CraigslistViewContainer }>
-          <Route path="/viewcraigslistview/:thingId" component={CraigslistViewContainer} />
+      <Route path="/" component={AppContainer}>
+        <IndexRoute component={Home} />
+        <Route path="createwebsite" component={CreateWebsiteViewContainer} />
+        <Route path=":websiteName/creatething" component={CreateThingContainer} />
+        <Route path="createaccount" component={CreateAccountFormContainer} />
+        <Route path="login" component={LoginFormContainer} />
+        <Route path=":websiteName/viewcraigslistview" component={CraigslistViewContainer }>
+          <Route path="/:websiteName/viewcraigslistview/:thingId" component={CraigslistViewContainer} />
         </Route>
+        <Route path=":websiteName/createthinginstance" component={CreateThingInstanceViewContainer}>
+          <Route path="/:websiteName/createthinginstance/:thingId" component={CreateThingInstanceViewContainer} />
+        </Route>
+        <Route path="dashboard" component={DashboardContainer} />
+        <Route path="*" component={FourOhFour} />
       </Route>
     </Router>
   </Provider>

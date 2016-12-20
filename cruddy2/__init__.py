@@ -115,8 +115,9 @@ def postLoginUser():
 @app.route('/api/postnewthinginstance', methods=['POST'])
 def postNewThingInstance():
     app.logger.debug(request.files)
+    app.logger.debug(request.form)
     thingInstance = api.createThingInstance(request.form, request.files)
-    return json.dumps({'success': True, 'thingid': thingInstance.thing.thingid}), 200, {'ContentType':'application/json'}
+    return json.dumps({'success': True, 'thingid': thingInstance.thing.thingid, 'websitename': request.form['websitename'] }), 200, {'ContentType':'application/json'}
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

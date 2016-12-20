@@ -168,7 +168,7 @@ export function submitNewThing(form) {
 	    })
 	      .then(response => response.json())
 	      .then(json =>
-	    	browserHistory.push(`/createthinginstance/${json.thingid}`)
+	    	browserHistory.push(`/${json.websitename}/createthinginstance/${json.thingid}`)
 	      )
 	      .catch(err => console.log(err))
 	}
@@ -183,7 +183,7 @@ export function submitNewThingInstance(form) {
 	    })
 	      .then(response => response.json())
 	      .then(json =>
-	    	browserHistory.push(`/viewcraigslistview/${json.thingid}`)
+	    	browserHistory.push(`/${json.websitename}/viewcraigslistview/${json.thingid}`)
 	      )
 	      .catch(err => console.log(err))
 	}

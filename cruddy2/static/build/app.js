@@ -232,7 +232,7 @@ function submitNewThingInstance(form) {
 }
 
 },{"react-router":421,"whatwg-fetch":528}],2:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -240,7 +240,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -265,51 +265,64 @@ var App = function (_React$Component) {
 	}
 
 	_createClass(App, [{
-		key: "logout",
+		key: 'logout',
 		value: function logout() {
 			this.props.logoutUser();
 		}
 	}, {
-		key: "render",
+		key: 'render',
 		value: function render() {
 			console.log(this.props.loggedInUser);
+			if (this.props.params.websiteName != null && this.props.params.thingId != null) {
+				var returnstring = '/' + String(this.props.params.websiteName) + '/createthinginstance/' + String(this.props.params.thingId);
+				var newinstancebutton = _react2.default.createElement(
+					'li',
+					{ style: { float: 'right', paddingTop: '5px', paddingBottom: '5px' } },
+					' ',
+					_react2.default.createElement(
+						'a',
+						{ href: returnstring },
+						' New Thing Instance '
+					),
+					' '
+				);
+			}
 			if (this.props.loggedInUser != null) {
 				var username = _react2.default.createElement(
-					"p",
-					{ className: "dropdown-item" },
-					"Logged in as ",
+					'p',
+					{ className: 'dropdown-item' },
+					'Logged in as ',
 					this.props.loggedInUser
 				);
 				var login = _react2.default.createElement(
-					"a",
-					{ className: "dropdown-item", href: "/", onClick: this.logout },
-					"Logout"
+					'a',
+					{ className: 'dropdown-item', href: '/', onClick: this.logout },
+					'Logout'
 				);
 				var dashboardOption = _react2.default.createElement(
-					"a",
-					{ className: "dropdown-item", href: "/dashboard" },
-					"My Dashboard"
+					'a',
+					{ className: 'dropdown-item', href: '/dashboard' },
+					'My Dashboard'
 				);
 			} else {
 				var login = _react2.default.createElement(
-					"a",
-					{ className: "dropdown-item", href: "/login" },
-					"Login"
+					'a',
+					{ className: 'dropdown-item', href: '/login' },
+					'Login'
 				);
 			}
-
 			if (['/creatething', '/login', '/dashboard', '/'].indexOf(this.props.location.pathname) >= 0) {
 				var nav = _react2.default.createElement(
-					"li",
-					{ className: "nav-item dropdown float-*-right" },
+					'li',
+					{ className: 'nav-item dropdown float-*-right' },
 					_react2.default.createElement(
-						"a",
-						{ className: "nav-link dropdown-toggle", id: "supportedContentDropdown", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" },
-						"Dropdown"
+						'a',
+						{ className: 'nav-link dropdown-toggle', id: 'supportedContentDropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+						'Dropdown'
 					),
 					_react2.default.createElement(
-						"div",
-						{ className: "dropdown-menu", "aria-labelledby": "supportedContentDropdown" },
+						'div',
+						{ className: 'dropdown-menu', 'aria-labelledby': 'supportedContentDropdown' },
 						username,
 						login,
 						dashboardOption
@@ -318,28 +331,37 @@ var App = function (_React$Component) {
 			}
 
 			return _react2.default.createElement(
-				"div",
+				'div',
 				null,
 				_react2.default.createElement(
-					"nav",
-					{ className: "navbar navbar-light bg-faded" },
+					'nav',
+					{ className: 'navbar navbar-light bg-faded' },
 					_react2.default.createElement(
-						"div",
-						{ className: "navbar-header" },
+						'div',
+						{ className: 'container-fluid' },
 						_react2.default.createElement(
-							"a",
-							{ className: "navbar-brand", href: "/" },
-							"Cruddy2"
+							'div',
+							{ className: 'navbar-header' },
+							_react2.default.createElement(
+								'a',
+								{ className: 'navbar-brand', href: '/' },
+								'Cruddy2'
+							)
+						),
+						_react2.default.createElement(
+							'ul',
+							{ className: 'nav navbar-nav float-*-right' },
+							nav
+						),
+						_react2.default.createElement(
+							'ul',
+							{ className: 'nav navbar-nav navbar-right' },
+							newinstancebutton
 						)
-					),
-					_react2.default.createElement(
-						"ul",
-						{ className: "nav navbar-nav float-*-right" },
-						nav
 					)
 				),
 				_react2.default.createElement(
-					"div",
+					'div',
 					null,
 					this.props.children
 				)
@@ -915,7 +937,7 @@ var Dashboard = function (_React$Component) {
               _react2.default.createElement(
                 'a',
                 { href: '/api/getview/' + this.props.websiteIds[i] },
-                ' New thing '
+                ' Go to Website '
               ),
               ' '
             )

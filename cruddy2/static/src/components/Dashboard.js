@@ -21,7 +21,7 @@ class Dashboard extends React.Component {
           var name = `websiteid.${this.props.websiteIds[i]}`;
           websitedivs.push(
             <div key={name}>
-              <span> {this.props.websiteNames[i]} </span> <span> <a href={`/api/getview/${this.props.websiteIds[i]}`}> New thing </a> </span>
+              <span> {this.props.websiteNames[i]} </span> <span> <a href={`/api/getview/${this.props.websiteIds[i]}`}> Go to Website </a> </span>
             </div>
           )
         }

@@ -41,6 +41,10 @@ class api:
     def savePhoto(self, fileStore):
         self.saveFileToUploads()
 
+    def getThingByWebsiteID(self, websiteId):
+        return self.session.query(Thing).filter_by(websiteid=websiteId).first()
+
+
     def createThingInstance(self, form, files):
         thingId = int(form['thingid'])
         thingInstance = {}
@@ -72,6 +76,11 @@ class api:
         website = self.session.query(Website).filter_by(websitename=websiteName).first()
         print website.websiteid
         return int(website.websiteid)
+
+    def getWebsiteByID(self, websiteID):
+        website = self.session.query(Website).filter_by(websiteid=websiteID).first()
+        return website
+
 
     def getWebsites(self, username):
         user = self.getUserFromUsername(username)

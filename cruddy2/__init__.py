@@ -25,6 +25,15 @@ def r8():
 # def index():
 #     return 'hi'
 #
+
+@app.route('/api/getview/<websiteId>')
+def getView(websiteId):
+    website = api.getWebsiteByID(websiteId)
+    tempthing = api.getThingByWebsiteID(websiteId)
+    redirectstring = '/' + str(website.websitename) + '/viewcraigslistview/'+str(tempthing.thingid)
+    return redirect(redirectstring)
+
+
 @app.route('/api/getthingattributetypes')
 def getThingAttributeTypes():
     return json.dumps(ThingAttributeTypes)
@@ -44,10 +53,6 @@ def getThingInstances(thingId):
 
     return json.dumps(result)
 
-@app.route('/api/getwebsiteidbyname/<websiteName>')
-def getWebsiteIDByName(websiteName):
-    website = api.getWebsiteIDByName(websiteName)
-    return json.dumps(website.websiteid)
 
 @app.route('/api/getwebsites/<username>')
 def getWebsites(username):

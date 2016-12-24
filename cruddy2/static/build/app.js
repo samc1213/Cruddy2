@@ -437,7 +437,7 @@ var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
 
   return _react2.default.createElement(
     "div",
-    { className: "card" },
+    { className: "card", style: { textAlign: 'left' } },
     _react2.default.createElement(
       "div",
       { className: "card-block" },
@@ -790,7 +790,7 @@ var CreateWebsite = function (_React$Component) {
         ),
         _react2.default.createElement(
           'form',
-          { action: '/api/postnewwebsite', method: 'POST', encType: 'multipart/form-data' },
+          { action: '/api/postnewwebsite', method: 'POST', encType: 'multipart/form-data', style: { textAlign: 'center' } },
           _react2.default.createElement(
             'label',
             null,
@@ -806,60 +806,60 @@ var CreateWebsite = function (_React$Component) {
           ),
           _react2.default.createElement(
             'div',
-            { id: 'myCarousel', className: 'carousel slide' },
+            { id: 'myCarousel', className: 'carousel slide', style: { width: '30%', margin: 'auto' } },
             _react2.default.createElement(
               'ol',
               { className: 'carousel-indicators' },
-              _react2.default.createElement('li', { 'data-target': '#myCarousel', 'data-slide-to': '0', className: 'active' })
+              _react2.default.createElement('li', { 'data-target': '#myCarousel', 'data-slide-to': '0', className: 'active' }),
+              _react2.default.createElement('li', { 'data-target': '#myCarousel', 'data-slide-to': '1' })
             ),
             _react2.default.createElement(
               'div',
-              { className: 'carousel-inner', style: { 'width': '300px', margin: 'auto' }, role: 'listbox' },
+              { className: 'carousel-inner', role: 'listbox' },
               _react2.default.createElement(
                 'div',
                 { className: 'carousel-item active' },
-                _react2.default.createElement(_CraigslistCardPreview2.default, { thingAttributeNames: ['Make', 'Model', 'Year'], thingAttributeExamples: ['Toyota', 'Corolla', '1995'],
-                  thingAttributeTypeIds: ['0', '0', '0'], isPreview: true }),
+                _react2.default.createElement('img', { src: '/examplecard', alt: 'Card' }),
                 _react2.default.createElement(
                   'div',
                   { className: 'text-xs-center' },
                   'Card View'
                 )
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'carousel-item' },
+                _react2.default.createElement('img', { src: '/exampletable', alt: 'Chania' }),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'text-xs-center' },
+                  'Table View'
+                )
               )
             ),
             _react2.default.createElement(
               'a',
-              { className: 'left carousel-control', href: '#myCarousel', role: 'button', 'data-slide': 'prev' },
+              { className: 'left carousel-control', style: { left: '-15%', backgroundImage: 'none' }, href: '#myCarousel', role: 'button', 'data-slide': 'prev' },
               _react2.default.createElement(
                 'span',
-                { style: { color: 'black' } },
-                'previous'
-              ),
-              _react2.default.createElement(
-                'span',
-                { className: 'sr-only' },
-                'Previous'
+                { style: { color: 'black', position: 'absolute', top: '45%', height: '10%', left: '-3px' } },
+                _react2.default.createElement('i', { className: 'fa fa-caret-square-o-left', 'aria-hidden': 'true' })
               )
             ),
             _react2.default.createElement(
               'a',
-              { className: 'right carousel-control', href: '#myCarousel', role: 'button', 'data-slide': 'next' },
+              { className: 'right carousel-control', style: { right: '-15%', backgroundImage: 'none' }, href: '#myCarousel', role: 'button', 'data-slide': 'next' },
               _react2.default.createElement(
                 'span',
-                { style: { color: 'black' } },
-                'next'
-              ),
-              _react2.default.createElement(
-                'span',
-                { className: 'sr-only' },
-                'Next'
+                { style: { color: 'black', position: 'absolute', top: '45%', height: '10%', right: '-3px' } },
+                _react2.default.createElement('i', { className: 'fa fa-caret-square-o-right', 'aria-hidden': 'true' })
               )
+            ),
+            _react2.default.createElement(
+              'button',
+              { style: { position: 'absolute', top: '175px', left: '35%', width: '30%' }, className: 'btn btn-primary', type: 'submit' },
+              ' Submit '
             )
-          ),
-          _react2.default.createElement(
-            'button',
-            { className: 'btn btn-primary', type: 'submit' },
-            ' Submit '
           )
         )
       );

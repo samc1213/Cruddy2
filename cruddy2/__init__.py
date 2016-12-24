@@ -16,10 +16,18 @@ api = api()
 @app.route('/exampleimage')
 def exampleimg():
     return send_file('./static/car.jpg', mimetype='image/jpeg')
-    
+
 @app.route('/r8')
 def r8():
     return send_file('./static/r8edit.jpg', mimetype='image/jpeg')
+
+@app.route('/examplecard')
+def exampleCard():
+    return send_file('./static/ExampleCard.png', mimetype='image/png')
+
+@app.route('/exampletable')
+def exampleTable():
+    return send_file('./static/ExampleTable.png', mimetype='image/png')
 #
 # @app.route('/')
 # def index():

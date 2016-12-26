@@ -33,12 +33,12 @@ export const thingAttributesReceived = (data) => ({
 })
 
 export const userLoggedIn = (data) => ({
-	type: "USER_LOGGED_IN",
-	data
+  type: "USER_LOGGED_IN",
+  data
 })
 
 export const userLoggedOut = () => ({
-	type: "USER_LOGGED_OUT"
+  type: "USER_LOGGED_OUT"
 })
 
 export const websitesFetch = (isTrue) =>({
@@ -52,139 +52,139 @@ export const websitesReceived = (data) => ({
 })
 
 export const rehydrateLoggedInUser = () => ({
-	type: "REHYDRATE_LOGGED_IN_USER"
+  type: "REHYDRATE_LOGGED_IN_USER"
 })
 
 export function rehydrateAndGetWebsites(username) {
-	return function (dispatch) {
-    	dispatch(rehydrateLoggedInUser())
+  return function (dispatch) {
+      dispatch(rehydrateLoggedInUser())
 
-	    return dispatch(getWebsites(username))
-	}
+      return dispatch(getWebsites(username))
+  }
 }
 
 
 export function getThingInstances(thingId) {
-	return function (dispatch) {
-    	dispatch(thingInstancesFetch(true))
+  return function (dispatch) {
+      dispatch(thingInstancesFetch(true))
 
-	    return fetch(`/api/getthinginstances/${thingId}`)
-	      .then(response => response.json())
-	      .then(json =>
-	        dispatch(thingInstancesReceived(json))
-	      )
-	      .catch(err => console.log(err))
-	}
+      return fetch(`/api/getthinginstances/${thingId}`)
+        .then(response => response.json())
+        .then(json =>
+          dispatch(thingInstancesReceived(json))
+        )
+        .catch(err => console.log(err))
+  }
 }
 
 export function getThingAttributes(thingId) {
-	return function (dispatch) {
-    	dispatch(thingAttributesFetch(true))
+  return function (dispatch) {
+      dispatch(thingAttributesFetch(true))
 
-	    return fetch(`/api/getthingattributes/${thingId}`)
-	      .then(response => response.json())
-	      .then(json =>
-	        dispatch(thingAttributesReceived(json))
-	      )
-	      .catch(err => console.log(err))
-	}
+      return fetch(`/api/getthingattributes/${thingId}`)
+        .then(response => response.json())
+        .then(json =>
+          dispatch(thingAttributesReceived(json))
+        )
+        .catch(err => console.log(err))
+  }
 }
 
 export function getWebsites(username) {
-	return function (dispatch) {
-    	dispatch(websitesFetch(true))
+  return function (dispatch) {
+      dispatch(websitesFetch(true))
 
-	    return fetch(`/api/getwebsites/${username}`)
-	      .then(response => response.json())
-	      .then(json =>
-	        dispatch(websitesReceived(json))
-	      )
-	      .catch(err => console.log(err))
-	}
+      return fetch(`/api/getwebsites/${username}`)
+        .then(response => response.json())
+        .then(json =>
+          dispatch(websitesReceived(json))
+        )
+        .catch(err => console.log(err))
+  }
 }
 
 
 export function submitCreateAccount(firstname, lastname, username, password) {
-	function doFetch(data, dispatch) {
-		return fetch('/api/postnewaccount', {
-			method: 'POST',
-			body: data
-		}).then(response => response.json())  
-		  .then((json) => {
-		  	if (json.success == true) {
-		  		dispatch(userLoggedIn(json['username']));
-		  		browserHistory.push('/dashboard');
-		  	}
-		  	else {
-		  		console.log("bad new account");
-		  	}
-		  })
-		  .catch(err => console.log(err))
-	}
+  function doFetch(data, dispatch) {
+    return fetch('/api/postnewaccount', {
+      method: 'POST',
+      body: data
+    }).then(response => response.json())
+      .then((json) => {
+        if (json.success == true) {
+          dispatch(userLoggedIn(json['username']));
+          browserHistory.push('/dashboard');
+        }
+        else {
+          console.log("bad new account");
+        }
+      })
+      .catch(err => console.log(err))
+  }
 
-	return function(dispatch) {
-		var data = new FormData();
-		data.append('firstname', firstname);
-		data.append('lastname', lastname);
-		data.append('username', username);
-		data.append('password', password);
+  return function(dispatch) {
+    var data = new FormData();
+    data.append('firstname', firstname);
+    data.append('lastname', lastname);
+    data.append('username', username);
+    data.append('password', password);
 
-		return doFetch(data, dispatch);
-	}
+    return doFetch(data, dispatch);
+  }
 }
-	
+
 export function submitLogin(username, password) {
-	function doFetch(data, dispatch) {
-		return fetch('/api/postloginuser', {
-			method: 'POST',
-			body: data
-		}).then(response => response.json())  
-		  .then((json) => {
-		  	if (json.success == true) {
-		  		dispatch(userLoggedIn(json['username']));
-		  		browserHistory.push('/dashboard');
-		  	}
-		  	else {
-		  		console.log("bad login");
-		  	}
-		  })
-		  .catch(err => console.log(err))
-	}
+  function doFetch(data, dispatch) {
+    return fetch('/api/postloginuser', {
+      method: 'POST',
+      body: data
+    }).then(response => response.json())
+      .then((json) => {
+        if (json.success == true) {
+          dispatch(userLoggedIn(json['username']));
+          browserHistory.push('/dashboard');
+        }
+        else {
+          console.log("bad login");
+        }
+      })
+      .catch(err => console.log(err))
+  }
 
-	return function(dispatch) {
-		var data = new FormData();
-		data.append('username', username);
-		data.append('password', password);
+  return function(dispatch) {
+    var data = new FormData();
+    data.append('username', username);
+    data.append('password', password);
 
-		return doFetch(data, dispatch);
-	}
+    return doFetch(data, dispatch);
+  }
 }
 
 export function submitNewThing(form) {
-	return function (dispatch) {
-	    return fetch(`/postnewthing`, {
-	    	method: 'POST',
-	    	body: new FormData(form)
-	    })
-	      .then(response => response.json())
-	      .then(json =>
-	    	browserHistory.push(`/${json.websitename}/createthinginstance/${json.thingid}`)
-	      )
-	      .catch(err => console.log(err))
-	}
+  return function (dispatch) {
+      return fetch(`/postnewthing`, {
+        method: 'POST',
+        body: new FormData(form)
+      })
+        .then(response => response.json())
+        .then(json =>
+        browserHistory.push(`/dashboard`)
+        )
+        .catch(err => console.log(err))
+  }
 }
 
 
 export function submitNewThingInstance(form) {
-	return function (dispatch) {
-	    return fetch(`/api/postnewthinginstance`, {
-	    	method: 'POST',
-	    	body: new FormData(form)
-	    })
-	      .then(response => response.json())
-	      .then(json =>
-	    	browserHistory.push(`/${json.websitename}/viewcraigslistview/${json.thingid}`)
-	      )
-	      .catch(err => console.log(err))
-	}
+  return function (dispatch) {
+      return fetch(`/api/postnewthinginstance`, {
+        method: 'POST',
+        body: new FormData(form)
+      })
+        .then(response => response.json())
+        .then(json =>
+        browserHistory.push(`/${json.websitename}/viewcraigslistview/${json.thingid}`)
+        )
+        .catch(err => console.log(err))
+  }
 }

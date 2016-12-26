@@ -21,8 +21,6 @@ class DBSessionManager():
         host = url.hostname
         port = url.port
 
-
-
         return create_engine(
             'postgresql://{0}:{1}@{2}:{3}/{4}'.format(user, password, host, port, database))
 

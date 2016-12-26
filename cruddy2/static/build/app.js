@@ -781,12 +781,21 @@ var CreateWebsite = function (_React$Component) {
     _this.handleWebsiteNameChange = _this.handleWebsiteNameChange.bind(_this);
     _this.handleWebsiteNameKeyDown = _this.handleWebsiteNameKeyDown.bind(_this);
     _this.handleFormSubmit = _this.handleFormSubmit.bind(_this);
+    _this.trueSubmit = _this.trueSubmit.bind(_this);
     return _this;
   }
 
   _createClass(CreateWebsite, [{
+    key: 'trueSubmit',
+    value: function trueSubmit(event) {
+      console.log('trusub');
+      var form = document.getElementById("newwebsiteform");
+      form.submit();
+    }
+  }, {
     key: 'handleFormSubmit',
     value: function handleFormSubmit(event) {
+      console.log(event.target);
       event.preventDefault();
     }
   }, {
@@ -823,7 +832,7 @@ var CreateWebsite = function (_React$Component) {
         ),
         _react2.default.createElement(
           'form',
-          { action: '/api/postnewwebsite', method: 'POST', encType: 'multipart/form-data', style: { textAlign: 'center' }, onSubmit: this.handleFormSubmit },
+          { id: 'newwebsiteform', action: '/api/postnewwebsite', method: 'POST', encType: 'multipart/form-data', style: { textAlign: 'center' }, onSubmit: this.handleFormSubmit },
           _react2.default.createElement(
             'div',
             { style: { display: this.state.websiteNameVisibility } },
@@ -899,8 +908,8 @@ var CreateWebsite = function (_React$Component) {
               )
             ),
             _react2.default.createElement(
-              'button',
-              { style: { position: 'absolute', top: '300px', left: '35%', width: '30%' }, className: 'btn btn-primary', type: 'submit' },
+              'a',
+              { style: { position: 'absolute', top: '300px', left: '35%', width: '30%' }, className: 'btn btn-primary', onClick: this.trueSubmit },
               ' Submit '
             )
           )

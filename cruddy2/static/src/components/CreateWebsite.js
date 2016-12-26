@@ -12,9 +12,17 @@ class CreateWebsite extends React.Component {
     this.handleWebsiteNameChange = this.handleWebsiteNameChange.bind(this);
     this.handleWebsiteNameKeyDown = this.handleWebsiteNameKeyDown.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.trueSubmit = this.trueSubmit.bind(this);
+  }
+
+  trueSubmit(event) {
+    console.log('trusub');
+    var form = document.getElementById("newwebsiteform");
+    form.submit();
   }
 
   handleFormSubmit(event) {
+    console.log(event.target);
     event.preventDefault();
   }
 
@@ -42,7 +50,7 @@ class CreateWebsite extends React.Component {
         <div>
         <h2 className="text-xs-center">Create Your Website</h2>
 
-          <form action="/api/postnewwebsite" method="POST" encType="multipart/form-data" style={{textAlign:'center'}} onSubmit={this.handleFormSubmit}>
+          <form id="newwebsiteform" action="/api/postnewwebsite" method="POST" encType="multipart/form-data" style={{textAlign:'center'}} onSubmit={this.handleFormSubmit}>
             <div style={{display: this.state.websiteNameVisibility}}>
               <label> Website Name </label>
               <input type="text" name="websitename" value={this.state.websiteName} onChange={this.handleWebsiteNameChange} onKeyDown={this.handleWebsiteNameKeyDown}/>
@@ -74,7 +82,7 @@ class CreateWebsite extends React.Component {
             <a className="right carousel-control" style={{right:'-15%', backgroundImage:'none'}} href="#myCarousel" role="button" data-slide="next">
               <span style={{color: 'black', position:'absolute', top:'45%', height:'10%', right:'-3px'}}><i className="fa fa-caret-square-o-right" aria-hidden="true"></i></span>
             </a>
-            <button style={{position:'absolute', top:'300px', left:'35%', width:'30%'}} className="btn btn-primary" type="submit"> Submit </button>
+            <a style={{position:'absolute', top:'300px', left:'35%', width:'30%'}} className="btn btn-primary" onClick={this.trueSubmit}> Submit </a>
           </div>
           </form>
         </div>

@@ -28,6 +28,14 @@ def exampleCard():
 @app.route('/exampletable')
 def exampleTable():
     return send_file('./static/ExampleTable.png', mimetype='image/png')
+
+@app.route('/static/websitename')
+def websiteName():
+    return send_file('./static/websitename.gif', mimetype='image/gif')
+#
+@app.route('/static/websitetype')
+def websiteType():
+    return send_file('./static/websitetype.gif', mimetype='image/gif')
 #
 # @app.route('/')
 # def index():

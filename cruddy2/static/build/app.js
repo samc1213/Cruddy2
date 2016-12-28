@@ -2,7 +2,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 exports.rehydrateLoggedInUser = exports.websitesReceived = exports.websitesFetch = exports.userLoggedOut = exports.userLoggedIn = exports.thingAttributesReceived = exports.thingInstancesReceived = exports.thingAttributesFetch = exports.thingInstancesFetch = exports.getCurrentWebsiteName = exports.getThingAttributeTypes = undefined;
 exports.rehydrateAndGetWebsites = rehydrateAndGetWebsites;
@@ -19,216 +19,216 @@ var _reactRouter = require('react-router');
 require('whatwg-fetch');
 
 var getThingAttributeTypes = exports.getThingAttributeTypes = function getThingAttributeTypes(data) {
-	return {
-		type: "GET_THING_ATTRIBUTE_TYPES",
-		data: data
-	};
+  return {
+    type: "GET_THING_ATTRIBUTE_TYPES",
+    data: data
+  };
 };
 
 var getCurrentWebsiteName = exports.getCurrentWebsiteName = function getCurrentWebsiteName(data) {
-	return {
-		type: "GET_CURRENT_WEBSITE",
-		data: data
-	};
+  return {
+    type: "GET_CURRENT_WEBSITE",
+    data: data
+  };
 };
 
 var thingInstancesFetch = exports.thingInstancesFetch = function thingInstancesFetch(isTrue) {
-	return {
-		type: "THING_INSTANCES_FETCH",
-		isTrue: isTrue
-	};
+  return {
+    type: "THING_INSTANCES_FETCH",
+    isTrue: isTrue
+  };
 };
 
 var thingAttributesFetch = exports.thingAttributesFetch = function thingAttributesFetch(isTrue) {
-	return {
-		type: "THING_ATTRIBUTES_FETCH",
-		isTrue: isTrue
-	};
+  return {
+    type: "THING_ATTRIBUTES_FETCH",
+    isTrue: isTrue
+  };
 };
 
 var thingInstancesReceived = exports.thingInstancesReceived = function thingInstancesReceived(data) {
-	return {
-		type: "THING_INSTANCES_RECEIVED",
-		data: data
-	};
+  return {
+    type: "THING_INSTANCES_RECEIVED",
+    data: data
+  };
 };
 
 var thingAttributesReceived = exports.thingAttributesReceived = function thingAttributesReceived(data) {
-	return {
-		type: "THING_ATTRIBUTES_RECEIVED",
-		data: data
-	};
+  return {
+    type: "THING_ATTRIBUTES_RECEIVED",
+    data: data
+  };
 };
 
 var userLoggedIn = exports.userLoggedIn = function userLoggedIn(data) {
-	return {
-		type: "USER_LOGGED_IN",
-		data: data
-	};
+  return {
+    type: "USER_LOGGED_IN",
+    data: data
+  };
 };
 
 var userLoggedOut = exports.userLoggedOut = function userLoggedOut() {
-	return {
-		type: "USER_LOGGED_OUT"
-	};
+  return {
+    type: "USER_LOGGED_OUT"
+  };
 };
 
 var websitesFetch = exports.websitesFetch = function websitesFetch(isTrue) {
-	return {
-		type: "WEBSITES_FETCH",
-		isTrue: isTrue
-	};
+  return {
+    type: "WEBSITES_FETCH",
+    isTrue: isTrue
+  };
 };
 
 var websitesReceived = exports.websitesReceived = function websitesReceived(data) {
-	return {
-		type: "WEBSITES_RECEIVED",
-		data: data
-	};
+  return {
+    type: "WEBSITES_RECEIVED",
+    data: data
+  };
 };
 
 var rehydrateLoggedInUser = exports.rehydrateLoggedInUser = function rehydrateLoggedInUser() {
-	return {
-		type: "REHYDRATE_LOGGED_IN_USER"
-	};
+  return {
+    type: "REHYDRATE_LOGGED_IN_USER"
+  };
 };
 
 function rehydrateAndGetWebsites(username) {
-	return function (dispatch) {
-		dispatch(rehydrateLoggedInUser());
+  return function (dispatch) {
+    dispatch(rehydrateLoggedInUser());
 
-		return dispatch(getWebsites(username));
-	};
+    return dispatch(getWebsites(username));
+  };
 }
 
 function getThingInstances(thingId) {
-	return function (dispatch) {
-		dispatch(thingInstancesFetch(true));
+  return function (dispatch) {
+    dispatch(thingInstancesFetch(true));
 
-		return fetch('/api/getthinginstances/' + thingId).then(function (response) {
-			return response.json();
-		}).then(function (json) {
-			return dispatch(thingInstancesReceived(json));
-		}).catch(function (err) {
-			return console.log(err);
-		});
-	};
+    return fetch('/api/getthinginstances/' + thingId).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return dispatch(thingInstancesReceived(json));
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
 }
 
 function getThingAttributes(thingId) {
-	return function (dispatch) {
-		dispatch(thingAttributesFetch(true));
+  return function (dispatch) {
+    dispatch(thingAttributesFetch(true));
 
-		return fetch('/api/getthingattributes/' + thingId).then(function (response) {
-			return response.json();
-		}).then(function (json) {
-			return dispatch(thingAttributesReceived(json));
-		}).catch(function (err) {
-			return console.log(err);
-		});
-	};
+    return fetch('/api/getthingattributes/' + thingId).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return dispatch(thingAttributesReceived(json));
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
 }
 
 function getWebsites(username) {
-	return function (dispatch) {
-		dispatch(websitesFetch(true));
+  return function (dispatch) {
+    dispatch(websitesFetch(true));
 
-		return fetch('/api/getwebsites/' + username).then(function (response) {
-			return response.json();
-		}).then(function (json) {
-			return dispatch(websitesReceived(json));
-		}).catch(function (err) {
-			return console.log(err);
-		});
-	};
+    return fetch('/api/getwebsites/' + username).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return dispatch(websitesReceived(json));
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
 }
 
 function submitCreateAccount(firstname, lastname, username, password) {
-	function doFetch(data, dispatch) {
-		return fetch('/api/postnewaccount', {
-			method: 'POST',
-			body: data
-		}).then(function (response) {
-			return response.json();
-		}).then(function (json) {
-			if (json.success == true) {
-				dispatch(userLoggedIn(json['username']));
-				_reactRouter.browserHistory.push('/dashboard');
-			} else {
-				console.log("bad new account");
-			}
-		}).catch(function (err) {
-			return console.log(err);
-		});
-	}
+  function doFetch(data, dispatch) {
+    return fetch('/api/postnewaccount', {
+      method: 'POST',
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      if (json.success == true) {
+        dispatch(userLoggedIn(json['username']));
+        _reactRouter.browserHistory.push('/dashboard');
+      } else {
+        console.log("bad new account");
+      }
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  }
 
-	return function (dispatch) {
-		var data = new FormData();
-		data.append('firstname', firstname);
-		data.append('lastname', lastname);
-		data.append('username', username);
-		data.append('password', password);
+  return function (dispatch) {
+    var data = new FormData();
+    data.append('firstname', firstname);
+    data.append('lastname', lastname);
+    data.append('username', username);
+    data.append('password', password);
 
-		return doFetch(data, dispatch);
-	};
+    return doFetch(data, dispatch);
+  };
 }
 
 function submitLogin(username, password) {
-	function doFetch(data, dispatch) {
-		return fetch('/api/postloginuser', {
-			method: 'POST',
-			body: data
-		}).then(function (response) {
-			return response.json();
-		}).then(function (json) {
-			if (json.success == true) {
-				dispatch(userLoggedIn(json['username']));
-				_reactRouter.browserHistory.push('/dashboard');
-			} else {
-				console.log("bad login");
-			}
-		}).catch(function (err) {
-			return console.log(err);
-		});
-	}
+  function doFetch(data, dispatch) {
+    return fetch('/api/postloginuser', {
+      method: 'POST',
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      if (json.success == true) {
+        dispatch(userLoggedIn(json['username']));
+        _reactRouter.browserHistory.push('/dashboard');
+      } else {
+        console.log("bad login");
+      }
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  }
 
-	return function (dispatch) {
-		var data = new FormData();
-		data.append('username', username);
-		data.append('password', password);
+  return function (dispatch) {
+    var data = new FormData();
+    data.append('username', username);
+    data.append('password', password);
 
-		return doFetch(data, dispatch);
-	};
+    return doFetch(data, dispatch);
+  };
 }
 
 function submitNewThing(form) {
-	return function (dispatch) {
-		return fetch('/postnewthing', {
-			method: 'POST',
-			body: new FormData(form)
-		}).then(function (response) {
-			return response.json();
-		}).then(function (json) {
-			return _reactRouter.browserHistory.push('/' + json.websitename + '/createthinginstance/' + json.thingid);
-		}).catch(function (err) {
-			return console.log(err);
-		});
-	};
+  return function (dispatch) {
+    return fetch('/postnewthing', {
+      method: 'POST',
+      body: new FormData(form)
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return _reactRouter.browserHistory.push('/dashboard');
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
 }
 
 function submitNewThingInstance(form) {
-	return function (dispatch) {
-		return fetch('/api/postnewthinginstance', {
-			method: 'POST',
-			body: new FormData(form)
-		}).then(function (response) {
-			return response.json();
-		}).then(function (json) {
-			return _reactRouter.browserHistory.push('/' + json.websitename + '/viewcraigslistview/' + json.thingid);
-		}).catch(function (err) {
-			return console.log(err);
-		});
-	};
+  return function (dispatch) {
+    return fetch('/api/postnewthinginstance', {
+      method: 'POST',
+      body: new FormData(form)
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return _reactRouter.browserHistory.push('/' + json.websitename + '/viewcraigslistview/' + json.thingid);
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
 }
 
 },{"react-router":230,"whatwg-fetch":650}],2:[function(require,module,exports){
@@ -1111,7 +1111,7 @@ var Home = function (_React$Component) {
         null,
         _react2.default.createElement(
           "div",
-          { className: "jumbotron", style: { background: "url('/r8') no-repeat center center", width: '100%', height: '100%', color: 'white' } },
+          { className: "jumbotron", style: { background: "url('/r8') no-repeat center center", width: '100%', height: '100%', color: 'white', marginBottom: '0px' } },
           _react2.default.createElement(
             "div",
             { className: "container" },
@@ -1123,14 +1123,14 @@ var Home = function (_React$Component) {
             _react2.default.createElement(
               "p",
               { style: { fontSize: "1.4em" } },
-              "Tell us what matters to you. We'll handle the rest."
+              "Create your own data-driven website, no coding required."
             ),
             _react2.default.createElement(
               "p",
               null,
               _react2.default.createElement(
                 "a",
-                { className: "btn btn-primary btn-lg", href: "/createaccount", role: "button", style: { backgroundColor: "rgb(219, 0, 3)", border: "2px solid rgb(219, 0, 3)", color: 'black' } },
+                { className: "btn btn-primary btn-lg", href: "/createaccount", role: "button", style: { backgroundColor: "rgb(219, 0, 3)", border: '2px solid rgb(219, 0, 3)', color: 'black' } },
                 "Sign Up \xBB"
               )
             )
@@ -1138,47 +1138,68 @@ var Home = function (_React$Component) {
         ),
         _react2.default.createElement(
           "div",
-          { className: "row" },
+          { className: "row", style: { height: '200px', backgroundColor: 'rgba(235, 235, 235, 1)', borderBottom: '1px solid rgb(135, 135, 135)' } },
           _react2.default.createElement(
             "div",
-            { className: "col-md-6" },
+            { style: { padding: '25px' } },
             _react2.default.createElement(
-              "h1",
-              null,
-              "Step One:"
+              "div",
+              { className: "col-md-6", style: { height: '150px', display: 'flex', justifyContent: 'center', flexDirection: 'column' } },
+              _react2.default.createElement(
+                "h1",
+                null,
+                "Step One:"
+              ),
+              _react2.default.createElement(
+                "h3",
+                null,
+                "Create your website name."
+              ),
+              _react2.default.createElement(
+                "p",
+                null,
+                "You get your own cruddy2 domain name all to yourself!"
+              )
             ),
             _react2.default.createElement(
-              "h3",
-              null,
-              "Create your website name."
-            ),
-            _react2.default.createElement(
-              "p",
-              null,
-              "You get your own cruddy2 domain name all to yourself!"
+              "div",
+              { className: "col-md-6 text-xs-center", style: { height: '150px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
+              _react2.default.createElement("img", { style: { width: '70%' }, src: "/static/websitename" })
             )
-          ),
-          _react2.default.createElement("div", { className: "col-md-6" })
+          )
         ),
         _react2.default.createElement(
           "div",
-          { className: "row" },
+          { className: "row", style: { height: '200px' } },
           _react2.default.createElement(
             "div",
-            { className: "col-md-6" },
+            { style: { padding: '25px' } },
             _react2.default.createElement(
-              "h1",
-              null,
-              "Step Two:"
+              "div",
+              { className: "col-md-6 text-xs-center", style: { height: '150px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
+              _react2.default.createElement("img", { style: { width: '70%' }, src: "/static/websitetype" })
             ),
             _react2.default.createElement(
-              "h3",
-              null,
-              "Define your layout."
-            ),
-            _react2.default.createElement("p", null)
-          ),
-          _react2.default.createElement("div", { className: "col-md-6" })
+              "div",
+              { className: "col-md-6", style: { height: '150px', display: 'flex', justifyContent: 'center', flexDirection: 'column' } },
+              _react2.default.createElement(
+                "h1",
+                null,
+                "Step Two:"
+              ),
+              _react2.default.createElement(
+                "h3",
+                null,
+                "Define your layout."
+              ),
+              _react2.default.createElement(
+                "p",
+                null,
+                "We're constantly adding more templates for you to get started with."
+              ),
+              _react2.default.createElement("p", null)
+            )
+          )
         )
       );
     }

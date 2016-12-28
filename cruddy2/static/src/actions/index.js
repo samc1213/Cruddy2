@@ -64,11 +64,11 @@ export function rehydrateAndGetWebsites(username) {
 }
 
 
-export function getThingInstances(thingId) {
+export function getThingInstances(websiteName) {
   return function (dispatch) {
       dispatch(thingInstancesFetch(true))
 
-      return fetch(`/api/getthinginstances/${thingId}`)
+      return fetch(`/api/getthinginstances/${websiteName}`)
         .then(response => response.json())
         .then(json =>
           dispatch(thingInstancesReceived(json))
@@ -77,11 +77,11 @@ export function getThingInstances(thingId) {
   }
 }
 
-export function getThingAttributes(thingId) {
+export function getThingAttributes(websiteName) {
   return function (dispatch) {
       dispatch(thingAttributesFetch(true))
 
-      return fetch(`/api/getthingattributes/${thingId}`)
+      return fetch(`/api/getthingattributes/${websiteName}`)
         .then(response => response.json())
         .then(json =>
           dispatch(thingAttributesReceived(json))
@@ -183,7 +183,7 @@ export function submitNewThingInstance(form) {
       })
         .then(response => response.json())
         .then(json =>
-        browserHistory.push(`/${json.websitename}/viewcraigslistview/${json.thingid}`)
+        browserHistory.push(`/${json.websitename}`)
         )
         .catch(err => console.log(err))
   }

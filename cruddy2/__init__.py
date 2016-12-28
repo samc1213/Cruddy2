@@ -54,20 +54,28 @@ def getView(websiteId):
 def getThingAttributeTypes():
     return json.dumps(ThingAttributeTypes)
 
-@app.route('/api/getthingattributes/<thingId>')
-def getThingAttributes(thingId):
-    thingAttributes = api.getThingAttributes(thingId)
-    return json.dumps(thingAttributes)
+@app.route('/api/getthingattributes/<websiteName>')
+def getThingAttributes(websiteName):
+    thingId = api.getThingIdFromWebsiteName(websiteName)
+    if thingId is not None:
+        thingAttributes = api.getThingAttributes(thingId)
+        return json.dumps(thingAttributes)
+    else:
+        return ''
 
-@app.route('/api/getthinginstances/<thingId>')
-def getThingInstances(thingId):
-    thingInstances = api.getThingInstances(thingId)
-    thingAttributes = api.getThingAttributes(thingId)
-    result = {}
-    result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
-    result['thingAttributes'] = thingAttributes
+@app.route('/api/getthinginstances/<websiteName>')
+def getThingInstances(websiteName):
+    thingId = api.getThingIdFromWebsiteName(websiteName)
+    if thingId is not None:
+        thingInstances = api.getThingInstances(thingId)
+        thingAttributes = api.getThingAttributes(thingId)
+        result = {}
+        result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
+        result['thingAttributes'] = thingAttributes
 
-    return json.dumps(result)
+        return json.dumps(result)
+    else:
+        return ''
 
 
 @app.route('/api/getwebsites/<username>')
@@ -139,8 +147,6 @@ def postLoginUser():
 
 @app.route('/api/postnewthinginstance', methods=['POST'])
 def postNewThingInstance():
-    app.logger.debug(request.files)
-    app.logger.debug(request.form)
     thingInstance = api.createThingInstance(request.form, request.files)
     return json.dumps({'success': True, 'thingid': thingInstance.thing.thingid, 'websitename': request.form['websitename'] }), 200, {'ContentType':'application/json'}
 

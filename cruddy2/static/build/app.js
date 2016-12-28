@@ -101,11 +101,11 @@ function rehydrateAndGetWebsites(username) {
   };
 }
 
-function getThingInstances(thingId) {
+function getThingInstances(websiteName) {
   return function (dispatch) {
     dispatch(thingInstancesFetch(true));
 
-    return fetch('/api/getthinginstances/' + thingId).then(function (response) {
+    return fetch('/api/getthinginstances/' + websiteName).then(function (response) {
       return response.json();
     }).then(function (json) {
       return dispatch(thingInstancesReceived(json));
@@ -115,11 +115,11 @@ function getThingInstances(thingId) {
   };
 }
 
-function getThingAttributes(thingId) {
+function getThingAttributes(websiteName) {
   return function (dispatch) {
     dispatch(thingAttributesFetch(true));
 
-    return fetch('/api/getthingattributes/' + thingId).then(function (response) {
+    return fetch('/api/getthingattributes/' + websiteName).then(function (response) {
       return response.json();
     }).then(function (json) {
       return dispatch(thingAttributesReceived(json));
@@ -224,7 +224,7 @@ function submitNewThingInstance(form) {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      return _reactRouter.browserHistory.push('/' + json.websitename + '/viewcraigslistview/' + json.thingid);
+      return _reactRouter.browserHistory.push('/' + json.websitename);
     }).catch(function (err) {
       return console.log(err);
     });
@@ -235,7 +235,7 @@ function submitNewThingInstance(form) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -253,123 +253,123 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var App = function (_React$Component) {
-	_inherits(App, _React$Component);
+  _inherits(App, _React$Component);
 
-	function App(props) {
-		_classCallCheck(this, App);
+  function App(props) {
+    _classCallCheck(this, App);
 
-		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-		_this.logout = _this.logout.bind(_this);
-		return _this;
-	}
+    _this.logout = _this.logout.bind(_this);
+    return _this;
+  }
 
-	_createClass(App, [{
-		key: 'logout',
-		value: function logout() {
-			this.props.logoutUser();
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			console.log(this.props.loggedInUser);
-			if (this.props.params.websiteName != null && this.props.params.thingId != null) {
-				var returnstring = '/' + String(this.props.params.websiteName) + '/createthinginstance/' + String(this.props.params.thingId);
-				var newinstancebutton = _react2.default.createElement(
-					'li',
-					{ style: { float: 'right', paddingTop: '5px', paddingBottom: '5px' } },
-					' ',
-					_react2.default.createElement(
-						'a',
-						{ href: returnstring },
-						' New Thing Instance '
-					),
-					' '
-				);
-			}
-			if (this.props.loggedInUser != null) {
-				var username = _react2.default.createElement(
-					'p',
-					{ className: 'dropdown-item' },
-					'Logged in as ',
-					this.props.loggedInUser
-				);
-				var login = _react2.default.createElement(
-					'a',
-					{ className: 'dropdown-item', href: '/', onClick: this.logout },
-					'Logout'
-				);
-				var dashboardOption = _react2.default.createElement(
-					'a',
-					{ className: 'dropdown-item', href: '/dashboard' },
-					'My Dashboard'
-				);
-			} else {
-				var login = _react2.default.createElement(
-					'a',
-					{ className: 'dropdown-item', href: '/login' },
-					'Login'
-				);
-			}
-			if (['/creatething', '/login', '/dashboard', '/'].indexOf(this.props.location.pathname) >= 0) {
-				var nav = _react2.default.createElement(
-					'li',
-					{ className: 'nav-item dropdown float-*-right' },
-					_react2.default.createElement(
-						'a',
-						{ className: 'nav-link dropdown-toggle', id: 'supportedContentDropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-						'Dropdown'
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'dropdown-menu', 'aria-labelledby': 'supportedContentDropdown' },
-						username,
-						login,
-						dashboardOption
-					)
-				);
-			}
+  _createClass(App, [{
+    key: 'logout',
+    value: function logout() {
+      this.props.logoutUser();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      console.log(this.props.loggedInUser);
+      if (this.props.params.websiteName != null) {
+        var returnstring = '/' + String(this.props.params.websiteName) + '/createthinginstance';
+        var newinstancebutton = _react2.default.createElement(
+          'li',
+          { style: { float: 'right', paddingTop: '5px', paddingBottom: '5px' } },
+          ' ',
+          _react2.default.createElement(
+            'a',
+            { href: returnstring },
+            ' New Thing Instance '
+          ),
+          ' '
+        );
+      }
+      if (this.props.loggedInUser != null) {
+        var username = _react2.default.createElement(
+          'p',
+          { className: 'dropdown-item' },
+          'Logged in as ',
+          this.props.loggedInUser
+        );
+        var login = _react2.default.createElement(
+          'a',
+          { className: 'dropdown-item', href: '/', onClick: this.logout },
+          'Logout'
+        );
+        var dashboardOption = _react2.default.createElement(
+          'a',
+          { className: 'dropdown-item', href: '/dashboard' },
+          'My Dashboard'
+        );
+      } else {
+        var login = _react2.default.createElement(
+          'a',
+          { className: 'dropdown-item', href: '/login' },
+          'Login'
+        );
+      }
+      if (['/creatething', '/login', '/dashboard', '/'].indexOf(this.props.location.pathname) >= 0) {
+        var nav = _react2.default.createElement(
+          'li',
+          { className: 'nav-item dropdown float-*-right' },
+          _react2.default.createElement(
+            'a',
+            { className: 'nav-link dropdown-toggle', id: 'supportedContentDropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+            'Dropdown'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'dropdown-menu', 'aria-labelledby': 'supportedContentDropdown' },
+            username,
+            login,
+            dashboardOption
+          )
+        );
+      }
 
-			return _react2.default.createElement(
-				'div',
-				null,
-				_react2.default.createElement(
-					'nav',
-					{ className: 'navbar navbar-light bg-faded' },
-					_react2.default.createElement(
-						'div',
-						{ className: 'container-fluid' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'navbar-header' },
-							_react2.default.createElement(
-								'a',
-								{ className: 'navbar-brand', href: '/' },
-								'Cruddy2'
-							)
-						),
-						_react2.default.createElement(
-							'ul',
-							{ className: 'nav navbar-nav float-*-right' },
-							nav
-						),
-						_react2.default.createElement(
-							'ul',
-							{ className: 'nav navbar-nav navbar-right' },
-							newinstancebutton
-						)
-					)
-				),
-				_react2.default.createElement(
-					'div',
-					null,
-					this.props.children
-				)
-			);
-		}
-	}]);
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'nav',
+          { className: 'navbar navbar-light bg-faded' },
+          _react2.default.createElement(
+            'div',
+            { className: 'container-fluid' },
+            _react2.default.createElement(
+              'div',
+              { className: 'navbar-header' },
+              _react2.default.createElement(
+                'a',
+                { className: 'navbar-brand', href: '/' },
+                'Cruddy2'
+              )
+            ),
+            _react2.default.createElement(
+              'ul',
+              { className: 'nav navbar-nav float-*-right' },
+              nav
+            ),
+            _react2.default.createElement(
+              'ul',
+              { className: 'nav navbar-nav navbar-right' },
+              newinstancebutton
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          null,
+          this.props.children
+        )
+      );
+    }
+  }]);
 
-	return App;
+  return App;
 }(_react2.default.Component);
 
 exports.default = App;
@@ -457,7 +457,7 @@ exports.default = CraigslistCardPreview;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -479,63 +479,63 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var CraigslistView = function (_React$Component) {
-	_inherits(CraigslistView, _React$Component);
+  _inherits(CraigslistView, _React$Component);
 
-	function CraigslistView() {
-		_classCallCheck(this, CraigslistView);
+  function CraigslistView() {
+    _classCallCheck(this, CraigslistView);
 
-		return _possibleConstructorReturn(this, (CraigslistView.__proto__ || Object.getPrototypeOf(CraigslistView)).apply(this, arguments));
-	}
+    return _possibleConstructorReturn(this, (CraigslistView.__proto__ || Object.getPrototypeOf(CraigslistView)).apply(this, arguments));
+  }
 
-	_createClass(CraigslistView, [{
-		key: 'componentDidMount',
-		value: function componentDidMount() {
-			this.props.getThingInstances(this.props.params.thingId);
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			var cards = [];
-			var conversion = this.props.thingAttributeIdsToNamesAndTypes;
-			for (var index in this.props.thingInstances) {
-				var thingInstance = this.props.thingInstances[index];
-				var thingAttributeNames = [];
-				var thingAttributeTypeIds = [];
-				var thingAttributeExamples = [];
-				for (var thingAttributeId in thingInstance) {
-					thingAttributeNames.push(conversion[thingAttributeId].name);
-					thingAttributeTypeIds.push(conversion[thingAttributeId].typeid);
-					if (conversion[thingAttributeId].typeid == "3") {
-						thingAttributeExamples.push([thingInstance[thingAttributeId], false]);
-					} else {
-						thingAttributeExamples.push(thingInstance[thingAttributeId]);
-					}
-				}
-				cards.push(_react2.default.createElement(
-					'div',
-					{ className: 'col-md-6' },
-					_react2.default.createElement('div', { className: 'col-md-2' }),
-					_react2.default.createElement(
-						'div',
-						{ className: 'col-md-8' },
-						_react2.default.createElement(_CraigslistCardPreview2.default, { key: index,
-							thingAttributeNames: thingAttributeNames,
-							thingAttributeTypeIds: thingAttributeTypeIds,
-							thingAttributeExamples: thingAttributeExamples,
-							isPreview: false })
-					),
-					_react2.default.createElement('div', { className: 'col-md-2' })
-				));
-			}
-			return _react2.default.createElement(
-				'div',
-				{ className: 'col-md-12' },
-				cards
-			);
-		}
-	}]);
+  _createClass(CraigslistView, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.getThingInstances(this.props.params.websiteName);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var cards = [];
+      var conversion = this.props.thingAttributeIdsToNamesAndTypes;
+      for (var index in this.props.thingInstances) {
+        var thingInstance = this.props.thingInstances[index];
+        var thingAttributeNames = [];
+        var thingAttributeTypeIds = [];
+        var thingAttributeExamples = [];
+        for (var thingAttributeId in thingInstance) {
+          thingAttributeNames.push(conversion[thingAttributeId].name);
+          thingAttributeTypeIds.push(conversion[thingAttributeId].typeid);
+          if (conversion[thingAttributeId].typeid == "3") {
+            thingAttributeExamples.push([thingInstance[thingAttributeId], false]);
+          } else {
+            thingAttributeExamples.push(thingInstance[thingAttributeId]);
+          }
+        }
+        cards.push(_react2.default.createElement(
+          'div',
+          { className: 'col-md-6', key: index },
+          _react2.default.createElement('div', { className: 'col-md-2' }),
+          _react2.default.createElement(
+            'div',
+            { className: 'col-md-8' },
+            _react2.default.createElement(_CraigslistCardPreview2.default, {
+              thingAttributeNames: thingAttributeNames,
+              thingAttributeTypeIds: thingAttributeTypeIds,
+              thingAttributeExamples: thingAttributeExamples,
+              isPreview: false })
+          ),
+          _react2.default.createElement('div', { className: 'col-md-2' })
+        ));
+      }
+      return _react2.default.createElement(
+        'div',
+        { className: 'col-md-12' },
+        cards
+      );
+    }
+  }]);
 
-	return CraigslistView;
+  return CraigslistView;
 }(_react2.default.Component);
 
 exports.default = CraigslistView;
@@ -1601,7 +1601,7 @@ exports.default = ThingInstanceViewPreview;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1621,78 +1621,77 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var CreateThingInstance = function (_React$Component) {
-	_inherits(CreateThingInstance, _React$Component);
+  _inherits(CreateThingInstance, _React$Component);
 
-	_createClass(CreateThingInstance, [{
-		key: 'componentDidMount',
-		value: function componentDidMount() {
-			this.props.getThingAttributes(this.props.params.thingId);
-		}
-	}]);
+  _createClass(CreateThingInstance, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.getThingAttributes(this.props.params.websiteName);
+    }
+  }]);
 
-	function CreateThingInstance(props) {
-		_classCallCheck(this, CreateThingInstance);
+  function CreateThingInstance(props) {
+    _classCallCheck(this, CreateThingInstance);
 
-		var _this = _possibleConstructorReturn(this, (CreateThingInstance.__proto__ || Object.getPrototypeOf(CreateThingInstance)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (CreateThingInstance.__proto__ || Object.getPrototypeOf(CreateThingInstance)).call(this, props));
 
-		_this.handleSubmit = _this.handleSubmit.bind(_this);
-		return _this;
-	}
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
+  }
 
-	_createClass(CreateThingInstance, [{
-		key: 'handleSubmit',
-		value: function handleSubmit(event) {
-			event.preventDefault();
-			var form = document.getElementById('newThingInstanceForm');
-			this.props.submitNewThingInstance(form);
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			var thingAttributes = [];
-			for (var i = 0; i < this.props.thingAttributeNames.length; i++) {
-				var name = 'thingattributeid.' + this.props.thingAttributeIds[i];
-				var thingAttributeType = this.props.thingAttributeTypes[i] != "3" ? _react2.default.createElement('input', { type: 'text', className: 'form-control', name: name }) : _react2.default.createElement('input', { type: 'file', className: 'form-control-file', accept: 'image/*', name: name });
+  _createClass(CreateThingInstance, [{
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
+      event.preventDefault();
+      var form = document.getElementById('newThingInstanceForm');
+      this.props.submitNewThingInstance(form);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var thingAttributes = [];
+      for (var i = 0; i < this.props.thingAttributeNames.length; i++) {
+        var name = 'thingattributeid.' + this.props.thingAttributeIds[i];
+        var thingAttributeType = this.props.thingAttributeTypes[i] != "3" ? _react2.default.createElement('input', { type: 'text', className: 'form-control', name: name }) : _react2.default.createElement('input', { type: 'file', className: 'form-control-file', accept: 'image/*', name: name });
 
-				thingAttributes.push(_react2.default.createElement(
-					'div',
-					{ key: i },
-					_react2.default.createElement(
-						'label',
-						null,
-						' ',
-						this.props.thingAttributeNames[i],
-						' '
-					),
-					thingAttributeType
-				));
-			}
+        thingAttributes.push(_react2.default.createElement(
+          'div',
+          { key: i },
+          _react2.default.createElement(
+            'label',
+            null,
+            ' ',
+            this.props.thingAttributeNames[i],
+            ' '
+          ),
+          thingAttributeType
+        ));
+      }
 
-			return _react2.default.createElement(
-				'div',
-				null,
-				_react2.default.createElement(
-					'h2',
-					{ className: 'text-xs-center' },
-					'Create A New Instance of Your Thing'
-				),
-				_react2.default.createElement(
-					'form',
-					{ id: 'newThingInstanceForm', onSubmit: this.handleSubmit, encType: 'multipart/form-data' },
-					_react2.default.createElement('input', { type: 'hidden', name: 'thingid', value: this.props.params.thingId }),
-					_react2.default.createElement('input', { type: 'hidden', name: 'websitename', value: this.props.params.websiteName }),
-					thingAttributes,
-					_react2.default.createElement(
-						'button',
-						{ type: 'submit' },
-						' Submit '
-					)
-				)
-			);
-		}
-	}]);
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h2',
+          { className: 'text-xs-center' },
+          'Create A New Instance of Your Thing'
+        ),
+        _react2.default.createElement(
+          'form',
+          { id: 'newThingInstanceForm', onSubmit: this.handleSubmit, encType: 'multipart/form-data' },
+          _react2.default.createElement('input', { type: 'hidden', name: 'websitename', value: this.props.params.websiteName }),
+          thingAttributes,
+          _react2.default.createElement(
+            'button',
+            { type: 'submit' },
+            ' Submit '
+          )
+        )
+      );
+    }
+  }]);
 
-	return CreateThingInstance;
+  return CreateThingInstance;
 }(_react2.default.Component);
 
 exports.default = CreateThingInstance;
@@ -2191,16 +2190,8 @@ fetch('/api/getthingattributetypes').then(function (response) {
       _react2.default.createElement(_reactRouter.Route, { path: ':websiteName/creatething', component: _CreateThingContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: 'createaccount', component: _CreateAccountFormContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _LoginFormContainer2.default }),
-      _react2.default.createElement(
-        _reactRouter.Route,
-        { path: ':websiteName/viewcraigslistview', component: _CraigslistViewContainer2.default },
-        _react2.default.createElement(_reactRouter.Route, { path: '/:websiteName/viewcraigslistview/:thingId', component: _CraigslistViewContainer2.default })
-      ),
-      _react2.default.createElement(
-        _reactRouter.Route,
-        { path: ':websiteName/createthinginstance', component: _CreateThingInstanceViewContainer2.default },
-        _react2.default.createElement(_reactRouter.Route, { path: '/:websiteName/createthinginstance/:thingId', component: _CreateThingInstanceViewContainer2.default })
-      ),
+      _react2.default.createElement(_reactRouter.Route, { path: ':websiteName', component: _CraigslistViewContainer2.default }),
+      _react2.default.createElement(_reactRouter.Route, { path: ':websiteName/createthinginstance', component: _CreateThingInstanceViewContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _DashboardContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: '*', component: _FourOhFour2.default })
     )

@@ -47,12 +47,8 @@ render((
         <Route path=":websiteName/creatething" component={CreateThingContainer} />
         <Route path="createaccount" component={CreateAccountFormContainer} />
         <Route path="login" component={LoginFormContainer} />
-        <Route path=":websiteName/viewcraigslistview" component={CraigslistViewContainer }>
-          <Route path="/:websiteName/viewcraigslistview/:thingId" component={CraigslistViewContainer} />
-        </Route>
-        <Route path=":websiteName/createthinginstance" component={CreateThingInstanceViewContainer}>
-          <Route path="/:websiteName/createthinginstance/:thingId" component={CreateThingInstanceViewContainer} />
-        </Route>
+        <Route path=":websiteName" component={CraigslistViewContainer } />
+        <Route path=":websiteName/createthinginstance" component={CreateThingInstanceViewContainer} />
         <Route path="dashboard" component={DashboardContainer} />
         <Route path="*" component={FourOhFour} />
       </Route>

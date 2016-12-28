@@ -25,16 +25,16 @@ class Dashboard extends React.Component {
             </div>
           )
         }
-				if (websitedivs.length == 0)
-				{
-					websitedivs.push(<div className="text-xs-center"> Your websites will appear here</div>)
-				}
+        if (websitedivs.length == 0)
+        {
+          websitedivs.push(<div className="text-xs-center"> Your websites will appear here</div>)
+        }
 
         return (
             <div className="text-xs-center">
                 <h2 className="text-xs-center">Welcome To Your Dashboard </h2>
                 {websitedivs}
-                <a className="btn btn-primary" href="/createwebsite" role="button">Create New Website</a>
+                <a className="btn btn-primary" href="/admin/createwebsite" role="button">Create New Website</a>
 
             </div>
             )

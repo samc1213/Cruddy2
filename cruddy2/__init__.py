@@ -45,8 +45,7 @@ def websiteType():
 @app.route('/api/getview/<websiteId>')
 def getView(websiteId):
     website = api.getWebsiteByID(websiteId)
-    tempthing = api.getThingByWebsiteID(websiteId)
-    redirectstring = '/' + str(website.websitename) + '/viewcraigslistview/'+str(tempthing.thingid)
+    redirectstring = '/' + str(website.websitename)
     return redirect(redirectstring)
 
 

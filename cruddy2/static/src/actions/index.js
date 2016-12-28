@@ -113,7 +113,7 @@ export function submitCreateAccount(firstname, lastname, username, password) {
       .then((json) => {
         if (json.success == true) {
           dispatch(userLoggedIn(json['username']));
-          browserHistory.push('/dashboard');
+          browserHistory.push('/admin/dashboard');
         }
         else {
           console.log("bad new account");
@@ -142,7 +142,7 @@ export function submitLogin(username, password) {
       .then((json) => {
         if (json.success == true) {
           dispatch(userLoggedIn(json['username']));
-          browserHistory.push('/dashboard');
+          browserHistory.push('/admin/dashboard');
         }
         else {
           console.log("bad login");
@@ -168,7 +168,7 @@ export function submitNewThing(form) {
       })
         .then(response => response.json())
         .then(json =>
-        browserHistory.push(`/dashboard`)
+        browserHistory.push(`/admin/dashboard`)
         )
         .catch(err => console.log(err))
   }

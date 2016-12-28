@@ -153,7 +153,7 @@ function submitCreateAccount(firstname, lastname, username, password) {
     }).then(function (json) {
       if (json.success == true) {
         dispatch(userLoggedIn(json['username']));
-        _reactRouter.browserHistory.push('/dashboard');
+        _reactRouter.browserHistory.push('/admin/dashboard');
       } else {
         console.log("bad new account");
       }
@@ -183,7 +183,7 @@ function submitLogin(username, password) {
     }).then(function (json) {
       if (json.success == true) {
         dispatch(userLoggedIn(json['username']));
-        _reactRouter.browserHistory.push('/dashboard');
+        _reactRouter.browserHistory.push('/admin/dashboard');
       } else {
         console.log("bad login");
       }
@@ -209,7 +209,7 @@ function submitNewThing(form) {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      return _reactRouter.browserHistory.push('/dashboard');
+      return _reactRouter.browserHistory.push('/admin/dashboard');
     }).catch(function (err) {
       return console.log(err);
     });
@@ -301,7 +301,7 @@ var App = function (_React$Component) {
         );
         var dashboardOption = _react2.default.createElement(
           'a',
-          { className: 'dropdown-item', href: '/dashboard' },
+          { className: 'dropdown-item', href: '/admin/dashboard' },
           'My Dashboard'
         );
       } else {
@@ -311,7 +311,7 @@ var App = function (_React$Component) {
           'Login'
         );
       }
-      if (['/creatething', '/login', '/dashboard', '/'].indexOf(this.props.location.pathname) >= 0) {
+      if (['/creatething', '/login', '/admin/dashboard', '/'].indexOf(this.props.location.pathname) >= 0) {
         var nav = _react2.default.createElement(
           'li',
           { className: 'nav-item dropdown float-*-right' },
@@ -1014,7 +1014,7 @@ var Dashboard = function (_React$Component) {
           websitedivs,
           _react2.default.createElement(
             'a',
-            { className: 'btn btn-primary', href: '/createwebsite', role: 'button' },
+            { className: 'btn btn-primary', href: '/admin/createwebsite', role: 'button' },
             'Create New Website'
           )
         );
@@ -2186,13 +2186,13 @@ fetch('/api/getthingattributetypes').then(function (response) {
       _reactRouter.Route,
       { path: '/', component: _AppContainer2.default },
       _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
-      _react2.default.createElement(_reactRouter.Route, { path: 'createwebsite', component: _CreateWebsiteViewContainer2.default }),
+      _react2.default.createElement(_reactRouter.Route, { path: 'admin/createwebsite', component: _CreateWebsiteViewContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: ':websiteName/creatething', component: _CreateThingContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: 'createaccount', component: _CreateAccountFormContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _LoginFormContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: ':websiteName', component: _CraigslistViewContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: ':websiteName/createthinginstance', component: _CreateThingInstanceViewContainer2.default }),
-      _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _DashboardContainer2.default }),
+      _react2.default.createElement(_reactRouter.Route, { path: 'admin/dashboard', component: _DashboardContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: '*', component: _FourOhFour2.default })
     )
   )

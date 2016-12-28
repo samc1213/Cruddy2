@@ -43,13 +43,13 @@ render((
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer}>
         <IndexRoute component={Home} />
-        <Route path="createwebsite" component={CreateWebsiteViewContainer} />
+        <Route path="admin/createwebsite" component={CreateWebsiteViewContainer} />
         <Route path=":websiteName/creatething" component={CreateThingContainer} />
         <Route path="createaccount" component={CreateAccountFormContainer} />
         <Route path="login" component={LoginFormContainer} />
         <Route path=":websiteName" component={CraigslistViewContainer } />
         <Route path=":websiteName/createthinginstance" component={CreateThingInstanceViewContainer} />
-        <Route path="dashboard" component={DashboardContainer} />
+        <Route path="admin/dashboard" component={DashboardContainer} />
         <Route path="*" component={FourOhFour} />
       </Route>
     </Router>

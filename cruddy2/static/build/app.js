@@ -317,7 +317,7 @@ var App = function (_React$Component) {
           { className: 'nav-item dropdown float-*-right' },
           _react2.default.createElement(
             'a',
-            { className: 'nav-link dropdown-toggle', id: 'supportedContentDropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+            { style: { cursor: 'pointer' }, className: 'nav-link dropdown-toggle', id: 'supportedContentDropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
             'Dropdown'
           ),
           _react2.default.createElement(

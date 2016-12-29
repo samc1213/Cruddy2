@@ -28,7 +28,7 @@ class App extends React.Component {
      if (['/creatething', '/login', '/admin/dashboard', '/'].indexOf(this.props.location.pathname) >= 0)
     {
       var nav = <li className="nav-item dropdown float-*-right">
-          <a className="nav-link dropdown-toggle" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+          <a style={{cursor: 'pointer'}}className="nav-link dropdown-toggle" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
           <div className="dropdown-menu" aria-labelledby="supportedContentDropdown">
             {username}
             {login}

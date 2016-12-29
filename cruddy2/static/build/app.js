@@ -273,7 +273,7 @@ var App = function (_React$Component) {
     key: 'render',
     value: function render() {
       console.log(this.props.loggedInUser);
-      if (this.props.params.websiteName != null) {
+      if (this.props.params.websiteName != null && location.href.split('/').slice(-1)[0] != 'creatething') {
         var returnstring = '/' + String(this.props.params.websiteName) + '/createthinginstance';
         var newinstancebutton = _react2.default.createElement(
           'li',
@@ -738,7 +738,7 @@ var CreateThing = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'col-md-6' },
-          _react2.default.createElement(_ThingInstanceViewPreviewContainer2.default, null)
+          _react2.default.createElement(_ThingInstanceViewPreviewContainer2.default, { style: { position: 'fixed' } })
         )
       );
     }
@@ -1173,7 +1173,7 @@ var Home = function (_React$Component) {
             _react2.default.createElement(
               "div",
               { className: "col-md-6 text-xs-center", style: { height: '150px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
-              _react2.default.createElement("img", { style: { width: '70%' }, src: "/static/websitename" })
+              _react2.default.createElement("img", { style: { width: '70%', maxHeight: '180px' }, src: "/static/websitename" })
             )
           )
         ),
@@ -1186,7 +1186,7 @@ var Home = function (_React$Component) {
             _react2.default.createElement(
               "div",
               { className: "col-md-6 text-xs-center", style: { height: '150px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
-              _react2.default.createElement("img", { style: { width: '70%' }, src: "/static/websitetype" })
+              _react2.default.createElement("img", { style: { width: '70%', maxHeight: '180px' }, src: "/static/websitetype" })
             ),
             _react2.default.createElement(
               "div",
@@ -1207,6 +1207,38 @@ var Home = function (_React$Component) {
                 "We're constantly adding more templates for you to get started with."
               ),
               _react2.default.createElement("p", null)
+            )
+          )
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "row", style: { height: '300px', backgroundColor: 'rgba(235, 235, 235, 1)', borderBottom: '1px solid rgb(135, 135, 135)', borderTop: '1px solid rgb(135, 135, 135)' } },
+          _react2.default.createElement(
+            "div",
+            { style: { padding: '25px' } },
+            _react2.default.createElement(
+              "div",
+              { className: "col-md-6", style: { height: '250px', display: 'flex', justifyContent: 'center', flexDirection: 'column' } },
+              _react2.default.createElement(
+                "h1",
+                null,
+                "Step Three:"
+              ),
+              _react2.default.createElement(
+                "h3",
+                null,
+                "Define your data model."
+              ),
+              _react2.default.createElement(
+                "p",
+                null,
+                "Your data model defines what you want your users to be able to represent."
+              )
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "col-md-6 text-xs-center", style: { height: '250px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
+              _react2.default.createElement("img", { style: { maxWidth: '70%', maxHeight: '250px' }, src: "/static/thingdefinition" })
             )
           )
         )
@@ -1416,13 +1448,6 @@ var thingAttributes = function (_React$Component) {
         _react2.default.createElement(
           'div',
           null,
-          _react2.default.createElement(
-            'button',
-            { className: 'btn btn-primary', type: 'button', onClick: function onClick() {
-                return _this2.props.fields.push({});
-              } },
-            'Add Thing Attribute'
-          ),
           this.props.touched && error && _react2.default.createElement(
             'span',
             null,
@@ -1449,7 +1474,7 @@ var thingAttributes = function (_React$Component) {
                 (_React$createElement = {
                   style: { float: "right" },
                   type: 'button',
-                  className: 'btn btn-primary'
+                  className: 'fa fa-times-circle-o'
                 }, _defineProperty(_React$createElement, 'type', 'button'), _defineProperty(_React$createElement, 'title', 'Remove ThingAttribute'), _defineProperty(_React$createElement, 'onClick', function onClick() {
                   return _this2.props.fields.remove(index);
                 }), _defineProperty(_React$createElement, 'aria-label', 'Left Align'), _React$createElement),
@@ -1486,7 +1511,18 @@ var thingAttributes = function (_React$Component) {
             ),
             _this2.createExampleField(_this2.props.selectedExampleType[index], thingAttribute)
           );
-        })
+        }),
+        _react2.default.createElement(
+          'div',
+          { className: 'text-xs-center' },
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-primary', type: 'button', onClick: function onClick() {
+                return _this2.props.fields.push({});
+              } },
+            'Add Thing Attribute'
+          )
+        )
       );
     }
   }]);
@@ -1585,8 +1621,8 @@ var ThingInstanceViewPreview = function ThingInstanceViewPreview(_ref) {
     null,
     _react2.default.createElement('div', { className: 'col-md-2' }),
     _react2.default.createElement(
-      'div',
-      { className: 'col-md-8' },
+      'span',
+      { className: 'col-md-8', style: { width: '400px', position: 'fixed' } },
       _react2.default.createElement(
         'h4',
         null,

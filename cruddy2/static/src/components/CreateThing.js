@@ -18,7 +18,7 @@ class CreateThing extends React.Component {
             <NewThingFormContainer />
           </div>
           <div className="col-md-6">
-            <ThingInstanceViewPreviewContainer />
+            <ThingInstanceViewPreviewContainer style={{position:'fixed'}}/>
           </div>
         </div>
     );

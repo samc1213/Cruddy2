@@ -45,7 +45,6 @@ class thingAttributes extends React.Component {
     return (
       <div>
         <div>
-          <button className="btn btn-primary" type="button" onClick={() => this.props.fields.push({})}>Add Thing Attribute</button>
           {this.props.touched && error && <span>{error}</span>}
         </div>
         {this.props.fields.map((thingAttribute, index) =>
@@ -55,7 +54,7 @@ class thingAttributes extends React.Component {
                   <button
                     style={{float: "right"}}
                     type="button"
-                    className="btn btn-primary"
+                    className="fa fa-times-circle-o"
                     type="button"
                     title="Remove ThingAttribute"
                     onClick={() => this.props.fields.remove(index)}
@@ -85,6 +84,9 @@ class thingAttributes extends React.Component {
               {this.createExampleField(this.props.selectedExampleType[index], thingAttribute)}
           </div>
         )}
+        <div className="text-xs-center">
+          <button className="btn btn-primary" type="button" onClick={() => this.props.fields.push({})}>Add Thing Attribute</button>
+        </div>
       </div>
     )
   }
@@ -93,8 +95,8 @@ class thingAttributes extends React.Component {
 class NewThingForm extends React.Component {
   constructor(props) {
     super(props);
-		
-		this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(event) {

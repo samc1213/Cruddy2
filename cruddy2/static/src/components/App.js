@@ -10,7 +10,7 @@ class App extends React.Component {
   }
   render(){
     console.log(this.props.loggedInUser);
-    if ((this.props.params.websiteName != null))
+    if ((this.props.params.websiteName != null) && location.href.split('/').slice(-1)[0] != 'creatething')
     {
       var returnstring = '/'+String(this.props.params.websiteName)+'/createthinginstance'
       var newinstancebutton = <li style={{float:'right', paddingTop:'5px', paddingBottom:'5px'}}> <a href={returnstring}> New Thing Instance </a> </li>

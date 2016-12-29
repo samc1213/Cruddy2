@@ -36,6 +36,10 @@ def websiteName():
 @app.route('/static/websitetype')
 def websiteType():
     return send_file('./static/websitetype.gif', mimetype='image/gif')
+
+@app.route('/static/thingdefinition')
+def thingDefinition():
+    return send_file('./static/thingdefinition.gif', mimetype='image/gif')
 #
 # @app.route('/')
 # def index():

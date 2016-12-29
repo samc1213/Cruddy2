@@ -19,20 +19,32 @@ class Home extends React.Component {
                 <p>You get your own cruddy2 domain name all to yourself!</p>
               </div>
               <div className="col-md-6 text-xs-center" style={{height: '150px', display: 'flex', justifyContent:'center', flexDirection:'column', alignItems:'center' }}>
-                <img style={{ width: '70%' }} src="/static/websitename" />
+                <img style={{ width: '70%', maxHeight:'180px' }} src="/static/websitename" />
               </div>
             </div>
           </div>
           <div className="row" style={{height:'200px'}}>
             <div style={{padding: '25px'}}>
               <div className="col-md-6 text-xs-center" style={{height: '150px', display: 'flex', justifyContent:'center', flexDirection:'column', alignItems:'center' }}>
-                <img style={{ width: '70%' }} src="/static/websitetype" />
+                <img style={{ width: '70%', maxHeight:'180px' }} src="/static/websitetype" />
               </div>
               <div className="col-md-6" style={{height: '150px', display: 'flex', justifyContent:'center', flexDirection:'column' }}>
                 <h1>Step Two:</h1>
                 <h3>Define your layout.</h3>
                 <p>We're constantly adding more templates for you to get started with.</p>
                 <p></p>
+              </div>
+            </div>
+          </div>
+          <div className="row" style={{height:'300px', backgroundColor: 'rgba(235, 235, 235, 1)', borderBottom  :'1px solid rgb(135, 135, 135)', borderTop  :'1px solid rgb(135, 135, 135)'}}>
+            <div style={{padding: '25px'}}>
+              <div className="col-md-6" style={{height: '250px', display: 'flex', justifyContent:'center', flexDirection:'column' }}>
+                <h1>Step Three:</h1>
+                <h3>Define your data model.</h3>
+                <p>Your data model defines what you want your users to be able to represent.</p>
+              </div>
+              <div className="col-md-6 text-xs-center" style={{height: '250px', display: 'flex', justifyContent:'center', flexDirection:'column', alignItems:'center' }}>
+                <img style={{ maxWidth: '70%', maxHeight:'250px' }} src="/static/thingdefinition" />
               </div>
             </div>
           </div>

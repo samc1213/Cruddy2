@@ -6,12 +6,12 @@ const ThingInstanceViewPreview = ({ thingAttributeNames, thingAttributeExamples,
     <div>
       <div className="col-md-2">
       </div>
-      <div className="col-md-8">
+      <span className="col-md-8" style={{width:'400px', position:'fixed'}}>
         <h4>Example Card</h4>
         <p>This is what your things will look like!</p>
-        <CraigslistCardPreview thingAttributeNames={thingAttributeNames} thingAttributeExamples={thingAttributeExamples} 
+        <CraigslistCardPreview thingAttributeNames={thingAttributeNames} thingAttributeExamples={thingAttributeExamples}
         thingAttributeTypeIds={thingAttributeTypeIds} isPreview={true} />
-      </div>
+      </span>
       <div className="col-md-2">
       </div>
     </div>

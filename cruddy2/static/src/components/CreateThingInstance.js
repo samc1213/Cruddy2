@@ -39,7 +39,7 @@ class CreateThingInstance extends React.Component {
         <form id="newThingInstanceForm" onSubmit={this.handleSubmit} encType="multipart/form-data">
         <input type="hidden" name="websitename" value={this.props.params.websiteName} />
         {thingAttributes}
-        <button type="submit"> Submit </button>
+        <button type="submit" className="btn btn-default"> Submit </button>
         </form>
       </div>
     )

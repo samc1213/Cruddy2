@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import CraigslistCardPreview from './CraigslistCardPreview'
+import Walkthrough from './Walkthrough'
 
 
 class CreateWebsite extends React.Component {
@@ -13,6 +14,7 @@ class CreateWebsite extends React.Component {
     this.handleWebsiteNameKeyDown = this.handleWebsiteNameKeyDown.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.trueSubmit = this.trueSubmit.bind(this);
+    document.title = 'Create a New Website - Cruddy2'
   }
 
   trueSubmit(event) {
@@ -48,7 +50,7 @@ class CreateWebsite extends React.Component {
       return(
 
         <div>
-        <h2 className="text-xs-center">Create Your Website</h2>
+        <Walkthrough bigText="Create Your Website" helpText="Create your website here." />
 
           <form id="newwebsiteform" action="/api/postnewwebsite" method="POST" encType="multipart/form-data" style={{textAlign:'center'}} onSubmit={this.handleFormSubmit}>
             <div style={{display: this.state.websiteNameVisibility}}>
@@ -82,7 +84,7 @@ class CreateWebsite extends React.Component {
             <a className="right carousel-control" style={{right:'-15%', backgroundImage:'none'}} href="#myCarousel" role="button" data-slide="next">
               <span style={{color: 'black', position:'absolute', top:'45%', height:'10%', right:'-3px'}}><i className="fa fa-caret-square-o-right" aria-hidden="true"></i></span>
             </a>
-            <a style={{position:'absolute', top:'300px', left:'35%', width:'30%'}} className="btn btn-primary" onClick={this.trueSubmit}> Submit </a>
+            <a style={{position:'absolute', top:'375px', left:'35%', width:'30%'}} className="btn btn-primary" onClick={this.trueSubmit}> Submit </a>
           </div>
           </form>
         </div>

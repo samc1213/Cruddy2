@@ -1,8 +1,10 @@
 import React, { PropTypes } from 'react'
+import Walkthrough from './Walkthrough'
 
 class Dashboard extends React.Component {
   componentDidMount() {
     this.props.getWebsites(localStorage.getItem('loggedinuser'));
+    document.title = 'Dashboard - Cruddy2';
   }
 
   render(){
@@ -32,7 +34,7 @@ class Dashboard extends React.Component {
 
         return (
             <div className="text-xs-center">
-                <h2 className="text-xs-center">Welcome To Your Dashboard </h2>
+                <Walkthrough bigText="Welcome to your Dashboard" helpText="The Dashboard is your hub for managing your apps, and creating new ones."/>
                 {websitedivs}
                 <a className="btn btn-primary" href="/admin/createwebsite" role="button">Create New Website</a>
 

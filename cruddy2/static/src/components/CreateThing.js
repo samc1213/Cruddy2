@@ -1,6 +1,7 @@
 import React from 'react'
 import NewThingFormContainer from '../containers/NewThingFormContainer'
 import ThingInstanceViewPreviewContainer from '../containers/ThingInstanceViewPreviewContainer'
+import Walkthrough from './Walkthrough'
 
 
 class CreateThing extends React.Component {
@@ -12,7 +13,7 @@ class CreateThing extends React.Component {
     console.log()
       return(
         <div>
-				<h1 className="text-xs-center">What Thing you want to represent in your website {this.props.params.websiteName}? </h1>
+          <Walkthrough bigText="Define Your Data Model" helpText="Be sure to put in examples, so that you can see what an instance of your Thing would look like!" />
           <div className="col-md-6">
             <NewThingFormContainer />
           </div>

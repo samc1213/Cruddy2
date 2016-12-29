@@ -11,7 +11,7 @@ class Home extends React.Component {
                 <p><a className="btn btn-primary btn-lg" href="/createaccount" role="button" style={{backgroundColor:"rgb(219, 0, 3)", border:'2px solid rgb(219, 0, 3)', color:'black'}}>Sign Up &raquo;</a></p>
               </div>
           </div>
-          <div className="row" style={{height:'200px', backgroundColor: 'rgba(235, 235, 235, 1)', borderBottom:'1px solid rgb(135, 135, 135)'}}>
+          <div className="row" style={{height:'200px', backgroundColor: 'rgba(235, 235, 235, 1)', borderBottom  :'1px solid rgb(135, 135, 135)'}}>
             <div style={{padding: '25px'}}>
               <div className="col-md-6" style={{height: '150px', display: 'flex', justifyContent:'center', flexDirection:'column' }}>
                 <h1>Step One:</h1>

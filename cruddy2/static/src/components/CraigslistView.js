@@ -1,5 +1,6 @@
 import React from 'react'
 import CraigslistCardPreview from './CraigslistCardPreview'
+import Walkthrough from './Walkthrough'
 
 class CraigslistView extends React.Component {
   componentDidMount() {
@@ -41,6 +42,12 @@ class CraigslistView extends React.Component {
         </div>
         )
     }
+
+    if (cards.length == 0)
+    {
+      cards.push(<Walkthrough bigText="This is your website" helpText="There's nothing here yet. Go ahead and create the first instance of your Thing." />)
+    }
+    
     return (
       <div className="col-md-12">
         {cards}

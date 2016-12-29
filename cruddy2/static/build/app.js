@@ -273,6 +273,7 @@ var App = function (_React$Component) {
     key: 'render',
     value: function render() {
       console.log(this.props.loggedInUser);
+
       if (this.props.params.websiteName != null && location.href.split('/').slice(-1)[0] != 'creatething') {
         var returnstring = '/' + String(this.props.params.websiteName) + '/createthinginstance';
         var newinstancebutton = _react2.default.createElement(
@@ -287,6 +288,7 @@ var App = function (_React$Component) {
           ' '
         );
       }
+      var dashText;
       if (this.props.loggedInUser != null) {
         var username = _react2.default.createElement(
           'p',
@@ -304,25 +306,32 @@ var App = function (_React$Component) {
           { className: 'dropdown-item', href: '/admin/dashboard' },
           'My Dashboard'
         );
+        dashText = 'Hi, ' + this.props.loggedInUser;
       } else {
+        dashText = 'Login or Sign Up';
         var login = _react2.default.createElement(
           'a',
           { className: 'dropdown-item', href: '/login' },
           'Login'
         );
+        var dashboardOption = _react2.default.createElement(
+          'a',
+          { className: 'dropdown-item', href: '/createaccount' },
+          'Sign Up'
+        );
       }
       if (['/creatething', '/login', '/admin/dashboard', '/'].indexOf(this.props.location.pathname) >= 0) {
         var nav = _react2.default.createElement(
           'li',
-          { className: 'nav-item dropdown float-*-right' },
+          { className: 'nav-item dropdown', style: { float: 'right' } },
           _react2.default.createElement(
             'a',
-            { style: { cursor: 'pointer' }, className: 'nav-link dropdown-toggle', id: 'supportedContentDropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-            'Dropdown'
+            { style: { cursor: 'pointer', MozUserSelect: 'none', WebkitUserSelect: 'none' }, className: 'nav-link dropdown-toggle', id: 'supportedContentDropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+            dashText
           ),
           _react2.default.createElement(
             'div',
-            { className: 'dropdown-menu', 'aria-labelledby': 'supportedContentDropdown' },
+            { className: 'dropdown-menu dropdown-menu-right', 'aria-labelledby': 'supportedContentDropdown' },
             username,
             login,
             dashboardOption

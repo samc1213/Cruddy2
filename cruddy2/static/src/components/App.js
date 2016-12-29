@@ -10,26 +10,31 @@ class App extends React.Component {
   }
   render(){
     console.log(this.props.loggedInUser);
+
     if ((this.props.params.websiteName != null) && location.href.split('/').slice(-1)[0] != 'creatething')
     {
       var returnstring = '/'+String(this.props.params.websiteName)+'/createthinginstance'
       var newinstancebutton = <li style={{float:'right', paddingTop:'5px', paddingBottom:'5px'}}> <a href={returnstring}> New Thing Instance </a> </li>
     }
+    var dashText;
     if (this.props.loggedInUser != null)
     {
       var username = <p className="dropdown-item">Logged in as {this.props.loggedInUser}</p>;
       var login = <a className="dropdown-item" href="/" onClick={this.logout}>Logout</a>;
       var dashboardOption = <a className="dropdown-item" href="/admin/dashboard">My Dashboard</a>;
+      dashText = 'Hi, ' + this.props.loggedInUser;
     }
     else
     {
+      dashText = 'Login or Sign Up';
       var login = <a className="dropdown-item" href="/login">Login</a>;
+        var dashboardOption = <a className="dropdown-item" href="/createaccount">Sign Up</a>;
     }
      if (['/creatething', '/login', '/admin/dashboard', '/'].indexOf(this.props.location.pathname) >= 0)
     {
-      var nav = <li className="nav-item dropdown float-*-right">
-          <a style={{cursor: 'pointer'}}className="nav-link dropdown-toggle" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-          <div className="dropdown-menu" aria-labelledby="supportedContentDropdown">
+      var nav = <li className="nav-item dropdown" style={{float: 'right'}}>
+          <a style={{cursor: 'pointer', MozUserSelect: 'none', WebkitUserSelect: 'none'}}className="nav-link dropdown-toggle" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{dashText}</a>
+          <div className="dropdown-menu dropdown-menu-right" aria-labelledby="supportedContentDropdown">
             {username}
             {login}
             {dashboardOption}

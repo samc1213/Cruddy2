@@ -17,7 +17,7 @@ class App extends React.Component {
       var newinstancebutton = <li style={{float:'right', paddingTop:'5px', paddingBottom:'5px'}}> <a href={returnstring}> New Thing Instance </a> </li>
     }
     var dashText;
-    if (this.props.loggedInUser != null)
+    if (this.props.loggedInUser != null && this.props.loggedInUser.length > 0)
     {
       var username = <p className="dropdown-item">Logged in as {this.props.loggedInUser}</p>;
       var login = <a className="dropdown-item" href="/" onClick={this.logout}>Logout</a>;

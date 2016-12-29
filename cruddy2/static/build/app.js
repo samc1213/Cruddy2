@@ -289,7 +289,7 @@ var App = function (_React$Component) {
         );
       }
       var dashText;
-      if (this.props.loggedInUser != null) {
+      if (this.props.loggedInUser != null && this.props.loggedInUser.length > 0) {
         var username = _react2.default.createElement(
           'p',
           { className: 'dropdown-item' },
@@ -1798,7 +1798,7 @@ var CreateThingInstance = function (_React$Component) {
           thingAttributes,
           _react2.default.createElement(
             'button',
-            { type: 'submit' },
+            { type: 'submit', className: 'btn btn-default' },
             ' Submit '
           )
         )

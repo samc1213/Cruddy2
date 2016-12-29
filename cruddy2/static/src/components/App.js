@@ -30,7 +30,7 @@ class App extends React.Component {
       var login = <a className="dropdown-item" href="/login">Login</a>;
         var dashboardOption = <a className="dropdown-item" href="/createaccount">Sign Up</a>;
     }
-     if (['/creatething', '/login', '/admin/dashboard', '/'].indexOf(this.props.location.pathname) >= 0)
+     if (['/creatething', '/admin/dashboard', '/'].indexOf(this.props.location.pathname) >= 0)
     {
       var nav = <li className="nav-item dropdown" style={{float: 'right'}}>
           <a style={{cursor: 'pointer', MozUserSelect: 'none', WebkitUserSelect: 'none'}}className="nav-link dropdown-toggle" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{dashText}</a>

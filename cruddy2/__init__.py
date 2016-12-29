@@ -3,7 +3,7 @@ import logging
 import psycopg2
 import urlparse
 import json
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, url_for, send_file, send_from_directory
 from model.Model import *
 from model.DBSessionManager import DBSessionManager
 from model.Cruddy2Enums import ThingAttributeTypes
@@ -12,46 +12,15 @@ from api import *
 app = Flask(__name__)
 api = api()
 
-
-@app.route('/exampleimage')
-def exampleimg():
-    return send_file('./static/car.jpg', mimetype='image/jpeg')
-
-@app.route('/r8')
-def r8():
-    return send_file('./static/r8edit.jpg', mimetype='image/jpeg')
-
-@app.route('/examplecard')
-def exampleCard():
-    return send_file('./static/ExampleCard.png', mimetype='image/png')
-
-@app.route('/exampletable')
-def exampleTable():
-    return send_file('./static/ExampleTable.png', mimetype='image/png')
-
-@app.route('/static/websitename')
-def websiteName():
-    return send_file('./static/websitename.gif', mimetype='image/gif')
-#
-@app.route('/static/websitetype')
-def websiteType():
-    return send_file('./static/websitetype.gif', mimetype='image/gif')
-
-@app.route('/static/thingdefinition')
-def thingDefinition():
-    return send_file('./static/thingdefinition.gif', mimetype='image/gif')
-#
-# @app.route('/')
-# def index():
-#     return 'hi'
-#
+@app.route('/images/<path:path>')
+def send_image(path):
+    return send_from_directory('./static/images', path)
 
 @app.route('/api/getview/<websiteId>')
 def getView(websiteId):
     website = api.getWebsiteByID(websiteId)
     redirectstring = '/' + str(website.websitename)
     return redirect(redirectstring)
-
 
 @app.route('/api/getthingattributetypes')
 def getThingAttributeTypes():

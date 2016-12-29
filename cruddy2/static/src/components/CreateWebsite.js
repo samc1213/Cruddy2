@@ -69,11 +69,11 @@ class CreateWebsite extends React.Component {
 
             <div className="carousel-inner" role="listbox">
               <div className="carousel-item active">
-                <img src="/examplecard" alt="Card" />
+                <img src="/images/ExampleCard.png" alt="Card" />
                 <div className="text-xs-center">Card View</div>
               </div>
               <div className="carousel-item">
-                <img src="/exampletable" alt="Chania" />
+                <img src="/images/ExampleTable.png" alt="Chania" />
                 <div className="text-xs-center">Table View</div>
               </div>
             </div>
@@ -84,7 +84,7 @@ class CreateWebsite extends React.Component {
             <a className="right carousel-control" style={{right:'-15%', backgroundImage:'none'}} href="#myCarousel" role="button" data-slide="next">
               <span style={{color: 'black', position:'absolute', top:'45%', height:'10%', right:'-3px'}}><i className="fa fa-caret-square-o-right" aria-hidden="true"></i></span>
             </a>
-            <a style={{position:'absolute', top:'375px', left:'35%', width:'30%'}} className="btn btn-primary" onClick={this.trueSubmit}> Submit </a>
+            <a style={{position:'absolute', top:'400px', left:'35%', width:'30%'}} className="btn btn-primary" onClick={this.trueSubmit}> Submit </a>
           </div>
           </form>
         </div>

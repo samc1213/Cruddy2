@@ -6,7 +6,7 @@ const CraigslistCardPreview = ({ thingAttributeNames, thingAttributeExamples, th
   var file;
   var imgStyle = {maxWidth: "100%", display:"none"};
   var weHaveAnImg = false;
-  var src="/exampleimage";
+  var src="/images/car.jpg";
 
   for (var i = 0; i < thingAttributeNames.length; i++)
   {
@@ -40,7 +40,7 @@ const CraigslistCardPreview = ({ thingAttributeNames, thingAttributeExamples, th
   }
 
   return (
-    <div className="card" style={{textAlign:'left'}} > 
+    <div className="card" style={{textAlign:'left'}} >
       <div className="card-block">
         <img className="card-img-top" src={src} alt="Card image cap" style={imgStyle}/>
         <ul className="list-group list-group-flush">

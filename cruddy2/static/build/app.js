@@ -320,7 +320,7 @@ var App = function (_React$Component) {
           'Sign Up'
         );
       }
-      if (['/creatething', '/login', '/admin/dashboard', '/'].indexOf(this.props.location.pathname) >= 0) {
+      if (['/creatething', '/admin/dashboard', '/'].indexOf(this.props.location.pathname) >= 0) {
         var nav = _react2.default.createElement(
           'li',
           { className: 'nav-item dropdown', style: { float: 'right' } },
@@ -406,7 +406,7 @@ var CraigslistCardPreview = function CraigslistCardPreview(_ref) {
   var file;
   var imgStyle = { maxWidth: "100%", display: "none" };
   var weHaveAnImg = false;
-  var src = "/exampleimage";
+  var src = "/images/car.jpg";
 
   for (var i = 0; i < thingAttributeNames.length; i++) {
     if (thingAttributeTypeIds[i] != "3") {
@@ -888,7 +888,7 @@ var CreateWebsite = function (_React$Component) {
               _react2.default.createElement(
                 'div',
                 { className: 'carousel-item active' },
-                _react2.default.createElement('img', { src: '/examplecard', alt: 'Card' }),
+                _react2.default.createElement('img', { src: '/images/ExampleCard.png', alt: 'Card' }),
                 _react2.default.createElement(
                   'div',
                   { className: 'text-xs-center' },
@@ -898,7 +898,7 @@ var CreateWebsite = function (_React$Component) {
               _react2.default.createElement(
                 'div',
                 { className: 'carousel-item' },
-                _react2.default.createElement('img', { src: '/exampletable', alt: 'Chania' }),
+                _react2.default.createElement('img', { src: '/images/ExampleTable.png', alt: 'Chania' }),
                 _react2.default.createElement(
                   'div',
                   { className: 'text-xs-center' },
@@ -926,7 +926,7 @@ var CreateWebsite = function (_React$Component) {
             ),
             _react2.default.createElement(
               'a',
-              { style: { position: 'absolute', top: '375px', left: '35%', width: '30%' }, className: 'btn btn-primary', onClick: this.trueSubmit },
+              { style: { position: 'absolute', top: '400px', left: '35%', width: '30%' }, className: 'btn btn-primary', onClick: this.trueSubmit },
               ' Submit '
             )
           )
@@ -1129,7 +1129,7 @@ var Home = function (_React$Component) {
         null,
         _react2.default.createElement(
           "div",
-          { className: "jumbotron", style: { background: "url('/r8') no-repeat center center", width: '100%', height: '100%', color: 'white', marginBottom: '0px' } },
+          { className: "jumbotron", style: { background: "url('/images/r8edit.jpg') no-repeat center center", width: '100%', height: '100%', color: 'white', marginBottom: '0px' } },
           _react2.default.createElement(
             "div",
             { className: "container" },
@@ -1182,7 +1182,7 @@ var Home = function (_React$Component) {
             _react2.default.createElement(
               "div",
               { className: "col-md-6 text-xs-center", style: { height: '150px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
-              _react2.default.createElement("img", { style: { width: '70%', maxHeight: '180px' }, src: "/static/websitename" })
+              _react2.default.createElement("img", { style: { width: '70%', maxHeight: '180px' }, src: "/images/websitename.gif" })
             )
           )
         ),
@@ -1195,7 +1195,7 @@ var Home = function (_React$Component) {
             _react2.default.createElement(
               "div",
               { className: "col-md-6 text-xs-center", style: { height: '150px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
-              _react2.default.createElement("img", { style: { width: '70%', maxHeight: '180px' }, src: "/static/websitetype" })
+              _react2.default.createElement("img", { style: { width: '70%', maxHeight: '180px' }, src: "/images/websitetype.gif" })
             ),
             _react2.default.createElement(
               "div",
@@ -1247,7 +1247,7 @@ var Home = function (_React$Component) {
             _react2.default.createElement(
               "div",
               { className: "col-md-6 text-xs-center", style: { height: '250px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
-              _react2.default.createElement("img", { style: { maxWidth: '70%', maxHeight: '250px' }, src: "/static/thingdefinition" })
+              _react2.default.createElement("img", { style: { maxWidth: '70%', maxHeight: '250px' }, src: "/images/thingdefinition.gif" })
             )
           )
         )

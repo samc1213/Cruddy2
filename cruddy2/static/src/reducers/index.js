@@ -5,6 +5,7 @@ import thingInstances from './thingInstances'
 import thingAttributeIdsToNamesAndTypes from './thingAttributeIdsToNamesAndTypes'
 import loggedInUser from './loggedInUser'
 import thingAttributes from './thingAttributes'
+import selectedDashboardTab from './selectedDashboardTab'
 import websites from './websites'
 import websiteName from './websiteName'
 
@@ -16,6 +17,7 @@ const todoApp = combineReducers({
   loggedInUser,
   websites,
   websiteName,
+  selectedDashboardTab,
   form: formReducer
 })
 

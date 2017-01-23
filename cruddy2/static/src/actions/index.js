@@ -51,6 +51,11 @@ export const websitesReceived = (data) => ({
   data
 })
 
+export const selectDashboardTab = (data) => ({
+  type: "DASHBOARD_TAB_SELECTED",
+  data
+})
+
 export const rehydrateLoggedInUser = () => ({
   type: "REHYDRATE_LOGGED_IN_USER"
 })
@@ -132,6 +137,36 @@ export function submitCreateAccount(firstname, lastname, username, password) {
     return doFetch(data, dispatch);
   }
 }
+
+export function submitCreateWebsite(websitetypeid, websitename, username) {
+  console.log('lskf')
+  function doFetch(data, dispatch) {
+    return fetch('/api/postnewwebsite', {
+      method: 'POST',
+      body: data
+    }).then(response => response.json())
+      .then((json) => {
+        if (json.success == true) {
+          dispatch(selectDashboardTab('Apps'));
+        }
+        else {
+          console.log("bad new website");
+        }
+      })
+      .catch(err => console.log(err))
+  }
+
+  return function(dispatch) {
+    console.log("inthisbitch")
+    var data = new FormData();
+    data.append('websitetypeid', websitetypeid);
+    data.append('websitename', websitename);
+    data.append('username', username);
+    console.log("inthisbitch")
+    return doFetch(data, dispatch);
+  }
+}
+
 
 export function submitLogin(username, password) {
   function doFetch(data, dispatch) {

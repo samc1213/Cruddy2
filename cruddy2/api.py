@@ -14,12 +14,16 @@ class api:
         self.session = self.sessionManager.GetSession()
 
     def createWebsite(self, form):
-        websiteTypeId = int(form['websitetypeid'])
-        websiteName = str(form['websitename'])
-        user = self.getUserFromUsername(form['username'])
-        newWebsite = Website(websiteName, websiteTypeId, int(user.userid))
-        sessionManager = DBSessionManager()
-        sessionManager.CommitToSession([newWebsite])
+        try:
+            websiteTypeId = int(form['websitetypeid'])
+            websiteName = str(form['websitename'])
+            user = self.getUserFromUsername(form['username'])
+            newWebsite = Website(websiteName, websiteTypeId, int(user.userid))
+            sessionManager = DBSessionManager()
+            sessionManager.CommitToSession([newWebsite])
+            return True
+        except:
+            return False
 
     def createThing(self, thingName, websiteID, thingAttributes):
         newThing = Thing(thingName, websiteID)
@@ -51,7 +55,7 @@ class api:
 
         if thingId is None:
             return ''
-            
+
         thingInstance = {}
 
         for name in form:

@@ -7,7 +7,7 @@ class CreateWebsite extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {websiteNameVisibility: 'block', websiteTypeVisibility: 'none', websiteName: ''}
+    this.state = {websiteTypeId: 0, websiteNameVisibility: 'block', websiteTypeVisibility: 'none', websiteName: ''}
 
     this.handleWebsiteNameSubmit = this.handleWebsiteNameSubmit.bind(this);
     this.handleWebsiteNameChange = this.handleWebsiteNameChange.bind(this);
@@ -19,8 +19,7 @@ class CreateWebsite extends React.Component {
 
   trueSubmit(event) {
     console.log('trusub');
-    var form = document.getElementById("newwebsiteform");
-    form.submit();
+     this.props.submitCreateWebsite(this.state.websiteTypeId, this.state.websiteName, this.props.loggedInUser);
   }
 
   handleFormSubmit(event) {
@@ -52,7 +51,7 @@ class CreateWebsite extends React.Component {
         <div>
         <Walkthrough bigText="Create Your Website" helpText="Create your website here." />
 
-          <form id="newwebsiteform" action="/api/postnewwebsite" method="POST" encType="multipart/form-data" style={{textAlign:'center'}} onSubmit={this.handleFormSubmit}>
+          <form id="newwebsiteform" encType="multipart/form-data" style={{textAlign:'center'}} onSubmit={this.handleFormSubmit}>
             <div style={{display: this.state.websiteNameVisibility}}>
               <label> Website Name </label>
               <input type="text" name="websitename" value={this.state.websiteName} onChange={this.handleWebsiteNameChange} onKeyDown={this.handleWebsiteNameKeyDown}/>
@@ -62,7 +61,7 @@ class CreateWebsite extends React.Component {
             </div>
 
             <input type="hidden" name="username" value = {this.props.loggedInUser} />
-            <input type="hidden" name="websitetypeid" value="0" />
+            <input type="hidden" name="websitetypeid" value={this.state.websiteTypeId} />
 
           <div is id="myCarousel" class="carousel slide" style={{width: '30%', margin:'auto', display: this.state.websiteTypeVisibility}} data-interval="false">
             <h4 className="text-xs-center"> What would you like your website to look like? </h4>

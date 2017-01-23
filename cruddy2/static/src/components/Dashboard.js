@@ -1,5 +1,11 @@
 import React, { PropTypes } from 'react'
 import Walkthrough from './Walkthrough'
+import AdminBarContainer from '../containers/AdminBarContainer'
+import CreateWebsiteViewContainer from '../containers/CreateWebsiteViewContainer'
+import DashboardArea from './DashboardArea'
+import CreateWebsite from './CreateWebsite'
+import AdminBarTabContainer from '../containers/AdminBarTabContainer'
+
 
 class Dashboard extends React.Component {
   componentDidMount() {
@@ -33,11 +39,19 @@ class Dashboard extends React.Component {
         }
 
         return (
-            <div className="text-xs-center">
-                <Walkthrough bigText="Welcome to your Dashboard" helpText="The Dashboard is your hub for managing your apps, and creating new ones."/>
-                {websitedivs}
-                <a className="btn btn-primary" href="/admin/createwebsite" role="button">Create New Website</a>
+            <div style={{height: '100%', width: '100%'}}>
 
+              <AdminBarContainer />
+              <DashboardArea selectedTab={this.props.selectedDashboardTab} tabName='Apps'>
+                <div className="text-xs-center">
+                  <Walkthrough bigText="Welcome to your Dashboard" helpText="The Dashboard is your hub for managing your apps, and creating new ones."/>
+                  {websitedivs}
+                  <a className="btn btn-primary" href="/admin/createwebsite" role="button">Create New Website</a>
+                </div>
+              </DashboardArea>
+              <DashboardArea selectedTab={this.props.selectedDashboardTab} tabName='Create New Website'>
+                <CreateWebsiteViewContainer />
+              </DashboardArea>
             </div>
             )
       }

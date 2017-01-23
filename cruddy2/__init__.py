@@ -58,9 +58,11 @@ def getWebsites(username):
 
 @app.route('/api/postnewwebsite', methods=['POST'])
 def postNewWebsite():
-    api.createWebsite(request.form)
-    redirectstring = '/'+str(request.form['websitename'])+'/creatething'
-    return redirect(redirectstring)
+    print request.form
+    if api.createWebsite(request.form) == True:
+        return json.dumps({'success': True, 'websitename': request.form['websitename']}), 200, {'ContentType':'application/json'}
+    else:
+        return json.dumps({'success': False, 'websitename': ''}), 200, {'ContentType':'application/json'}
 
 
 @app.route('/postnewthing', methods=['POST'])

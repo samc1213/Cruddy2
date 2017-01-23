@@ -4,35 +4,36 @@ import * as actions from '../actions/index'
 
 
 const mapStateToProps = (state) => {
-	var tempwebsitenames = [];
-	var tempwebsitetypeids = [];
-	var tempwebsiteids = [];
-	var tempthingids = [];
-	console.log( state.websites);
+  var tempwebsitenames = [];
+  var tempwebsitetypeids = [];
+  var tempwebsiteids = [];
+  var tempthingids = [];
+  console.log( state.websites);
 
-	for (var websiteid in state.websites){
-		tempwebsitenames.push(state.websites[websiteid].websitename)
-		tempwebsitetypeids.push(state.websites[websiteid].websitetypeid)
-		tempwebsiteids.push(websiteid)
+  for (var websiteid in state.websites){
+    tempwebsitenames.push(state.websites[websiteid].websitename)
+    tempwebsitetypeids.push(state.websites[websiteid].websitetypeid)
+    tempwebsiteids.push(websiteid)
 
-	}
+  }
 
-	return{
-	 	loggedInUser: state.loggedInUser,
-	 	websiteNames: tempwebsitenames,
-	 	websiteTypeIds: tempwebsitetypeids,
-	 	websiteIds: tempwebsiteids
-	}
+  return{
+     loggedInUser: state.loggedInUser,
+     websiteNames: tempwebsitenames,
+     websiteTypeIds: tempwebsitetypeids,
+     websiteIds: tempwebsiteids,
+     selectedDashboardTab: state.selectedDashboardTab
+  }
  }
 
  const mapDispatchToProps = (dispatch) => (
   {
     getWebsites: (username) => {
-    	dispatch(actions.getWebsites(username))
+      dispatch(actions.getWebsites(username))
     },
 
     rehydrate: () => {
-    	dispatch(actions.rehydrateLoggedInUser())
+      dispatch(actions.rehydrateLoggedInUser())
     }
   }
 )

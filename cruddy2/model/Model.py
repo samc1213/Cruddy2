@@ -1,10 +1,14 @@
 from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, LargeBinary
 from sqlalchemy.orm import relationship
-from DBSessionManager import Base
-from sqlalchemy.ext.declarative import declarative_base
+from cruddy2 import app
+from flask_sqlalchemy import SQLAlchemy
+import os
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+db = SQLAlchemy(app)
 
 
-class User(Base):
+class User(db.Model):
     __tablename__ = 'users'
 
     userid = Column(Integer, Sequence('users_userid_seq'), primary_key=True)
@@ -24,7 +28,7 @@ class User(Base):
 
 
 
-class Photo(Base):
+class Photo(db.Model):
     __tablename__ = 'photos'
 
     photoid = Column(Integer, Sequence('photos_photoid_seq'), primary_key=True)
@@ -34,7 +38,7 @@ class Photo(Base):
         self.photo = photo
 
 
-class Thing(Base):
+class Thing(db.Model):
     # Car
 
     __tablename__ = 'things'
@@ -51,7 +55,7 @@ class Thing(Base):
         self.thingname = name
         self.websiteid = websiteid
 
-class ThingAttribute(Base):
+class ThingAttribute(db.Model):
     # String, Make
     __tablename__ = 'thingattributes'
 
@@ -65,7 +69,7 @@ class ThingAttribute(Base):
         self.thingattributename = name
         self.thingattributetype = attributetype
 
-class ThingInstance(Base):
+class ThingInstance(db.Model):
     # Johnny's 2002 Toyota Corolla
     __tablename__ = 'thinginstances'
 
@@ -85,7 +89,7 @@ class ThingInstanceAttribute():
         self.ThingAttribute = thingAttribute
         self.Value = value
 
-class Website(Base):
+class Website(db.Model):
     # Craigslist for Cars
     __tablename__ = 'websites'
 
@@ -107,4 +111,4 @@ class Website(Base):
 #     # Sam
 #
 #     def __init__(self):
-# Base.metadata.create_all()
+# db.Model.metadata.create_all()

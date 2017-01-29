@@ -5,6 +5,7 @@ import CreateWebsiteViewContainer from '../containers/CreateWebsiteViewContainer
 import DashboardArea from './DashboardArea'
 import CreateWebsite from './CreateWebsite'
 import AdminBarTabContainer from '../containers/AdminBarTabContainer'
+import DataViewContainer from '../containers/DataViewContainer'
 
 
 class Dashboard extends React.Component {
@@ -51,6 +52,9 @@ class Dashboard extends React.Component {
               </DashboardArea>
               <DashboardArea selectedTab={this.props.selectedDashboardTab} tabName='Create New Website'>
                 <CreateWebsiteViewContainer />
+              </DashboardArea>
+              <DashboardArea selectedTab={this.props.selectedDashboardTab} tabName='Data'>
+                <DataViewContainer />
               </DashboardArea>
             </div>
             )

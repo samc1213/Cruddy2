@@ -1,16 +1,11 @@
-import os
-import csv
+from setuptools import setup
 
-with open('.env') as envfile:
-    rows = envfile.read().split('\n')
-    for row in rows:
-        try:
-            rowsplit = row.split('=')
-            env_var = rowsplit[0]
-            env_value = rowsplit[1]
-            print rowsplit
-            os.environ[env_var] = env_value
-        except:
-            continue
 
-os.system('python app.py')
+setup(
+    name='cruddy2',
+    packages=['cruddy2'],
+    include_package_data=True,
+    install_requires=[
+        'flask',
+    ],
+)

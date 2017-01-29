@@ -1,14 +1,13 @@
 import { connect } from 'react-redux'
-import Dashboard from '../components/Dashboard'
+import DataView from '../components/DataView'
 import * as actions from '../actions/index'
-
 
 const mapStateToProps = (state) => {
   var tempwebsitenames = [];
   var tempwebsitetypeids = [];
   var tempwebsiteids = [];
   var tempthingids = [];
-  console.log( state.websites);
+  console.log(state.websites);
 
   for (var websiteid in state.websites){
     tempwebsitenames.push(state.websites[websiteid].websitename)
@@ -21,26 +20,28 @@ const mapStateToProps = (state) => {
      websiteNames: tempwebsitenames,
      websiteTypeIds: tempwebsitetypeids,
      websiteIds: tempwebsiteids,
-     selectedDashboardTab: state.selectedDashboardTab
+     selectedDashboardTab: state.selectedDashboardTab,
+     thingInstances: state.thingInstances,
+     thingAttributeIdsToNamesAndTypes: state.thingAttributeIdsToNamesAndTypes,
   }
+}
+
+const mapDispatchToProps = (dispatch) => (
+ {
+   getWebsites: (username) => {
+     dispatch(actions.getWebsites(username))
+   },
+
+   getThingInstances: (thingId) => {
+     dispatch(actions.getThingInstances(thingId))
+   }
  }
-
- const mapDispatchToProps = (dispatch) => (
-  {
-    getWebsites: (username) => {
-      dispatch(actions.getWebsites(username))
-    },
-
-    rehydrate: () => {
-      dispatch(actions.rehydrateLoggedInUser())
-    }
-  }
 )
 
 
-const DashboardContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Dashboard)
+const DataViewContainer = connect(
+ mapStateToProps,
+ mapDispatchToProps
+)(DataView)
 
-export default DashboardContainer
+export default DataViewContainer

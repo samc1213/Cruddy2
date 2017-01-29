@@ -1,5 +1,7 @@
 from model.DBSessionManager import DBSessionManager
 from model.Model import *
+from model.Model import db
+from cruddy2 import app
 import json
 import uuid
 import os
@@ -11,7 +13,6 @@ class api:
 
     def __init__(self):
         self.sessionManager = DBSessionManager()
-        self.session = self.sessionManager.GetSession()
 
     def createWebsite(self, form):
         try:
@@ -46,7 +47,7 @@ class api:
         self.saveFileToUploads()
 
     def getThingByWebsiteID(self, websiteId):
-        return self.session.query(Thing).filter_by(websiteid=websiteId).first()
+        return db.session.query(Thing).filter_by(websiteid=websiteId).first()
 
 
     def createThingInstance(self, form, files):
@@ -77,12 +78,12 @@ class api:
         return newThingInstance
 
     def getThing(self, thingId):
-        thing = self.session.query(Thing).get(thingId)
+        thing = db.session.query(Thing).get(thingId)
 
         return thing
 
     def getWebsiteIDByName(self, websiteName):
-        website = self.session.query(Website).filter_by(websitename=websiteName).first()
+        website = db.session.query(Website).filter_by(websitename=websiteName).first()
         print website.websiteid
         return int(website.websiteid)
 
@@ -91,7 +92,7 @@ class api:
         return website
 
     def getWebsiteFromName(self, websiteName):
-        website = self.session.query(Website).filter_by(websitename=websiteName).first()
+        website = db.session.query(Website).filter_by(websitename=websiteName).first()
         return website
 
     def getThingIdFromWebsiteName(self, websiteName):
@@ -108,7 +109,7 @@ class api:
         return websites
 
     def getWebsiteFromUserID(self, id):
-        tempwebsites = self.session.query(Website).filter_by(userid=id)
+        tempwebsites = db.session.query(Website).filter_by(userid=id)
         websites = {}
         for website in tempwebsites:
             websites[website.websiteid] = {
@@ -136,6 +137,8 @@ class api:
     def validateUser(self, form):
         try:
             user = self.getUserFromUsername(form['username'])
+            app.logger.debug('poo')
+            app.logger.debug(user)
             if bcrypt.checkpw(form['password'].encode('utf-8'), user.password.encode('utf-8')):
                 return True
             else:
@@ -162,7 +165,9 @@ class api:
         return thingAttributes
 
     def getUserFromUsername(self, username):
-        user = self.session.query(User).filter_by(username=username).first()
+        app.logger.debug('helloboiboi')
+        user = db.session.query(User).filter_by(username=username).first()
+        app.logger.debug('helloboiboi2')
         return user
 
     def getThingFromThingName(self, thingName):

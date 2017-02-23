@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react'
+import ThingAttributeDisplayer from '../ThingAttributeDisplayer'
+
 
 class Home extends React.Component {
   render(){

@@ -3,15 +3,13 @@ import CraigslistView from '../components/CraigslistView'
 import * as actions from '../actions/index'
 
 const mapStateToProps = (state) => ({
-  thingAttributeTypes: state.thingAttributeTypes,
   thingInstances: state.thingInstances,
-  thingAttributeIdsToNamesAndTypes: state.thingAttributeIdsToNamesAndTypes,
   selectedExampleType: state.form.newThingForm ? state.form.newThingForm.values.members.map((member) => member.thingattributetypeid) : {}
 })
 
 const mapDispatchToProps = (dispatch) => ({
     getThingInstances: (thingId) => {
-    	dispatch(actions.getThingInstances(thingId))
+      dispatch(actions.getThingInstances(thingId))
     }
 })
 

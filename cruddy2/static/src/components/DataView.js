@@ -14,7 +14,7 @@ class DataView extends React.Component {
 
   handleChange(event) {
     this.setState({websiteName: event.target.value});
-    console.log(event.target.value);
+    console.log('zdxf' + event.target.value);
     this.props.getThingInstances(event.target.value);
   }
 

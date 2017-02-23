@@ -73,12 +73,22 @@ export function getThingInstances(websiteName) {
   return function (dispatch) {
       dispatch(thingInstancesFetch(true))
 
-      return fetch(`/api/getthinginstances/${websiteName}`)
-        .then(response => response.json())
-        .then(json =>
-          dispatch(thingInstancesReceived(json))
-        )
-        .catch(err => console.log(err))
+      // return fetch(`/api/getthinginstances/${websiteName}`)
+      //   .then(function(response) {
+      //     return response.json()
+      //   })
+      //   .then(json =>
+      //     dispatch(thingInstancesReceived(json))
+      //   )
+      //   .catch(err => console.log(err))
+        return fetch(`/api/getthinginstances/${websiteName}`)
+          .then(function(response) {
+            return response.json()
+          })
+          .then(json =>
+            dispatch(thingInstancesReceived(json))
+          )
+          .catch(err => console.log(err))
   }
 }
 
@@ -87,7 +97,10 @@ export function getThingAttributes(websiteName) {
       dispatch(thingAttributesFetch(true))
 
       return fetch(`/api/getthingattributes/${websiteName}`)
-        .then(response => response.json())
+        .then(function(response) {
+          console.log(response);
+          return response.json()
+        })
         .then(json =>
           dispatch(thingAttributesReceived(json))
         )

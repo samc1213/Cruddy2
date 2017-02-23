@@ -1,5 +1,6 @@
 from model.DBSessionManager import DBSessionManager
 from model.Model import *
+from model.Model import User
 from model.Model import db
 from cruddy2 import app
 import json
@@ -88,7 +89,7 @@ class api:
         return int(website.websiteid)
 
     def getWebsiteByID(self, websiteID):
-        website = self.session.query(Website).filter_by(websiteid=websiteID).first()
+        website = db.session.query(Website).filter_by(websiteid=websiteID).first()
         return website
 
     def getWebsiteFromName(self, websiteName):
@@ -96,12 +97,12 @@ class api:
         return website
 
     def getThingIdFromWebsiteName(self, websiteName):
+        print 'wefsdf1'
         website = self.getWebsiteFromName(websiteName)
         if len(website.things) > 0:
             return website.things[0].thingid
         else:
             return None
-
 
     def getWebsites(self, username):
         user = self.getUserFromUsername(username)
@@ -166,10 +167,17 @@ class api:
 
     def getUserFromUsername(self, username):
         app.logger.debug('helloboiboi')
-        user = db.session.query(User).filter_by(username=username).first()
+        app.logger.debug(username)
+        try:
+            app.logger.debug('before')
+            user = User.query.filter_by(username=username).first()
+            app.logger.debug('after')
+        except Exception as ex:
+            app.logger.debug('s34424')
+            app.logger.debug(ex)
         app.logger.debug('helloboiboi2')
         return user
 
     def getThingFromThingName(self, thingName):
-        thing = self.session.query(Thing).filter_by(thingname=thingName).first()
+        thing = db.session.query(Thing).filter_by(thingname=thingName).first()
         return thing

@@ -1,5 +1,3 @@
-from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, LargeBinary
-from sqlalchemy.orm import relationship
 from cruddy2 import app
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -11,14 +9,12 @@ db = SQLAlchemy(app)
 class User(db.Model):
     __tablename__ = 'users'
 
-    userid = Column(Integer, Sequence('users_userid_seq'), primary_key=True)
-    firstname = Column(String)
-    lastname = Column(String)
-    username = Column(String)
-    password = Column(String)
-    websites = relationship('Website', back_populates='user')
-
-
+    userid = db.Column(db.Integer, db.Sequence('users_userid_seq'), primary_key=True)
+    firstname = db.Column(db.String)
+    lastname = db.Column(db.String)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
+    websites = db.relationship('Website', back_populates='user')
 
     def __init__(self, firstName, lastName, username, password):
         self.firstname = firstName
@@ -31,8 +27,8 @@ class User(db.Model):
 class Photo(db.Model):
     __tablename__ = 'photos'
 
-    photoid = Column(Integer, Sequence('photos_photoid_seq'), primary_key=True)
-    photo = Column(LargeBinary)
+    photoid = db.Column(db.Integer, db.Sequence('photos_photoid_seq'), primary_key=True)
+    photo = db.Column(db.LargeBinary)
 
     def __init__(self, photo):
         self.photo = photo
@@ -43,27 +39,27 @@ class Thing(db.Model):
 
     __tablename__ = 'things'
 
-    thingid = Column(Integer, Sequence('things_thingid_seq'), primary_key=True)
-    thingname = Column(String)
-    websiteid = Column(Integer, ForeignKey('websites.websiteid'))
-    website = relationship('Website', back_populates='things')
+    thingid = db.Column(db.Integer, db.Sequence('things_thingid_seq'), primary_key=True)
+    thingname = db.Column(db.String)
+    websiteid = db.Column(db.Integer, db.ForeignKey('websites.websiteid'))
+    website = db.relationship('Website', back_populates='things')
 
-    thingattributes = relationship('ThingAttribute', back_populates='thing')
-    thinginstances = relationship('ThingInstance', back_populates='thing')
+    thingattributes = db.relationship('ThingAttribute', back_populates='thing')
+    thinginstances = db.relationship('ThingInstance', back_populates='thing')
 
     def __init__(self, name, websiteid):
         self.thingname = name
         self.websiteid = websiteid
 
 class ThingAttribute(db.Model):
-    # String, Make
+    # db.String, Make
     __tablename__ = 'thingattributes'
 
-    thingattributeid = Column(Integer, Sequence('thingattributes_thingattributeid_seq'), primary_key=True)
-    thingattributename = Column(String)
-    thingattributetype = Column(Integer)
-    thingid = Column(Integer, ForeignKey('things.thingid'))
-    thing = relationship('Thing', back_populates='thingattributes')
+    thingattributeid = db.Column(db.Integer, db.Sequence('thingattributes_thingattributeid_seq'), primary_key=True)
+    thingattributename = db.Column(db.String)
+    thingattributetype = db.Column(db.Integer)
+    thingid = db.Column(db.Integer, db.ForeignKey('things.thingid'))
+    thing = db.relationship('Thing', back_populates='thingattributes')
 
     def __init__(self, name, attributetype):
         self.thingattributename = name
@@ -73,17 +69,17 @@ class ThingInstance(db.Model):
     # Johnny's 2002 Toyota Corolla
     __tablename__ = 'thinginstances'
 
-    thinginstanceid = Column(Integer, Sequence('thinginstances_thinginstanceid_seq'), primary_key=True)
-    thinginstanceinfo = Column(String)
-    thingid = Column(Integer, ForeignKey('things.thingid'))
-    thing = relationship('Thing')
+    thinginstanceid = db.Column(db.Integer, db.Sequence('thinginstances_thinginstanceid_seq'), primary_key=True)
+    thinginstanceinfo = db.Column(db.String)
+    thingid = db.Column(db.Integer, db.ForeignKey('things.thingid'))
+    thing = db.relationship('Thing')
 
     def __init__(self, thinginstanceinfo):
         self.thinginstanceinfo = thinginstanceinfo
 
 
 class ThingInstanceAttribute():
-    # ThingAttribute("String", "Make"), "Toyota"
+    # ThingAttribute("db.String", "Make"), "Toyota"
 
     def __init__(self, thingAttribute, value):
         self.ThingAttribute = thingAttribute
@@ -93,12 +89,12 @@ class Website(db.Model):
     # Craigslist for Cars
     __tablename__ = 'websites'
 
-    websiteid = Column(Integer, Sequence('websites_websiteid_seq'), primary_key=True)
-    websitename = Column(String)
-    websitetypeid = Column(Integer)
-    userid = Column(Integer, ForeignKey('users.userid'))
-    user = relationship('User', back_populates='websites')
-    things = relationship('Thing', back_populates='website')
+    websiteid = db.Column(db.Integer, db.Sequence('websites_websiteid_seq'), primary_key=True)
+    websitename = db.Column(db.String)
+    websitetypeid = db.Column(db.Integer)
+    userid = db.Column(db.Integer, db.ForeignKey('users.userid'))
+    user = db.relationship('User', back_populates='websites')
+    things = db.relationship('Thing', back_populates='website')
 
 
 

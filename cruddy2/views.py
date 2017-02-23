@@ -40,14 +40,25 @@ def getThingInstances(websiteName):
     app.logger.debug(websiteName)
     thingId = api.getThingIdFromWebsiteName(websiteName)
     if thingId is not None:
+        app.logger.debug('boobs')
         thingInstances = api.getThingInstances(thingId)
         thingAttributes = api.getThingAttributes(thingId)
-        result = {}
-        result['thingInstances'] = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
-        result['thingAttributes'] = thingAttributes
 
-        return json.dumps(result)
+        app.logger.debug(thingAttributes)
+        results = []
+
+        thingInstanceInfos = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
+        for thingInstanceInfo in thingInstanceInfos:
+            newThingInstance = {}
+            for thingAttributeId, value in thingInstanceInfo.iteritems():
+                thingAttributeName = thingAttributes[int(thingAttributeId)]['name']
+                thingAttributeTypeId = thingAttributes[int(thingAttributeId)]['typeid']
+                newThingInstance[thingAttributeName] = {'value': value, 'typeid': thingAttributeTypeId}
+            results.append(newThingInstance)
+        app.logger.debug(json.dumps(results))
+        return json.dumps({'thingInstances': results})
     else:
+        app.logger.debug('boobs')
         return ''
 
 

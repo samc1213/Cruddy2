@@ -1,48 +1,18 @@
 import React, { PropTypes } from 'react'
+import ThingAttributeDisplayer from '../ThingAttributeDisplayer'
 
-
-const CraigslistCardPreview = ({ thingAttributeNames, thingAttributeExamples, thingAttributeTypeIds, isPreview }) => {
+const CraigslistCardPreview = ({ thingAttributes }) => {
   var rows = [];
-  var file;
-  var imgStyle = {maxWidth: "100%", display:"none"};
-  var weHaveAnImg = false;
-  var src="/images/car.jpg";
-
-  for (var i = 0; i < thingAttributeNames.length; i++)
+  console.log(thingAttributes);
+  for (var thingAttributeName in thingAttributes)
   {
-    if (thingAttributeTypeIds[i] != "3")
-    {
-      rows.push(<li className="list-group-item" key={i}><b>{thingAttributeNames[i]}</b>: {thingAttributeExamples[i]}</li>);
-    }
-    else
-    {
-      imgStyle.display = "inline-block";
-
-
-      if (thingAttributeExamples[i] != null && thingAttributeExamples[i][0] && isPreview == true)
-      //this is preview
-      {
-        var reader = new FileReader();
-        var preview = document.querySelector('img');
-        reader.readAsDataURL(thingAttributeExamples[i][0]);
-        reader.addEventListener("load", function () {
-          preview.src = reader.result;
-        }, false);
-      }
-
-      if (thingAttributeExamples[i][0] && isPreview == false)
-      //this is from the DB
-      {
-        var preview = document.querySelector('img');
-        src = "data:image/png;base64," + thingAttributeExamples[i][0];
-      }
-    }
+    console.log(thingAttributeName);
+    rows.push(<ThingAttributeDisplayer value={thingAttributes[thingAttributeName].value} />)
   }
 
   return (
     <div className="card" style={{textAlign:'left'}} >
       <div className="card-block">
-        <img className="card-img-top" src={src} alt="Card image cap" style={imgStyle}/>
         <ul className="list-group list-group-flush">
           {rows}
         </ul>

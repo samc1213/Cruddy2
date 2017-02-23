@@ -47,7 +47,6 @@ class Dashboard extends React.Component {
                 <div className="text-xs-center">
                   <Walkthrough bigText="Welcome to your Dashboard" helpText="The Dashboard is your hub for managing your apps, and creating new ones."/>
                   {websitedivs}
-                  <a className="btn btn-primary" href="/admin/createwebsite" role="button">Create New Website</a>
                 </div>
               </DashboardArea>
               <DashboardArea selectedTab={this.props.selectedDashboardTab} tabName='Create New Website'>

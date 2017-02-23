@@ -19,6 +19,8 @@ class CreateWebsite extends React.Component {
 
   trueSubmit(event) {
     console.log('trusub');
+    this.setState({websiteNameVisibility: 'block', websiteTypeVisibility:'none', websiteName:''});
+
      this.props.submitCreateWebsite(this.state.websiteTypeId, this.state.websiteName, this.props.loggedInUser);
   }
 

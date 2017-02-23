@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
-import ThingAttributeDisplayer from '../ThingAttributeDisplayer'
+import * as ThingAttributeDisplayerFactory from '../ThingAttributeDisplayerFactory'
+import ThingAttributeTextDisplayer from '../ThingAttributeTextDisplayer'
 
 const CraigslistCardPreview = ({ thingAttributes }) => {
   var rows = [];
@@ -7,7 +8,7 @@ const CraigslistCardPreview = ({ thingAttributes }) => {
   for (var thingAttributeName in thingAttributes)
   {
     console.log(thingAttributeName);
-    rows.push(<ThingAttributeDisplayer value={thingAttributes[thingAttributeName].value} />)
+    rows.push(ThingAttributeDisplayerFactory.GetThingAttributeDisplayer(thingAttributes[thingAttributeName].value, thingAttributes[thingAttributeName].typeid));
   }
 
   return (

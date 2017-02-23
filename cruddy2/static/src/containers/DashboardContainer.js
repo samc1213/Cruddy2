@@ -29,11 +29,7 @@ const mapStateToProps = (state) => {
   {
     getWebsites: (username) => {
       dispatch(actions.getWebsites(username))
-    },
-
-    rehydrate: () => {
-      dispatch(actions.rehydrateLoggedInUser())
-    }
+    }  
   }
 )
 

@@ -60,13 +60,7 @@ export const rehydrateLoggedInUser = () => ({
   type: "REHYDRATE_LOGGED_IN_USER"
 })
 
-export function rehydrateAndGetWebsites(username) {
-  return function (dispatch) {
-      dispatch(rehydrateLoggedInUser())
 
-      return dispatch(getWebsites(username))
-  }
-}
 
 
 export function getThingInstances(websiteName) {
@@ -111,7 +105,6 @@ export function getThingAttributes(websiteName) {
 export function getWebsites(username) {
   return function (dispatch) {
       dispatch(websitesFetch(true))
-
       return fetch(`/api/getwebsites/${username}`)
         .then(response => response.json())
         .then(json =>
@@ -160,6 +153,8 @@ export function submitCreateWebsite(websitetypeid, websitename, username) {
     }).then(response => response.json())
       .then((json) => {
         if (json.success == true) {
+          dispatch(getWebsites(localStorage.getItem('loggedinuser')));
+          console.log('aftergetwebsites')
           dispatch(selectDashboardTab('Apps'));
         }
         else {

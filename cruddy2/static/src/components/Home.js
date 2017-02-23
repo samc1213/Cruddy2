@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import ThingAttributeDisplayer from '../ThingAttributeDisplayer'
+import ThingAttributeTextDisplayer from '../ThingAttributeTextDisplayer'
 
 
 class Home extends React.Component {

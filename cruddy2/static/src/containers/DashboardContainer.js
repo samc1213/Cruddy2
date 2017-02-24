@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import Dashboard from '../components/Dashboard'
-import * as actions from '../actions/index'
+import * as facade from '../facade'
 
 
 const mapStateToProps = (state) => {
@@ -28,7 +28,7 @@ const mapStateToProps = (state) => {
  const mapDispatchToProps = (dispatch) => (
   {
     getWebsites: (username) => {
-      dispatch(actions.getWebsites(username))
+      dispatch(facade.getWebsites(username))
     }  
   }
 )

@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
 import CreateAccountForm from '../components/CreateAccountForm'
-import * as actions from '../actions/index'
+import * as facade from '../facade'
 
 
 const mapDispatchToProps = (dispatch) => (
   {
     submitCreateAccount: (firstname, lastname, username, password) => {
-    	dispatch(actions.submitCreateAccount(firstname, lastname, username, password))
+    	dispatch(facade.submitCreateAccount(firstname, lastname, username, password))
     }
   }
 )

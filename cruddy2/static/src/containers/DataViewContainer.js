@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import DataView from '../components/DataView'
-import * as actions from '../actions/index'
+import * as facade from '../facade'
 
 const mapStateToProps = (state) => {
   var tempwebsitenames = [];
@@ -29,11 +29,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => (
  {
    getWebsites: (username) => {
-     dispatch(actions.getWebsites(username))
+     dispatch(facade.getWebsites(username))
    },
 
    getThingInstances: (thingId) => {
-     dispatch(actions.getThingInstances(thingId))
+     dispatch(facade.getThingInstances(thingId))
    }
  }
 )

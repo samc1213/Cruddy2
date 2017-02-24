@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import CraigslistView from '../components/CraigslistView'
-import * as actions from '../actions/index'
+import * as facade from '../facade'
 
 const mapStateToProps = (state) => ({
   thingInstances: state.thingInstances,
@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     getThingInstances: (thingId) => {
-      dispatch(actions.getThingInstances(thingId))
+      dispatch(facade.getThingInstances(thingId))
     }
 })
 

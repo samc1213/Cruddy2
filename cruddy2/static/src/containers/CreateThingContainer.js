@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
 import CreateThing from '../components/CreateThing'
-import * as actions from '../actions/index'
+import * as facade from '../facade'
 
 
 const mapDispatchToProps = (dispatch) => (
   {
     getCurrentWebsiteName: (websiteName) => {
-    	dispatch(actions.getCurrentWebsiteName(websiteName))
+    	dispatch(facade.getCurrentWebsiteName(websiteName))
     }
   }
 )

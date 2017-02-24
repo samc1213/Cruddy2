@@ -1,10 +1,9 @@
 import { connect } from 'react-redux'
 import NewThingForm from '../components/NewThingForm'
-import * as actions from '../actions/index'
+import * as facade from '../facade'
 
 
 const mapStateToProps = (state) => {
-	console.log(state.websiteName)
 	return{
 	  thingAttributeTypes: state.thingAttributeTypes,
 	  websiteName: state.websiteName,
@@ -15,7 +14,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => (
   {
     submitNewThing: (form) => {
-    	dispatch(actions.submitNewThing(form))
+    	dispatch(facade.submitNewThing(form))
     }
   }
 )

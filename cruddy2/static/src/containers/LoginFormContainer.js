@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
 import LoginForm from '../components/LoginForm'
-import * as actions from '../actions/index'
+import * as facade from '../facade'
 
 
 const mapDispatchToProps = (dispatch) => (
   {
     submitLogin: (username, password) => {
-    	dispatch(actions.submitLogin(username, password))
+    	dispatch(facade.submitLogin(username, password))
     }
   }
 )

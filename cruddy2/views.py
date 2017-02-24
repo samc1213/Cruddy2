@@ -43,8 +43,6 @@ def getThingInstances(websiteName):
         app.logger.debug('boobs')
         thingInstances = api.getThingInstances(thingId)
         thingAttributes = api.getThingAttributes(thingId)
-
-        app.logger.debug(thingAttributes)
         results = []
 
         thingInstanceInfos = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
@@ -55,7 +53,6 @@ def getThingInstances(websiteName):
                 thingAttributeTypeId = thingAttributes[int(thingAttributeId)]['typeid']
                 newThingInstance[thingAttributeName] = {'value': value, 'typeid': thingAttributeTypeId}
             results.append(newThingInstance)
-        app.logger.debug(json.dumps(results))
         return json.dumps({'thingInstances': results})
     else:
         app.logger.debug('boobs')

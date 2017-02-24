@@ -5,10 +5,6 @@ import Walkthrough from './Walkthrough'
 
 
 class CreateThing extends React.Component {
-  componentDidMount() {
-    this.props.getCurrentWebsiteName(this.props.params.websiteName);
-  }
-
   render(){
     console.log()
       return(

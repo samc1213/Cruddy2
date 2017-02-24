@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import CreateThingInstance from '../components/createThingInstance'
-import * as actions from '../actions/index'
+import * as facade from '../facade'
 
 
 
@@ -25,11 +25,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => (
   {
     getThingAttributes: (thingId) => {
-    	dispatch(actions.getThingAttributes(thingId))
+    	dispatch(facade.getThingAttributes(thingId))
     },
 		
 		submitNewThingInstance: (form) => {
-			dispatch(actions.submitNewThingInstance(form))
+			dispatch(facade.submitNewThingInstance(form))
 		}
   }
 )

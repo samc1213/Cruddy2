@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import AdminBar from '../components/AdminBar'
-import * as actions from '../actions/index'
 
 const mapStateToProps = (state) => ({
   selectedDashboardTab: state.selectedDashboardTab

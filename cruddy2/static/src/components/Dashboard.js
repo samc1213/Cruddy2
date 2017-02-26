@@ -36,7 +36,7 @@ class Dashboard extends React.Component {
         }
         if (websitedivs.length == 0)
         {
-          websitedivs.push(<div className="text-xs-center"> Your websites will appear here</div>)
+          websitedivs.push(<div key="empt" className="text-xs-center"> Your websites will appear here</div>)
         }
 
         return (

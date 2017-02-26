@@ -84,7 +84,6 @@ export function submitCreateAccount(firstname, lastname, username, password) {
 }
 
 export function submitCreateWebsite(websitetypeid, websitename, username) {
-  console.log('lskf')
   function doFetch(data, dispatch) {
     return fetch('/api/postnewwebsite', {
       method: 'POST',
@@ -93,7 +92,6 @@ export function submitCreateWebsite(websitetypeid, websitename, username) {
       .then((json) => {
         if (json.success == true) {
           dispatch(getWebsites(localStorage.getItem('loggedinuser')));
-          console.log('aftergetwebsites')
         }
         else {
           console.log("bad new website");
@@ -103,12 +101,10 @@ export function submitCreateWebsite(websitetypeid, websitename, username) {
   }
 
   return function(dispatch) {
-    console.log("inthisbitch")
     var data = new FormData();
     data.append('websitetypeid', websitetypeid);
     data.append('websitename', websitename);
     data.append('username', username);
-    console.log("inthisbitch")
     return doFetch(data, dispatch);
   }
 }

@@ -21,7 +21,6 @@ class CreateWebsite extends React.Component {
 
 
   changeState(newState) {
-    console.log('cstate: newstate' + newState);
     this.props.changeState(newState);
   }
 
@@ -35,19 +34,16 @@ class CreateWebsite extends React.Component {
 
   handleWebsiteNameKeyDown(event) {
     if (event.keyCode == 13) {
-      console.log('enterdown')
       this.props.changeState('websiteType')
     }
   }
 
   handleWebsiteNameChange(event) {
-    console.log(event.target.value);
     this.setState({websiteName: event.target.value});
     this.props.getCurrentWebsiteName(event.target.value);
   }
 
   componentDidMount() {
-    console.log('didmt')
     this.props.changeState('websiteName')
   }
 
@@ -55,7 +51,7 @@ class CreateWebsite extends React.Component {
       return(
 
         <div>
-        
+
         <form id="newwebsiteform" encType="multipart/form-data" style={{textAlign:'center'}} onSubmit={this.handleFormSubmit}>
           <NewWebsiteViewArea currentState={this.props.currentState} stateName='websiteName'>
             <Walkthrough bigText="Create Your Website" helpText="Create your website here." />

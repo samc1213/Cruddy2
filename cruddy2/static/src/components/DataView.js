@@ -20,8 +20,6 @@ class DataView extends React.Component {
 
   render(){
     var spans = []
-    console.log('proppies')
-    console.log(this.props)
     if (this.props.websiteIds != null)
     {
       for (var i = 0; i < this.props.websiteIds.length; i ++) {
@@ -33,7 +31,6 @@ class DataView extends React.Component {
           <select value={this.state.websiteName} onChange={this.handleChange}>
             {spans}
           </select>
-          {console.log(this.props.thingInstances)}
         </div>
     );
     }

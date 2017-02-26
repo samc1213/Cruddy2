@@ -11,7 +11,6 @@ class CraigslistView extends React.Component {
     for (var index in this.props.thingInstances)
     {
       var thingInstance = this.props.thingInstances[index];
-      console.log(thingInstance);
       cards.push(
         <div className="col-md-6" key={index}>
           <div className="col-md-2" />

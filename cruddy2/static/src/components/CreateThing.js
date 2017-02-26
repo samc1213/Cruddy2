@@ -13,11 +13,14 @@ class CreateThing extends React.Component {
           <div className="col-md-6">
             <NewThingFormContainer />
           </div>
+          <div className="col-md-6">
+            <div className="col-md-2"></div>
+            <div className="col-md-8"><ThingInstanceViewPreviewContainer /></div>
+            <div className="col-md-2"></div>
+          </div>
         </div>
     );
     }
   }
-
-
 
 export default CreateThing

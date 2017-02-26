@@ -9,8 +9,6 @@ class App extends React.Component {
     this.props.logoutUser();
   }
   render(){
-    console.log(this.props.loggedInUser);
-
     if ((this.props.params.websiteName != null) && location.href.split('/').slice(-1)[0] != 'creatething')
     {
       var returnstring = '/'+String(this.props.params.websiteName)+'/createthinginstance'

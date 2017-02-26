@@ -8,7 +8,6 @@ const mapStateToProps = (state) => {
   var tempwebsitetypeids = [];
   var tempwebsiteids = [];
   var tempthingids = [];
-  console.log( state.websites);
 
   for (var websiteid in state.websites){
     tempwebsitenames.push(state.websites[websiteid].websitename)
@@ -29,7 +28,7 @@ const mapStateToProps = (state) => {
   {
     getWebsites: (username) => {
       dispatch(facade.getWebsites(username))
-    }  
+    }
   }
 )
 

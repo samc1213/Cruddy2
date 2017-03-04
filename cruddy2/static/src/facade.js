@@ -1,5 +1,8 @@
 // LETS MOVE ALL API CALLS INTO THIS!
 import * as actions from './actions/index'
+import {browserHistory} from 'react-router'
+import 'whatwg-fetch'
+
 
 
 export function getThingInstances(websiteName) {
@@ -144,8 +147,13 @@ export function submitNewThing(form) {
         body: new FormData(form)
       })
         .then(response => response.json())
-        .then(json =>
-        browserHistory.push(`/admin/dashboard`)
+        .then((json) =>{
+          console.log('should be redirecting');
+          dispatch(actions.selectCurrentState('websiteName'));
+          dispatch(actions.setCurrentWebsiteName(''));
+          dispatch(actions.selectDashboardTab('Apps'));
+
+        }
         )
         .catch(err => console.log(err))
   }

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import App from '../components/App'
-import * as facade from '../facade'
+import * as actions from '../actions/index'
 
 const mapStateToProps = (state) => ({
  	loggedInUser: state.loggedInUser
@@ -8,7 +8,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     logoutUser: () => {
-    	dispatch(facade.userLoggedOut())
+    	dispatch(actions.userLoggedOut())
     }
 })
 

@@ -11,6 +11,6 @@ export function GetThingAttributeDisplayer(value, thingAttributeTypeId)
 	}
 	else
 	{
-		return (<ThingAttributeImageDisplayer value={value}/>);
+		return (<ThingAttributeImageDisplayer value={value} id="a" />);
 	}
 }

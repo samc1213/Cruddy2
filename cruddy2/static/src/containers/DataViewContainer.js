@@ -31,8 +31,8 @@ const mapDispatchToProps = (dispatch) => (
      dispatch(facade.getWebsites(username))
    },
 
-   getThingInstances: (thingId) => {
-     dispatch(facade.getThingInstances(thingId))
+   getThingInstances: (websiteName) => {
+     dispatch(facade.getThingInstances(websiteName))
    }
  }
 )

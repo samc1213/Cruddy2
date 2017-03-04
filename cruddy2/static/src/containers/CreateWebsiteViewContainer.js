@@ -11,8 +11,8 @@ const mapDispatchToProps = (dispatch) => (
     changeState: (newState) => {
     	dispatch(actions.selectCurrentState(newState))
     },
-    getCurrentWebsiteName: (websiteName) => {
-      dispatch(actions.getCurrentWebsiteName(websiteName))
+    setCurrentWebsiteName: (websiteName) => {
+      dispatch(actions.setCurrentWebsiteName(websiteName))
     }
   }
 )

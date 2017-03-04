@@ -7,8 +7,8 @@ export const getThingAttributeTypes = (data) => ({
   data
 })
 
-export const getCurrentWebsiteName = (data) => ({
-  type: "GET_CURRENT_WEBSITE",
+export const setCurrentWebsiteName = (data) => ({
+  type: "SET_CURRENT_WEBSITE",
   data
 })
 

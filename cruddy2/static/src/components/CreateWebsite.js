@@ -9,7 +9,7 @@ class CreateWebsite extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {websiteTypeId: 0, websiteNameVisibility: 'block', websiteTypeVisibility: 'none', websiteName: ''}
+    this.state = {websiteTypeId: 0, websiteNameVisibility: 'block', websiteTypeVisibility: 'none'}
     this.handleWebsiteNameChange = this.handleWebsiteNameChange.bind(this);
     this.handleWebsiteNameKeyDown = this.handleWebsiteNameKeyDown.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -39,8 +39,7 @@ class CreateWebsite extends React.Component {
   }
 
   handleWebsiteNameChange(event) {
-    this.setState({websiteName: event.target.value});
-    this.props.getCurrentWebsiteName(event.target.value);
+    this.props.setCurrentWebsiteName(event.target.value);
   }
 
   componentDidMount() {
@@ -57,9 +56,9 @@ class CreateWebsite extends React.Component {
             <Walkthrough bigText="Create Your Website" helpText="Create your website here." />
             <div>
               <label> Website Name </label>
-              <input type="text" name="websitename" value={this.state.websiteName} onChange={this.handleWebsiteNameChange} onKeyDown={this.handleWebsiteNameKeyDown}/>
+              <input type="text" name="websitename" value={this.props.websiteName} onChange={this.handleWebsiteNameChange} onKeyDown={this.handleWebsiteNameKeyDown}/>
               <p style={{marginBottom: '4px'}}> Your website will be available at: <br />
-                {`http://www.cruddy2.herokuapp.com/${this.state.websiteName}`}</p>
+                {`http://www.cruddy2.herokuapp.com/${this.props.websiteName}`}</p>
               <a className="btn btn-primary" onClick={() => { this.changeState('websiteType')}}> Submit </a>
             </div>
           </NewWebsiteViewArea>

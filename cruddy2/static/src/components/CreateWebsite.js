@@ -3,7 +3,7 @@ import CraigslistCardPreview from './CraigslistCardPreview'
 import Walkthrough from './Walkthrough'
 import NewWebsiteViewArea from './NewWebsiteViewArea'
 import CreateThingContainer from '../containers/CreateThingContainer'
-
+import RepeatingUnitDesignerContainer from '../containers/RepeatingUnitDesignerContainer'
 
 class CreateWebsite extends React.Component {
   constructor(props) {
@@ -17,8 +17,6 @@ class CreateWebsite extends React.Component {
     this.changeState = this.changeState.bind(this);
     document.title = 'Create a New Website - Cruddy2'
   }
-
-
 
   changeState(newState) {
     this.props.changeState(newState);
@@ -91,6 +89,9 @@ class CreateWebsite extends React.Component {
             </NewWebsiteViewArea>
             <NewWebsiteViewArea currentState={this.props.currentState} stateName='firstThing'>
               <CreateThingContainer />
+            </NewWebsiteViewArea>
+            <NewWebsiteViewArea currentState={this.props.currentState} stateName='repeatingUnit'>
+              <RepeatingUnitDesignerContainer />
             </NewWebsiteViewArea>
           </form>
         </div>

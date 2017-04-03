@@ -103,6 +103,7 @@ class NewThingForm extends React.Component {
     event.preventDefault();
     var form = document.getElementById('newThingForm');
     this.props.submitNewThing(form);
+    this.props.changeState('repeatingUnit');
   }
   render() {
     return (

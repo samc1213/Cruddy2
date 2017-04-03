@@ -148,11 +148,6 @@ export function submitNewThing(form) {
       })
         .then(response => response.json())
         .then((json) =>{
-          console.log('should be redirecting');
-          dispatch(actions.selectCurrentState('websiteName'));
-          dispatch(actions.setCurrentWebsiteName(''));
-          dispatch(actions.selectDashboardTab('Apps'));
-
         }
         )
         .catch(err => console.log(err))

@@ -4,7 +4,6 @@ import ThingAttributeTextDisplayer from '../ThingAttributeTextDisplayer'
 
 const CraigslistCardPreview = ({ thingAttributes }) => {
   var rows = [];
-  console.log(thingAttributes)
   for (var thingAttributeName in thingAttributes)
   {
     rows.push(ThingAttributeDisplayerFactory.GetThingAttributeDisplayer(thingAttributes[thingAttributeName].value, thingAttributes[thingAttributeName].typeid));

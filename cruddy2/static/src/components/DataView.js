@@ -48,11 +48,8 @@ class DataView extends React.Component {
       }
     }
 
-    console.log(this.props.thingInstances);
-    console.log(headers);
     if (this.props.thingInstances.length > 0)
     {
-      console.log('reater')
       var tab = TableMaker.GetTable(this.props.thingInstances);
     }
 
@@ -61,7 +58,7 @@ class DataView extends React.Component {
           <select value={this.state.websiteName} onChange={this.handleChange}>
             {spans}
           </select>
-          <div>{this.state.websiteName}</div> 
+          <div>{this.state.websiteName}</div>
           {tab}
         </div>
     );

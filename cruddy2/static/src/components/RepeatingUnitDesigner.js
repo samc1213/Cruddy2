@@ -60,6 +60,9 @@ class RepeatingUnitDesigner extends React.Component {
   onSubmit = () =>
   {
     this.props.submitCardData({'layout': this.state.items, 'thingid':this.props.thingId})
+    this.setState({
+      items: [''],
+    })
   }
 
   render() {

@@ -31,6 +31,7 @@ class api:
         newLayoutData = LayoutData(json.dumps(layout), thingid)
         self.sessionManager.CommitToSession([newLayoutData])
 
+
     def createThing(self, thingName, websiteID, thingAttributes):
         newThing = Thing(thingName, websiteID)
         objectsToCommitToDB = []
@@ -47,6 +48,8 @@ class api:
         objectsToCommitToDB.append(newThing)
 
         self.sessionManager.CommitToSession(objectsToCommitToDB)
+
+        return newThing
 
     def savePhoto(self, fileStore):
         self.saveFileToUploads()
@@ -84,7 +87,6 @@ class api:
 
     def getThing(self, thingId):
         thing = db.session.query(Thing).get(thingId)
-
         return thing
 
     def getWebsiteIDByName(self, websiteName):
@@ -128,6 +130,11 @@ class api:
         thing = self.getThing(thingId)
 
         return thing.thinginstances
+
+    def getLayoutData(self, thingId):
+        thing = self.getThing(thingId)
+        return thing.layoutdata
+
 
     def createUser(self, form):
         try:

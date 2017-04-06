@@ -57,6 +57,15 @@ def getThingInstances(websiteName):
     else:
         app.logger.debug('boobs')
         return ''
+@app.route('/api/getlayout/<websiteName>')
+def getLayout(websiteName):
+    thingId = api.getThingIdFromWebsiteName(websiteName)
+    if thingId is not None:
+        layout = json.loads(api.getLayoutData(thingId).layout)
+        return json.dumps({'success': True, 'data': layout}), 200, {'ContentType':'application/json'}
+    else:
+        return json.dumps({'success': False}), 200, {'ContentType':'application/json'}
+
 
 @app.route('/api/postcarddata', methods=['POST'])
 def postCardData():
@@ -98,16 +107,16 @@ def postNewThing():
         if key[11:] == "thingattributetypeid":
             thingAttributeTypeIds[int(key[8])] = value
         elif key[11:] == "thingattributename":
+            print value
             thingAttributeNames[int(key[8])] = value
 
     try:
-        api.createThing(thingName, websiteID,
+        thing = api.createThing(thingName, websiteID,
             [{'name': thingAttributeNames[i],
             'typeid': thingAttributeTypeIds[i]}
                 for i in range(len(thingAttributeNames))])
     except Exception as e:
         return json.dumps({'success': False, 'thingid': '', 'thingname': request.form['thingname'], 'message': 'There was a problem processing your new Thing'}), 500, {'ContentType':'application/json'}
-    thing = api.getThingFromThingName(thingName)
     return json.dumps({'success': False, 'thingid': str(thing.thingid), 'thingname': request.form['thingname'], 'websitename': websiteName}), 200, {'ContentType':'application/json'}
 #
 @app.route('/submittedthing', methods=['POST'])

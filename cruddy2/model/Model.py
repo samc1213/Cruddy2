@@ -11,6 +11,7 @@ class LayoutData(db.Model):
     layoutdataid = db.Column(db.Integer, db.Sequence('layoutdata_layoutdataid_seq'), primary_key=True)
     thingid = db.Column(db.Integer, db.ForeignKey('things.thingid'))
     layout = db.Column(db.String)
+    thing = db.relationship("Thing", back_populates="layoutdata")
 
     def __init__(self, layout, thingid):
         self.layout = layout
@@ -53,7 +54,7 @@ class Thing(db.Model):
     thingname = db.Column(db.String)
     websiteid = db.Column(db.Integer, db.ForeignKey('websites.websiteid'))
     website = db.relationship('Website', back_populates='things')
-
+    layoutdata = db.relationship('LayoutData', uselist=False, back_populates='thing')
     thingattributes = db.relationship('ThingAttribute', back_populates='thing')
     thinginstances = db.relationship('ThingInstance', back_populates='thing')
 

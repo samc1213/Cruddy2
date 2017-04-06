@@ -7,16 +7,6 @@ import 'whatwg-fetch'
 
 export function getThingInstances(websiteName) {
   return function (dispatch) {
-      dispatch(actions.thingInstancesFetch(true))
-
-      // return fetch(`/api/getthinginstances/${websiteName}`)
-      //   .then(function(response) {
-      //     return response.json()
-      //   })
-      //   .then(json =>
-      //     dispatch(actions.thingInstancesReceived(json))
-      //   )
-      //   .catch(err => console.log(err))
         return fetch(`/api/getthinginstances/${websiteName}`)
           .then(function(response) {
             return response.json()
@@ -28,10 +18,22 @@ export function getThingInstances(websiteName) {
   }
 }
 
+export function getLayout(websiteName) {
+  return function (dispatch) {
+        return fetch(`/api/getlayout/${websiteName}`)
+          .then(function(response) {
+            return response.json()
+          })
+          .then(json =>
+            dispatch(actions.layoutReceived(json))
+          )
+          .catch(err => console.log(err))
+  }
+}
+
+
 export function getThingAttributes(websiteName) {
   return function (dispatch) {
-      dispatch(actions.thingAttributesFetch(true))
-
       return fetch(`/api/getthingattributes/${websiteName}`)
         .then(function(response) {
           console.log(response);
@@ -149,6 +151,9 @@ export function submitCardData(data) {
     }).then(response => response.json())
       .then((json) => {
         console.log(json)
+        dispatch(actions.selectDashboardTab('Apps'));
+        dispatch(actions.selectCurrentState('websiteName'));
+        dispatch(actions.setCurrentWebsiteName(''));
       })
       .catch(err => console.log(err))
   }
@@ -169,6 +174,7 @@ export function submitNewThing(form) {
       })
         .then(response => response.json())
         .then((json) =>{
+          console.log(json);
           dispatch(actions.newThingReceived(json['thingid']))
         }
         )

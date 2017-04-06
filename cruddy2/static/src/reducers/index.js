@@ -10,6 +10,7 @@ import websiteName from './websiteName'
 import newThingInstances from './newThingInstances'
 import selectedCurrentState from './selectedCurrentState'
 import newThingId from './newThingId'
+import layout from './layout'
 
 const todoApp = combineReducers({
   thingAttributeTypes,
@@ -22,6 +23,7 @@ const todoApp = combineReducers({
   newThingInstances,
   selectedCurrentState,
   newThingId,
+  layout,
   form: formReducer
 })
 

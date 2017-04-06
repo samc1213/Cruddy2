@@ -6,7 +6,6 @@ import Walkthrough from './Walkthrough'
 
 class CreateThing extends React.Component {
   render(){
-    console.log()
       return(
         <div>
           <Walkthrough bigText="Define Your Data Model" helpText="Be sure to put in examples, so that you can see what an instance of your Thing would look like!" />

@@ -12,20 +12,18 @@ export const setCurrentWebsiteName = (data) => ({
   data
 })
 
-export const thingInstancesFetch = (isTrue) => ({
-  type: "THING_INSTANCES_FETCH",
-  isTrue
-})
-
-export const thingAttributesFetch = (isTrue) =>({
-  type: "THING_ATTRIBUTES_FETCH",
-  isTrue
-})
 
 export const thingInstancesReceived = (data) => ({
   type: "THING_INSTANCES_RECEIVED",
   data
 })
+
+
+export const layoutReceived = (data) => ({
+  type: "LAYOUT_RECEIVED",
+  data
+})
+
 
 export const thingAttributesReceived = (data) => ({
   type: "THING_ATTRIBUTES_RECEIVED",

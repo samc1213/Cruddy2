@@ -51,6 +51,11 @@ export const websitesReceived = (data) => ({
   data
 })
 
+export const newThingReceived = (thingid) => ({
+  type: "NEW_THING_RECEIVED",
+  thingid
+})
+
 export const selectDashboardTab = (data) => ({
   type: "DASHBOARD_TAB_SELECTED",
   data

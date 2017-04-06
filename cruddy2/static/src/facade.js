@@ -140,6 +140,27 @@ export function submitLogin(username, password) {
   }
 }
 
+
+export function submitCardData(data) {
+  function doFetch(data, dispatch) {
+    return fetch('/api/postcarddata', {
+      method: 'POST',
+      body: data
+    }).then(response => response.json())
+      .then((json) => {
+        console.log(json)
+      })
+      .catch(err => console.log(err))
+  }
+
+  return function(dispatch) {
+    var newData = new FormData();
+    newData.append('layout', JSON.stringify(data.layout))
+    newData.append('thingid', data.thingid)
+    return doFetch(newData, dispatch);
+  }
+}
+
 export function submitNewThing(form) {
   return function (dispatch) {
       return fetch(`/postnewthing`, {
@@ -148,6 +169,7 @@ export function submitNewThing(form) {
       })
         .then(response => response.json())
         .then((json) =>{
+          dispatch(actions.newThingReceived(json['thingid']))
         }
         )
         .catch(err => console.log(err))

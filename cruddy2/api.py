@@ -27,6 +27,10 @@ class api:
         except:
             return False
 
+    def createLayout(self, layout, thingid):
+        newLayoutData = LayoutData(json.dumps(layout), thingid)
+        self.sessionManager.CommitToSession([newLayoutData])
+
     def createThing(self, thingName, websiteID, thingAttributes):
         newThing = Thing(thingName, websiteID)
         objectsToCommitToDB = []

@@ -20,7 +20,6 @@ import CreateThingInstanceViewContainer from './containers/CreateThingInstanceVi
 import CreateWebsiteViewContainer from './containers/CreateWebsiteViewContainer'
 
 
-
 const store = createStore(reducer,
   applyMiddleware(thunkMiddleware),
   autoRehydrate()

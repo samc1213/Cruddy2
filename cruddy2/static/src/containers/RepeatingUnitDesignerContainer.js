@@ -5,7 +5,7 @@ import * as facade from '../facade'
 
 function mapStateToProps(state) {
   if (state.form.newThingForm.values == null) {
-    return {thingAttributes: []};
+    return {thingAttributes: [], thingId: state.newThingId};
   }
   else {
     var results = {};
@@ -14,7 +14,7 @@ function mapStateToProps(state) {
       var value = state.form.newThingForm.values.members[i];
       results[value.thingattributename] = {'typeid': parseInt(value.thingattributetypeid), 'value': value.thingattributeexample };
     }
-    return {thingAttributes: results};
+    return {thingAttributes: results, thingId: state.newThingId};
   }
 }
 
@@ -22,6 +22,9 @@ function mapStateToProps(state) {
   {
     getWebsites: (username) => {
       dispatch(facade.getWebsites(username))
+    },
+    submitCardData: (data) => {
+      dispatch(facade.submitCardData(data))
     }
   }
 )

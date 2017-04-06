@@ -6,6 +6,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 db = SQLAlchemy(app)
 
 
+class LayoutData(db.Model):
+    __tablename__ = 'layoutdata'
+    layoutdataid = db.Column(db.Integer, db.Sequence('layoutdata_layoutdataid_seq'), primary_key=True)
+    thingid = db.Column(db.Integer, db.ForeignKey('things.thingid'))
+    layout = db.Column(db.String)
+
+    def __init__(self, layout, thingid):
+        self.layout = layout
+        self.thingid = thingid
+
 class User(db.Model):
     __tablename__ = 'users'
 

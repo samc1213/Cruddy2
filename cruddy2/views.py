@@ -58,6 +58,16 @@ def getThingInstances(websiteName):
         app.logger.debug('boobs')
         return ''
 
+@app.route('/api/postcarddata', methods=['POST'])
+def postCardData():
+    print 'postcarddata'
+    try:
+        layout = json.loads(request.form['layout'])
+        thingid = int(request.form['thingid'])
+        api.createLayout(layout, thingid)
+    except Exception as ex:
+        print 'errro' + str(ex)
+    return json.dumps({'success': True}), 200, {'ContentType':'application/json'}
 
 @app.route('/api/getwebsites/<username>')
 def getWebsites(username):

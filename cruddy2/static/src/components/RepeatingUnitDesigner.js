@@ -24,6 +24,7 @@ class RepeatingUnitDesigner extends React.Component {
   constructor(props) {
     super(props);
     this.onBtnClick = this.onBtnClick.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
     for (var thingAttributeName in this.props.thingAttributes)
@@ -37,8 +38,7 @@ class RepeatingUnitDesigner extends React.Component {
     items: [''],
   };
    handleChangeText(text, index) {
-    	console.log(text,index,this.state)
-				this.state.items[index] = text;
+        this.state.items[index] = text;
         this.forceUpdate();
     };
 
@@ -57,6 +57,11 @@ class RepeatingUnitDesigner extends React.Component {
     });
   }
 
+  onSubmit = () =>
+  {
+    this.props.submitCardData({'layout': this.state.items, 'thingid':this.props.thingId})
+  }
+
   render() {
 
     return (
@@ -67,6 +72,7 @@ class RepeatingUnitDesigner extends React.Component {
           helperClass="SortableHelper" onChangeText={(text, index) => this.handleChangeText(text, index)} />
         </div>
         <button onClick = {this.onBtnClick}> Add New Row</button>
+        <button onClick = {this.onSubmit}>Submit</button>
       </div>
     );
   }

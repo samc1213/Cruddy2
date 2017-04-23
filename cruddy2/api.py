@@ -184,14 +184,9 @@ class api:
     def getUserFromUsername(self, username):
         app.logger.debug('helloboiboi')
         app.logger.debug(username)
-        try:
-            app.logger.debug('before')
-            user = User.query.filter_by(username=username).first()
-            app.logger.debug('after')
-        except Exception as ex:
-            app.logger.debug('s34424')
-            app.logger.debug(ex)
-        app.logger.debug('helloboiboi2')
+        app.logger.debug('before')
+        user = User.query.filter_by(username=username).first()
+        app.logger.debug('after')
         return user
 
     def getThingFromThingName(self, thingName):

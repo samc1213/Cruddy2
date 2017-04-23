@@ -143,28 +143,7 @@ export function submitLogin(username, password) {
 }
 
 
-export function submitCardData(data) {
-  function doFetch(data, dispatch) {
-    return fetch('/api/postcarddata', {
-      method: 'POST',
-      body: data
-    }).then(response => response.json())
-      .then((json) => {
-        console.log(json)
-        dispatch(actions.selectDashboardTab('Apps'));
-        dispatch(actions.selectCurrentState('websiteName'));
-        dispatch(actions.setCurrentWebsiteName(''));
-      })
-      .catch(err => console.log(err))
-  }
 
-  return function(dispatch) {
-    var newData = new FormData();
-    newData.append('layout', JSON.stringify(data.layout))
-    newData.append('thingid', data.thingid)
-    return doFetch(newData, dispatch);
-  }
-}
 
 export function submitWebsiteDesign(data) {
   function doFetch(data, dispatch) {
@@ -183,7 +162,7 @@ export function submitWebsiteDesign(data) {
 
   return function(dispatch) {
     var newData = new FormData();
-    newData.append('layout', JSON.stringify(data.layout))
+    newData.append('layout', data.layout)
     newData.append('websiteName', data.websiteName)
     return doFetch(newData, dispatch);
   }

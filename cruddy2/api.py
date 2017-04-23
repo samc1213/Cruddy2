@@ -15,6 +15,10 @@ class api:
     def __init__(self):
         self.sessionManager = DBSessionManager()
 
+    def getLayoutFromWebsiteName(self, websiteName):
+        website = db.session.query(Website).filter_by(websitename=websiteName).first()
+        return website.websitelayout.websitelayout
+
     def createWebsite(self, form):
         try:
             websiteTypeId = int(form['websitetypeid'])
@@ -27,12 +31,8 @@ class api:
         except:
             return False
 
-    def createLayout(self, layout, thingid):
-        newLayoutData = LayoutData(json.dumps(layout), thingid)
-        self.sessionManager.CommitToSession([newLayoutData])
-
     def createWebsiteLayout(self, websitelayout, websiteid):
-        newWebsiteLayout = WebsiteLayout(websitelayout, websiteid)
+        newWebsiteLayout = WebsiteLayout(json.dumps(websitelayout), websiteid)
         self.sessionManager.CommitToSession([newWebsiteLayout])
 
 

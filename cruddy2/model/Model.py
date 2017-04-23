@@ -6,16 +6,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 db = SQLAlchemy(app)
 
 
-class LayoutData(db.Model):
-    __tablename__ = 'layoutdata'
-    layoutdataid = db.Column(db.Integer, db.Sequence('layoutdata_layoutdataid_seq'), primary_key=True)
-    thingid = db.Column(db.Integer, db.ForeignKey('things.thingid'))
-    layout = db.Column(db.String)
-    thing = db.relationship("Thing", back_populates="layoutdata")
-
-    def __init__(self, layout, thingid):
-        self.layout = layout
-        self.thingid = thingid
 
 class WebsiteLayout(db.Model):
     __tablename__ = 'websitelayout'
@@ -65,7 +55,6 @@ class Thing(db.Model):
     thingname = db.Column(db.String)
     websiteid = db.Column(db.Integer, db.ForeignKey('websites.websiteid'))
     website = db.relationship('Website', back_populates='things')
-    layoutdata = db.relationship('LayoutData', uselist=False, back_populates='thing')
     thingattributes = db.relationship('ThingAttribute', back_populates='thing')
     thinginstances = db.relationship('ThingInstance', back_populates='thing')
 
@@ -117,9 +106,7 @@ class Website(db.Model):
     userid = db.Column(db.Integer, db.ForeignKey('users.userid'))
     user = db.relationship('User', back_populates='websites')
     things = db.relationship('Thing', back_populates='website')
-    websitelayout = db.relationship('WebsiteLayout', back_populates='website')
-
-
+    websitelayout = db.relationship('WebsiteLayout', uselist=False, back_populates='website')
 
     def __init__(self, websitename, websitetypeid, userid):
         self.websitename = websitename

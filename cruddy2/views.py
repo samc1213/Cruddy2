@@ -59,12 +59,12 @@ def getThingInstances(websiteName):
         return ''
 @app.route('/api/getlayout/<websiteName>')
 def getLayout(websiteName):
-    thingId = api.getThingIdFromWebsiteName(websiteName)
-    if thingId is not None:
-        layout = json.loads(api.getLayoutData(thingId).layout)
+    layout = api.getLayoutFromWebsiteName(websiteName)
+    if layout is not None:
         return json.dumps({'success': True, 'data': layout}), 200, {'ContentType':'application/json'}
     else:
         return json.dumps({'success': False}), 200, {'ContentType':'application/json'}
+
 
 
 @app.route('/api/postcarddata', methods=['POST'])
@@ -82,7 +82,7 @@ def postCardData():
 def postNewWebsiteLayout():
     print request.form
     try:
-        websitelayout = request.form['layout']
+        websitelayout = json.loads(request.form['layout'])
         websiteid = api.getWebsiteIDByName(request.form['websiteName'])
         api.createWebsiteLayout(websitelayout, websiteid)
     except Exception as ex:

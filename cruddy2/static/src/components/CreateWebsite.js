@@ -3,7 +3,7 @@ import CraigslistCardPreview from './CraigslistCardPreview'
 import Walkthrough from './Walkthrough'
 import NewWebsiteViewArea from './NewWebsiteViewArea'
 import CreateThingContainer from '../containers/CreateThingContainer'
-import RepeatingUnitDesignerContainer from '../containers/RepeatingUnitDesignerContainer'
+import DesignerContainer from '../containers/DesignerContainer'
 
 class CreateWebsite extends React.Component {
   constructor(props) {
@@ -90,10 +90,10 @@ class CreateWebsite extends React.Component {
             <NewWebsiteViewArea currentState={this.props.currentState} stateName='firstThing'>
               <CreateThingContainer />
             </NewWebsiteViewArea>
-            <NewWebsiteViewArea currentState={this.props.currentState} stateName='repeatingUnit'>
-              <RepeatingUnitDesignerContainer />
-            </NewWebsiteViewArea>
           </form>
+          <NewWebsiteViewArea currentState={this.props.currentState} stateName='repeatingUnit'>
+            <DesignerContainer />
+          </NewWebsiteViewArea>
         </div>
     );
     }

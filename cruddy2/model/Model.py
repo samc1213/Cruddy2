@@ -17,6 +17,17 @@ class LayoutData(db.Model):
         self.layout = layout
         self.thingid = thingid
 
+class WebsiteLayout(db.Model):
+    __tablename__ = 'websitelayout'
+    websitelayoutid = db.Column(db.Integer, db.Sequence('websitelayout_websitelayoutid_seq'), primary_key=True)
+    websiteid = db.Column(db.Integer, db.ForeignKey('websites.websiteid'))
+    websitelayout = db.Column(db.String)
+    website = db.relationship("Website", back_populates="websitelayout")
+
+    def __init__(self, websitelayout, websiteid):
+        self.websitelayout = websitelayout
+        self.websiteid = websiteid
+
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -106,6 +117,7 @@ class Website(db.Model):
     userid = db.Column(db.Integer, db.ForeignKey('users.userid'))
     user = db.relationship('User', back_populates='websites')
     things = db.relationship('Thing', back_populates='website')
+    websitelayout = db.relationship('WebsiteLayout', back_populates='website')
 
 
 

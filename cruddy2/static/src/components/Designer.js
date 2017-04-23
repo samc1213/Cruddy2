@@ -12,7 +12,8 @@ class Designer extends React.Component {
   }
 
   onSubmit = () => {
-    this.props.submitWebsiteDesign(JSON.stringify(this.state.design), this.props.websiteName);
+
+    this.props.submitWebsiteDesign({layout: JSON.stringify(this.state.design), websiteName: this.props.websiteName});
   }
 
   onBtnClick = (newItem) =>

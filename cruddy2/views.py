@@ -78,6 +78,18 @@ def postCardData():
         print 'errro' + str(ex)
     return json.dumps({'success': True}), 200, {'ContentType':'application/json'}
 
+@app.route('/api/postnewwebsitelayout', methods=['POST'])
+def postNewWebsiteLayout():
+    print request.form
+    try:
+        websitelayout = request.form['layout']
+        websiteid = api.getWebsiteIDByName(request.form['websiteName'])
+        api.createWebsiteLayout(websitelayout, websiteid)
+    except Exception as ex:
+        print 'errro' + str(ex)
+        return json.dumps({'success': False}), 200, {'ContentType':'application/json'}
+    return json.dumps({'success': True}), 200, {'ContentType':'application/json'}
+
 @app.route('/api/getwebsites/<username>')
 def getWebsites(username):
     print "inhere"
@@ -93,6 +105,8 @@ def postNewWebsite():
         return json.dumps({'success': False, 'websitename': ''}), 200, {'ContentType':'application/json'}
 
 
+
+
 @app.route('/postnewthing', methods=['POST'])
 def postNewThing():
     form = request.form
@@ -102,20 +116,21 @@ def postNewThing():
     thingAttributeNames = [None for i in range((len(form)-1)/3)]
     thingAttributeTypeIds = [None for i in range((len(form)-1)/3)]
     print form
-    assert len(thingAttributeNames) == len(thingAttributeTypeIds)
-    for key, value in form.iteritems():
-        if key[11:] == "thingattributetypeid":
-            thingAttributeTypeIds[int(key[8])] = value
-        elif key[11:] == "thingattributename":
-            print value
-            thingAttributeNames[int(key[8])] = value
-
     try:
+        assert len(thingAttributeNames) == len(thingAttributeTypeIds)
+        for key, value in form.iteritems():
+            if key[11:] == "thingattributetypeid":
+                thingAttributeTypeIds[int(key[8])] = value
+            elif key[11:] == "thingattributename":
+                print value
+                thingAttributeNames[int(key[8])] = value
+
         thing = api.createThing(thingName, websiteID,
             [{'name': thingAttributeNames[i],
             'typeid': thingAttributeTypeIds[i]}
                 for i in range(len(thingAttributeNames))])
     except Exception as e:
+        print 'EXCEPTION' + str(e)
         return json.dumps({'success': False, 'thingid': '', 'thingname': request.form['thingname'], 'message': 'There was a problem processing your new Thing'}), 500, {'ContentType':'application/json'}
     return json.dumps({'success': False, 'thingid': str(thing.thingid), 'thingname': request.form['thingname'], 'websitename': websiteName}), 200, {'ContentType':'application/json'}
 #

@@ -31,6 +31,11 @@ class api:
         newLayoutData = LayoutData(json.dumps(layout), thingid)
         self.sessionManager.CommitToSession([newLayoutData])
 
+    def createWebsiteLayout(self, websitelayout, websiteid):
+        newWebsiteLayout = WebsiteLayout(websitelayout, websiteid)
+        self.sessionManager.CommitToSession([newWebsiteLayout])
+
+
 
     def createThing(self, thingName, websiteID, thingAttributes):
         newThing = Thing(thingName, websiteID)

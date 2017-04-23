@@ -913,7 +913,7 @@ var CreateThing = function (_React$Component) {
 
 exports.default = CreateThing;
 
-},{"../containers/NewThingFormContainer":38,"../containers/ThingInstanceViewPreviewContainer":40,"./Walkthrough":25,"react":317}],13:[function(require,module,exports){
+},{"../containers/NewThingFormContainer":39,"../containers/ThingInstanceViewPreviewContainer":40,"./Walkthrough":25,"react":317}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -942,9 +942,9 @@ var _CreateThingContainer = require('../containers/CreateThingContainer');
 
 var _CreateThingContainer2 = _interopRequireDefault(_CreateThingContainer);
 
-var _RepeatingUnitDesignerContainer = require('../containers/RepeatingUnitDesignerContainer');
+var _DesignerContainer = require('../containers/DesignerContainer');
 
-var _RepeatingUnitDesignerContainer2 = _interopRequireDefault(_RepeatingUnitDesignerContainer);
+var _DesignerContainer2 = _interopRequireDefault(_DesignerContainer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1112,12 +1112,12 @@ var CreateWebsite = function (_React$Component) {
             _NewWebsiteViewArea2.default,
             { currentState: this.props.currentState, stateName: 'firstThing' },
             _react2.default.createElement(_CreateThingContainer2.default, null)
-          ),
-          _react2.default.createElement(
-            _NewWebsiteViewArea2.default,
-            { currentState: this.props.currentState, stateName: 'repeatingUnit' },
-            _react2.default.createElement(_RepeatingUnitDesignerContainer2.default, null)
           )
+        ),
+        _react2.default.createElement(
+          _NewWebsiteViewArea2.default,
+          { currentState: this.props.currentState, stateName: 'repeatingUnit' },
+          _react2.default.createElement(_DesignerContainer2.default, null)
         )
       );
     }
@@ -1128,7 +1128,7 @@ var CreateWebsite = function (_React$Component) {
 
 exports.default = CreateWebsite;
 
-},{"../containers/CreateThingContainer":32,"../containers/RepeatingUnitDesignerContainer":39,"./CraigslistCardPreview":9,"./NewWebsiteViewArea":22,"./Walkthrough":25,"react":317}],14:[function(require,module,exports){
+},{"../containers/CreateThingContainer":32,"../containers/DesignerContainer":37,"./CraigslistCardPreview":9,"./NewWebsiteViewArea":23,"./Walkthrough":25,"react":317}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1480,6 +1480,112 @@ exports.default = DataView;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _ThingAttributeDisplayerFactory = require('../ThingAttributeDisplayerFactory');
+
+var ThingAttributeDisplayerFactory = _interopRequireWildcard(_ThingAttributeDisplayerFactory);
+
+var _ThingAttributeTextDisplayer = require('../ThingAttributeTextDisplayer');
+
+var _ThingAttributeTextDisplayer2 = _interopRequireDefault(_ThingAttributeTextDisplayer);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Designer = function (_React$Component) {
+  _inherits(Designer, _React$Component);
+
+  function Designer(props) {
+    _classCallCheck(this, Designer);
+
+    var _this = _possibleConstructorReturn(this, (Designer.__proto__ || Object.getPrototypeOf(Designer)).call(this, props));
+
+    _this.onSubmit = function () {
+
+      _this.props.submitWebsiteDesign({ layout: JSON.stringify(_this.state.design), websiteName: _this.props.websiteName });
+    };
+
+    _this.onBtnClick = function (newItem) {
+      console.log('BUTTON CLICK IN DESIGNER');
+      switch (newItem) {
+        case 'row':
+          var newDesign = _this.state.design.slice();
+          var newElement = _react2.default.createElement('div', { contentEditable: true, className: 'row form-control', style: { 'borderColor': 'black', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } });
+          newDesign.push(newElement);
+          _this.setState({
+            design: newDesign
+          });
+          break;
+        case 'repeatingArea':
+          var newDesign = _this.state.design.slice();
+          var newElement = _react2.default.createElement('div', { contentEditable: true, className: 'row form-control', style: { 'borderColor': 'green', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } });
+          newDesign.push(newElement);
+          _this.setState({
+            design: newDesign
+          });
+          break;
+      }
+    };
+
+    _this.onBtnClick = _this.onBtnClick.bind(_this);
+    _this.onSubmit = _this.onSubmit.bind(_this);
+    _this.state = { design: [] };
+    return _this;
+  }
+
+  _createClass(Designer, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { id: 'designarea' },
+          this.state.design
+        ),
+        _react2.default.createElement(
+          'button',
+          { onClick: function onClick() {
+              return _this2.onBtnClick('row');
+            } },
+          ' Add New Row'
+        ),
+        _react2.default.createElement(
+          'button',
+          { onClick: this.onSubmit },
+          'Submit'
+        )
+      );
+    }
+  }]);
+
+  return Designer;
+}(_react2.default.Component);
+
+exports.default = Designer;
+
+},{"../ThingAttributeDisplayerFactory":2,"../ThingAttributeTextDisplayer":4,"react":317}],19:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
@@ -1522,7 +1628,7 @@ var FourOhFour = function (_React$Component) {
 
 exports.default = FourOhFour;
 
-},{"react":317}],19:[function(require,module,exports){
+},{"react":317}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1695,7 +1801,7 @@ var Home = function (_React$Component) {
 
 exports.default = Home;
 
-},{"../ThingAttributeTextDisplayer":4,"react":317}],20:[function(require,module,exports){
+},{"../ThingAttributeTextDisplayer":4,"react":317}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1789,7 +1895,7 @@ var LoginForm = function (_React$Component) {
 
 exports.default = LoginForm;
 
-},{"react":317}],21:[function(require,module,exports){
+},{"react":317}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2039,7 +2145,7 @@ exports.default = (0, _reduxForm.reduxForm)({
   } // a unique identifier for this form
 })(NewThingForm);
 
-},{"react":317,"redux-form":347}],22:[function(require,module,exports){
+},{"react":317,"redux-form":347}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2086,107 +2192,7 @@ var NewWebisteViewArea = function (_React$Component) {
 
 exports.default = NewWebisteViewArea;
 
-},{"react":317}],23:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _ThingAttributeDisplayerFactory = require('../ThingAttributeDisplayerFactory');
-
-var ThingAttributeDisplayerFactory = _interopRequireWildcard(_ThingAttributeDisplayerFactory);
-
-var _ThingAttributeTextDisplayer = require('../ThingAttributeTextDisplayer');
-
-var _ThingAttributeTextDisplayer2 = _interopRequireDefault(_ThingAttributeTextDisplayer);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var RepeatingUnitDesigner = function (_React$Component) {
-  _inherits(RepeatingUnitDesigner, _React$Component);
-
-  function RepeatingUnitDesigner(props) {
-    _classCallCheck(this, RepeatingUnitDesigner);
-
-    var _this = _possibleConstructorReturn(this, (RepeatingUnitDesigner.__proto__ || Object.getPrototypeOf(RepeatingUnitDesigner)).call(this, props));
-
-    _this.onBtnClick = function (newItem) {
-      switch (newItem) {
-        case 'row':
-          var newDesign = _this.state.design.slice();
-          var newElement = _react2.default.createElement('div', { contentEditable: true, className: 'row form-control', style: { 'borderColor': 'black', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } });
-          newDesign.push(newElement);
-          _this.setState({
-            design: newDesign
-          });
-          break;
-        case 'repeatingArea':
-          var newDesign = _this.state.design.slice();
-          var newElement = _react2.default.createElement('div', { contentEditable: true, className: 'row form-control', style: { 'borderColor': 'green', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } });
-          newDesign.push(newElement);
-          _this.setState({
-            design: newDesign
-          });
-          break;
-      }
-    };
-
-    _this.onBtnClick = _this.onBtnClick.bind(_this);
-    _this.state = { design: [] };
-    return _this;
-  }
-
-  _createClass(RepeatingUnitDesigner, [{
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      console.log(JSON.stringify(this.state.design));
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          'div',
-          { id: 'designarea' },
-          this.state.design
-        ),
-        _react2.default.createElement(
-          'button',
-          { onClick: function onClick() {
-              return _this2.onBtnClick('row');
-            } },
-          ' Add New Row'
-        ),
-        _react2.default.createElement(
-          'button',
-          { onClick: this.onSubmit },
-          'Submit'
-        )
-      );
-    }
-  }]);
-
-  return RepeatingUnitDesigner;
-}(_react2.default.Component);
-
-exports.default = RepeatingUnitDesigner;
-
-},{"../ThingAttributeDisplayerFactory":2,"../ThingAttributeTextDisplayer":4,"react":317}],24:[function(require,module,exports){
+},{"react":317}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2830,6 +2836,45 @@ Object.defineProperty(exports, "__esModule", {
 
 var _reactRedux = require('react-redux');
 
+var _Designer = require('../components/Designer');
+
+var _Designer2 = _interopRequireDefault(_Designer);
+
+var _facade = require('../facade');
+
+var facade = _interopRequireWildcard(_facade);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function mapStateToProps(state) {
+  return {
+    websiteName: state.websiteName
+  };
+}
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    submitWebsiteDesign: function submitWebsiteDesign(data) {
+      dispatch(facade.submitWebsiteDesign(data));
+    }
+  };
+};
+
+var DesignerContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Designer2.default);
+
+exports.default = DesignerContainer;
+
+},{"../components/Designer":18,"../facade":41,"react-redux":208}],38:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactRedux = require('react-redux');
+
 var _LoginForm = require('../components/LoginForm');
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
@@ -2854,7 +2899,7 @@ var LoginFormContainer = (0, _reactRedux.connect)(null, mapDispatchToProps)(_Log
 
 exports.default = LoginFormContainer;
 
-},{"../components/LoginForm":20,"../facade":41,"react-redux":208}],38:[function(require,module,exports){
+},{"../components/LoginForm":21,"../facade":41,"react-redux":208}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2904,56 +2949,7 @@ var NewThingFormContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatc
 
 exports.default = NewThingFormContainer;
 
-},{"../actions/index":5,"../components/NewThingForm":21,"../facade":41,"react-redux":208}],39:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _reactRedux = require('react-redux');
-
-var _RepeatingUnitDesigner = require('../components/RepeatingUnitDesigner');
-
-var _RepeatingUnitDesigner2 = _interopRequireDefault(_RepeatingUnitDesigner);
-
-var _facade = require('../facade');
-
-var facade = _interopRequireWildcard(_facade);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function mapStateToProps(state) {
-  if (state.form.newThingForm.values == null) {
-    return { thingAttributes: [], thingId: state.newThingId };
-  } else {
-    var results = {};
-    for (var i = 0; i < state.form.newThingForm.values.members.length; i++) {
-      var value = state.form.newThingForm.values.members[i];
-      results[value.thingattributename] = { 'typeid': parseInt(value.thingattributetypeid), 'value': value.thingattributeexample };
-    }
-    return { thingAttributes: results, thingId: state.newThingId };
-  }
-}
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    getWebsites: function getWebsites(username) {
-      dispatch(facade.getWebsites(username));
-    },
-    submitCardData: function submitCardData(data) {
-      dispatch(facade.submitCardData(data));
-    }
-  };
-};
-
-var RepeatingUnitDesignerContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_RepeatingUnitDesigner2.default);
-
-exports.default = RepeatingUnitDesignerContainer;
-
-},{"../components/RepeatingUnitDesigner":23,"../facade":41,"react-redux":208}],40:[function(require,module,exports){
+},{"../actions/index":5,"../components/NewThingForm":22,"../facade":41,"react-redux":208}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2999,6 +2995,7 @@ exports.submitCreateAccount = submitCreateAccount;
 exports.submitCreateWebsite = submitCreateWebsite;
 exports.submitLogin = submitLogin;
 exports.submitCardData = submitCardData;
+exports.submitWebsiteDesign = submitWebsiteDesign;
 exports.submitNewThing = submitNewThing;
 exports.submitNewThingInstance = submitNewThingInstance;
 
@@ -3171,6 +3168,31 @@ function submitCardData(data) {
   };
 }
 
+function submitWebsiteDesign(data) {
+  function doFetch(data, dispatch) {
+    return fetch('/api/postnewwebsitelayout', {
+      method: 'POST',
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      console.log(json);
+      dispatch(actions.selectDashboardTab('Apps'));
+      dispatch(actions.selectCurrentState('websiteName'));
+      dispatch(actions.setCurrentWebsiteName(''));
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  }
+
+  return function (dispatch) {
+    var newData = new FormData();
+    newData.append('layout', JSON.stringify(data.layout));
+    newData.append('websiteName', data.websiteName);
+    return doFetch(newData, dispatch);
+  };
+}
+
 function submitNewThing(form) {
   return function (dispatch) {
     return fetch('/postnewthing', {
@@ -3271,6 +3293,10 @@ var _CreateWebsiteViewContainer = require('./containers/CreateWebsiteViewContain
 
 var _CreateWebsiteViewContainer2 = _interopRequireDefault(_CreateWebsiteViewContainer);
 
+var _Designer = require('./components/Designer');
+
+var _Designer2 = _interopRequireDefault(_Designer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var store = (0, _redux.createStore)(_reducers2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default), (0, _reduxPersist.autoRehydrate)());
@@ -3300,6 +3326,7 @@ fetch('/api/getthingattributetypes').then(function (response) {
       _react2.default.createElement(_reactRouter.Route, { path: ':websiteName/creatething', component: _CreateThingContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: 'createaccount', component: _CreateAccountFormContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _LoginFormContainer2.default }),
+      _react2.default.createElement(_reactRouter.Route, { path: 'design', component: _Designer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: ':websiteName', component: _CraigslistViewContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: ':websiteName/createthinginstance', component: _CreateThingInstanceViewContainer2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: 'admin/dashboard', component: _DashboardContainer2.default }),
@@ -3308,7 +3335,7 @@ fetch('/api/getthingattributetypes').then(function (response) {
   )
 ), document.getElementById('root'));
 
-},{"./actions":5,"./components/FourOhFour":18,"./components/Home":19,"./containers/AppContainer":29,"./containers/CraigslistViewContainer":30,"./containers/CreateAccountFormContainer":31,"./containers/CreateThingContainer":32,"./containers/CreateThingInstanceViewContainer":33,"./containers/CreateWebsiteViewContainer":34,"./containers/DashboardContainer":35,"./containers/LoginFormContainer":37,"./reducers":43,"react":317,"react-dom":55,"react-redux":208,"react-router":251,"redux":663,"redux-persist":508,"redux-thunk":657,"whatwg-fetch":678}],43:[function(require,module,exports){
+},{"./actions":5,"./components/Designer":18,"./components/FourOhFour":19,"./components/Home":20,"./containers/AppContainer":29,"./containers/CraigslistViewContainer":30,"./containers/CreateAccountFormContainer":31,"./containers/CreateThingContainer":32,"./containers/CreateThingInstanceViewContainer":33,"./containers/CreateWebsiteViewContainer":34,"./containers/DashboardContainer":35,"./containers/LoginFormContainer":38,"./reducers":43,"react":317,"react-dom":55,"react-redux":208,"react-router":251,"redux":663,"redux-persist":508,"redux-thunk":657,"whatwg-fetch":678}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

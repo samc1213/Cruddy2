@@ -12,8 +12,8 @@ function mapStateToProps(state) {
 
  const mapDispatchToProps = (dispatch) => (
   {
-    submitWebsiteDesign: (layout, websiteName) => {
-      dispatch(facade.submitWebsiteDesign(layout, websiteName))
+    submitWebsiteDesign: (data) => {
+      dispatch(facade.submitWebsiteDesign(data))
     }
   }
 )

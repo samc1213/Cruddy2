@@ -18,6 +18,7 @@ import { getThingAttributeTypes } from './actions'
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
 import CreateThingInstanceViewContainer from './containers/CreateThingInstanceViewContainer'
 import CreateWebsiteViewContainer from './containers/CreateWebsiteViewContainer'
+import Designer from './components/Designer'
 
 
 const store = createStore(reducer,
@@ -46,6 +47,7 @@ render((
         <Route path=":websiteName/creatething" component={CreateThingContainer} />
         <Route path="createaccount" component={CreateAccountFormContainer} />
         <Route path="login" component={LoginFormContainer} />
+        <Route path="design" component={Designer} />
         <Route path=":websiteName" component={CraigslistViewContainer } />
         <Route path=":websiteName/createthinginstance" component={CreateThingInstanceViewContainer} />
         <Route path="admin/dashboard" component={DashboardContainer} />

@@ -12,31 +12,55 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function GetJSX(jsxDescriptions) {
+function GetJSX(websitelayout, repeatinglayout, thinginstances) {
+  console.log("BEGINNING OF JSX BITCH");
+  console.log(websitelayout);
+  console.log(repeatinglayout);
   var result = [];
-  jsxDescriptions.forEach(function (description) {
-    switch (description.element) {
-      case 'div':
-        result.push(getDiv(description.props, description.text));
-    }
+  websitelayout.forEach(function (description) {
+    var newElement = getElement(result, description.element, description.props, description.text, repeatinglayout, thinginstances);
+    result = result.slice().concat(newElement);
   });
   return result;
 }
 
-function getDiv(props, text) {
+function getElement(result, element, props, text, repeatinglayout, thinginstances) {
+  switch (element) {
+    case 'div':
+      return getDiv(props, text, repeatinglayout, thinginstances);
+  }
+}
+
+function getDiv(props, text, repeatinglayout, thinginstances) {
   var className = null;
   if (props.hasOwnProperty('className')) {
     className = props['className'];
+    if (className.includes('repeatingArea') && repeatinglayout != null && thinginstances != null) {
+      return getRepeatingLayout(repeatinglayout, thinginstances);
+    }
   }
   var style = null;
   if (props.hasOwnProperty('style')) {
     style = props['style'];
   }
+
   return _react2.default.createElement(
     'div',
     { className: className, style: style },
     text
   );
+}
+
+function getRepeatingLayout(repeatinglayout, thinginstances) {
+  var result = [];
+  repeatinglayout.forEach(function (description) {
+    console.log(description);
+
+    var newElement = getElement(result, description.element, description.props, description.text, null, null);
+    console.log(newElement);
+    result = result.slice().concat(newElement);
+  });
+  return result;
 }
 
 },{"react":481}],2:[function(require,module,exports){
@@ -713,7 +737,7 @@ var CraigslistView = function (_React$Component) {
         console.log(this.props.layout.data);
         var data = JSON.parse(this.props.layout.data);
         console.log(data);
-        var website = JsxFactory.GetJSX(data.websitelayout);
+        var website = JsxFactory.GetJSX(data.websitelayout, data.repeatinglayout, this.props.thingInstances);
         console.log(website);
 
         return _react2.default.createElement(
@@ -722,7 +746,8 @@ var CraigslistView = function (_React$Component) {
           website
         );
       }
-      // if (this.props.layout.data != null && this.props.thingInstances != null )
+
+      // if (this.props.layout.data.repeatinglayout != null && this.props.thingInstances != null )
       // {
       //   for (var index in this.props.thingInstances)
       //   {
@@ -731,9 +756,9 @@ var CraigslistView = function (_React$Component) {
       //     var newLayoutDataInfo = []
       //     var thingAttributeNames = Object.keys(thingInstance)
       //
-      //     for (var i = 0; i < this.props.layout.data.length; i++)
+      //     for (var i = 0; i < this.props.layout.data.repeatinglayout.length; i++)
       //     {
-      //       var layoutString = this.props.layout.data[i].slice(0);
+      //       var layoutString = this.props.layout.data.repeatinglayout[i].slice(0);
       //       var replacedString = layoutString;
       //       thingAttributeNames.forEach((thingAttributeName) => {
       //         var thingAttributeValue = thingInstance[thingAttributeName].value;
@@ -755,7 +780,7 @@ var CraigslistView = function (_React$Component) {
       //       </div>
       //     )
       // }
-
+      //
       // }
       if (cards.length == 0) {
         cards.push(_react2.default.createElement(_Walkthrough2.default, { bigText: 'This is your website', helpText: 'There\'s nothing here yet. Go ahead and create the first instance of your Thing.' }));
@@ -1576,24 +1601,33 @@ var Designer = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Designer.__proto__ || Object.getPrototypeOf(Designer)).call(this, props));
 
+    _this.getCustomLayout = function (layout) {
+      var result = [];
+      layout.forEach(function (design) {
+        var newDesign = {};
+        newDesign.element = design.type;
+        newDesign.text = document.getElementById(design.props.id).innerText;
+        newDesign.props = design.props;
+        result.push(newDesign);
+      });
+      return result;
+    };
+
     _this.onSubmit = function () {
       if (_this.state.currentDesignState == 'repeatingunit') {
+        var repeatingUnitCustom = _this.getCustomLayout(_this.state.repeatingDesign);
         _this.setState({
-          currentDesignState: 'website'
+          currentDesignState: 'website',
+          repeatingUnitCustomLayout: repeatingUnitCustom
         });
       } else {
-        var stateCopy = _this.state.websiteDesign.slice();
-        console.log(JSON.stringify(stateCopy));
+        var websiteDesignCopy = _this.state.websiteDesign.slice();
+        var repeatingDesignCopy = _this.state.repeatingDesign.slice();
         var result = {};
-        result['websitelayout'] = [];
-        stateCopy.forEach(function (design) {
-          var newDesign = {};
-          newDesign.element = design.type;
-          newDesign.text = document.getElementById(design.props.id).innerText;
-          newDesign.props = design.props;
-          result.websitelayout.push(newDesign);
-        });
-        result['repeatinglayout'] = _this.state.repeatingDesign.slice();
+        result['websitelayout'] = _this.getCustomLayout(websiteDesignCopy);
+        console.log(result);
+        result['repeatinglayout'] = _this.state.repeatingUnitCustomLayout;
+        console.log(result);
         _this.props.submitWebsiteDesign({ layout: JSON.stringify(result), websiteName: _this.props.websiteName });
       }
     };
@@ -1610,6 +1644,10 @@ var Designer = function (_React$Component) {
       }
     };
 
+    _this.getId = function () {
+      return _this.state.currentDesignState + _this.getDesign().length;
+    };
+
     _this.getDesign = function () {
       if (_this.state.currentDesignState == 'website') {
         return _this.state.websiteDesign.slice();
@@ -1621,20 +1659,20 @@ var Designer = function (_React$Component) {
     _this.onBtnClick = function (newItem) {
       switch (newItem) {
         case 'row':
+          var id = _this.getId();
+          var newElement = _react2.default.createElement('div', { id: id, contentEditable: true, className: 'row form-control', style: { 'borderColor': 'black', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } });
           var newDesign = _this.getDesign();
-          var newElement = _react2.default.createElement(
-            'div',
-            { id: newDesign.length, contentEditable: true, className: 'row form-control', style: { 'borderColor': 'black', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } },
-            _react2.default.createElement('div', { className: 'innerDiv' }),
-            ' ',
-            _react2.default.createElement('div', { className: 'secondInnerDiv' })
-          );
           newDesign.push(newElement);
           _this.updateState(newDesign);
           break;
         case 'repeatingArea':
+          var id = _this.getId();
+          var newElement = _react2.default.createElement(
+            'div',
+            { id: id, className: 'row form-control repeatingArea', style: { 'borderColor': 'green', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } },
+            ' Repeating Area Bitch'
+          );
           var newDesign = _this.getDesign();
-          var newElement = _react2.default.createElement('div', { id: newDesign.length, contentEditable: true, className: 'row form-control repeatingArea', style: { 'borderColor': 'green', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } });
           newDesign.push(newElement);
           _this.updateState(newDesign);
           break;
@@ -1644,7 +1682,9 @@ var Designer = function (_React$Component) {
     _this.onBtnClick = _this.onBtnClick.bind(_this);
     _this.onSubmit = _this.onSubmit.bind(_this);
     _this.updateState = _this.updateState.bind(_this);
+    _this.getId = _this.getId.bind(_this);
     _this.getDesign = _this.getDesign.bind(_this);
+    _this.getCustomLayout = _this.getCustomLayout.bind(_this);
     _this.state = { websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit' };
     return _this;
   }
@@ -1655,11 +1695,20 @@ var Designer = function (_React$Component) {
       var _this2 = this;
 
       var design;
+      var websitedesignbuttons = null;
       if (this.state.currentDesignState == 'website') {
         design = this.state.websiteDesign;
+        websitedesignbuttons = [_react2.default.createElement(
+          'button',
+          { onClick: function onClick() {
+              return _this2.onBtnClick('repeatingArea');
+            } },
+          ' Add New Repeating Unit'
+        )];
       } else {
         design = this.state.repeatingDesign;
       }
+
       return _react2.default.createElement(
         'div',
         null,
@@ -1679,7 +1728,8 @@ var Designer = function (_React$Component) {
           'button',
           { onClick: this.onSubmit },
           'Submit'
-        )
+        ),
+        websitedesignbuttons
       );
     }
   }]);

@@ -15,7 +15,7 @@ class CraigslistView extends React.Component {
       console.log(this.props.layout.data)
       var data = JSON.parse(this.props.layout.data)
       console.log(data)
-      var website = JsxFactory.GetJSX(data.websitelayout);
+      var website = JsxFactory.GetJSX(data.websitelayout, data.repeatinglayout, this.props.thingInstances);
       console.log(website);
 
       return (
@@ -24,7 +24,9 @@ class CraigslistView extends React.Component {
         </div>
       );
     }
-    // if (this.props.layout.data != null && this.props.thingInstances != null )
+
+
+    // if (this.props.layout.data.repeatinglayout != null && this.props.thingInstances != null )
     // {
     //   for (var index in this.props.thingInstances)
     //   {
@@ -33,9 +35,9 @@ class CraigslistView extends React.Component {
     //     var newLayoutDataInfo = []
     //     var thingAttributeNames = Object.keys(thingInstance)
     //
-    //     for (var i = 0; i < this.props.layout.data.length; i++)
+    //     for (var i = 0; i < this.props.layout.data.repeatinglayout.length; i++)
     //     {
-    //       var layoutString = this.props.layout.data[i].slice(0);
+    //       var layoutString = this.props.layout.data.repeatinglayout[i].slice(0);
     //       var replacedString = layoutString;
     //       thingAttributeNames.forEach((thingAttributeName) => {
     //         var thingAttributeValue = thingInstance[thingAttributeName].value;
@@ -57,7 +59,7 @@ class CraigslistView extends React.Component {
     //       </div>
     //     )
     // }
-
+    //
     // }
     if (cards.length == 0)
     {

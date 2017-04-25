@@ -13,9 +13,6 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function GetJSX(websitelayout, repeatinglayout, thinginstances) {
-  console.log("BEGINNING OF JSX BITCH");
-  console.log(websitelayout);
-  console.log(repeatinglayout);
   var result = [];
   websitelayout.forEach(function (description) {
     var newElement = getElement(result, description.element, description.props, description.text, repeatinglayout, thinginstances, null);
@@ -36,7 +33,6 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance) {
   if (props.hasOwnProperty('className')) {
     className = props['className'];
     if (className.includes('repeatingArea') && repeatinglayout != null && thinginstances != null) {
-      console.log("repeatinglayoutfetch");
       return getRepeatingLayout(repeatinglayout, thinginstances);
     }
   }
@@ -47,12 +43,10 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance) {
   var replacedString = text.slice(0);
 
   if (repeatinglayout == null && thinginstances == null) {
-    console.log(thingInstance);
     var thingAttributeNames = Object.keys(thingInstance);
     thingAttributeNames.forEach(function (thingAttributeName) {
       var thingAttributeValue = thingInstance[thingAttributeName].value;
       var magicBracketString = '{' + thingAttributeName + '}';
-      console.log(magicBracketString);
       replacedString = replacedString.replace(new RegExp(magicBracketString, 'g'), thingAttributeValue);
     });
   }
@@ -68,13 +62,8 @@ function getRepeatingLayout(repeatinglayout, thinginstances) {
   var result = [];
   for (var index in thinginstances) {
     var thingInstance = thinginstances[index];
-
     repeatinglayout.forEach(function (description) {
-      console.log('newthinginstance');
-      console.log(description);
-
       var newElement = getElement(result, description.element, description.props, description.text, null, null, thingInstance);
-      console.log(newElement);
       result = result.slice().concat(newElement);
     });
   }
@@ -1644,9 +1633,7 @@ var Designer = function (_React$Component) {
         var repeatingDesignCopy = _this.state.repeatingDesign.slice();
         var result = {};
         result['websitelayout'] = _this.getCustomLayout(websiteDesignCopy);
-        console.log(result);
         result['repeatinglayout'] = _this.state.repeatingUnitCustomLayout;
-        console.log(result);
         _this.props.submitWebsiteDesign({ layout: JSON.stringify(result), websiteName: _this.props.websiteName });
       }
     };

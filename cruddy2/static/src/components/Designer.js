@@ -40,9 +40,7 @@ class Designer extends React.Component {
       var repeatingDesignCopy = this.state.repeatingDesign.slice();
       var result = {};
       result['websitelayout'] = this.getCustomLayout(websiteDesignCopy);
-      console.log(result);
       result['repeatinglayout'] = this.state.repeatingUnitCustomLayout;
-      console.log(result);
       this.props.submitWebsiteDesign({layout: JSON.stringify(result), websiteName: this.props.websiteName});
     }
   }

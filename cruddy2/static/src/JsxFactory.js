@@ -2,9 +2,6 @@ import React from 'react'
 
 export function GetJSX(websitelayout, repeatinglayout, thinginstances)
 {
-  console.log("BEGINNING OF JSX BITCH")
-  console.log(websitelayout);
-  console.log(repeatinglayout);
   var result = []
 	websitelayout.forEach((description) => {
     var newElement = getElement(result, description.element, description.props, description.text, repeatinglayout, thinginstances, null);
@@ -29,7 +26,6 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance)
   {
     className = props['className']
     if (className.includes('repeatingArea') && repeatinglayout != null && thinginstances != null) {
-      console.log("repeatinglayoutfetch");
       return getRepeatingLayout(repeatinglayout, thinginstances);
     }
   }
@@ -42,16 +38,12 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance)
 
   if (repeatinglayout == null && thinginstances == null)
   {
-        console.log(thingInstance);
         var thingAttributeNames = Object.keys(thingInstance)
         thingAttributeNames.forEach((thingAttributeName) => {
             var thingAttributeValue = thingInstance[thingAttributeName].value;
             var magicBracketString = '{' + thingAttributeName + '}';
-            console.log(magicBracketString)
             replacedString = replacedString.replace(new RegExp(magicBracketString, 'g'), thingAttributeValue);
           })
-
-
   }
 
 
@@ -64,13 +56,8 @@ function getRepeatingLayout(repeatinglayout, thinginstances)
   for (var index in thinginstances)
   {
       var thingInstance = thinginstances[index];
-
       repeatinglayout.forEach((description) => {
-        console.log('newthinginstance')
-      console.log(description)
-
       var newElement = getElement(result, description.element, description.props, description.text, null, null, thingInstance);
-      console.log(newElement)
       result = result.slice().concat(newElement);
     })
   }

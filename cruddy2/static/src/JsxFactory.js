@@ -26,7 +26,7 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance)
   {
     className = props['className']
     if (className.includes('repeatingArea') && repeatinglayout != null && thinginstances != null) {
-      return getRepeatingLayout(repeatinglayout, thinginstances);
+      var repLayout = getRepeatingLayout(repeatinglayout, thinginstances);
     }
   }
   var style = null;
@@ -46,8 +46,13 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance)
           })
   }
 
-
-  return (<div className={className} style={style}>{replacedString}</div>)
+  if (repLayout == null)
+  {
+    return (<div className={className} style={style}>{replacedString}</div>)
+  }
+  else {
+     return (<div className={className} style={style}>{repLayout}</div>)
+  }
 }
 
 function getRepeatingLayout(repeatinglayout, thinginstances)

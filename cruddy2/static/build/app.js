@@ -33,7 +33,7 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance) {
   if (props.hasOwnProperty('className')) {
     className = props['className'];
     if (className.includes('repeatingArea') && repeatinglayout != null && thinginstances != null) {
-      return getRepeatingLayout(repeatinglayout, thinginstances);
+      var repLayout = getRepeatingLayout(repeatinglayout, thinginstances);
     }
   }
   var style = null;
@@ -51,11 +51,19 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance) {
     });
   }
 
-  return _react2.default.createElement(
-    'div',
-    { className: className, style: style },
-    replacedString
-  );
+  if (repLayout == null) {
+    return _react2.default.createElement(
+      'div',
+      { className: className, style: style },
+      replacedString
+    );
+  } else {
+    return _react2.default.createElement(
+      'div',
+      { className: className, style: style },
+      repLayout
+    );
+  }
 }
 
 function getRepeatingLayout(repeatinglayout, thinginstances) {
@@ -1621,6 +1629,32 @@ var Designer = function (_React$Component) {
       return result;
     };
 
+    _this.onDivClicked = function (id) {
+      var newDesign = _this.getDesign();
+      newDesign.forEach(function (design) {
+        design.props.style['outlineColor'] = 'None';
+        design.props.style['outlineStyle'] = 'None';
+        design.props.style['borderColor'] = 'black';
+      });
+      var elementThatClicked = newDesign.filter(function (design) {
+        return design.props.id == id;
+      })[0];
+      var size = elementThatClicked.props.className.slice(7);
+      _this.setState({
+        selectedDivID: id,
+        size: size
+      });
+      var newStyle = Object.assign({}, elementThatClicked.props.style);
+      newStyle['outlineColor'] = 'red';
+      newStyle['outlineStyle'] = 'dashed';
+      newStyle['outlineWidth'] = '2.5px';
+      var elementThatClickedCopy = _react2.default.cloneElement(elementThatClicked, { style: newStyle });
+      newDesign[newDesign.findIndex(function (design) {
+        return design.props.id == id;
+      })] = elementThatClickedCopy;
+      _this.updateState(newDesign);
+    };
+
     _this.onSubmit = function () {
       if (_this.state.currentDesignState == 'repeatingunit') {
         var repeatingUnitCustom = _this.getCustomLayout(_this.state.repeatingDesign);
@@ -1662,11 +1696,31 @@ var Designer = function (_React$Component) {
       }
     };
 
+    _this.changeSize = function (event) {
+      _this.setState({
+        size: event.target.value
+      });
+      if (_this.state.selectedDivID != null) {
+        var newDesign = _this.getDesign();
+        var elementThatClicked = newDesign.filter(function (design) {
+          return design.props.id == _this.state.selectedDivID;
+        })[0];
+        var newClassName = "col-md-" + event.target.value;
+        var elementThatClickedCopy = _react2.default.cloneElement(elementThatClicked, { className: newClassName });
+        newDesign[newDesign.findIndex(function (design) {
+          return design.props.id == _this.state.selectedDivID;
+        })] = elementThatClickedCopy;
+        _this.updateState(newDesign);
+      }
+    };
+
     _this.onBtnClick = function (newItem) {
       switch (newItem) {
         case 'row':
           var id = _this.getId();
-          var newElement = _react2.default.createElement('div', { id: id, contentEditable: true, className: 'row form-control', style: { 'borderColor': 'black', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } });
+          var newElement = _react2.default.createElement('div', { onClick: function onClick() {
+              return _this.onDivClicked(id);
+            }, id: id, contentEditable: true, className: 'col-md-12', style: { 'borderColor': 'black', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } });
           var newDesign = _this.getDesign();
           newDesign.push(newElement);
           _this.updateState(newDesign);
@@ -1675,7 +1729,7 @@ var Designer = function (_React$Component) {
           var id = _this.getId();
           var newElement = _react2.default.createElement(
             'div',
-            { id: id, className: 'row form-control repeatingArea', style: { 'borderColor': 'green', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } },
+            { id: id, className: 'col-md-12 repeatingArea', style: { 'borderColor': 'green', 'borderStyle': 'solid', 'contentEditable': 'true' } },
             ' Repeating Area Bitch'
           );
           var newDesign = _this.getDesign();
@@ -1691,7 +1745,8 @@ var Designer = function (_React$Component) {
     _this.getId = _this.getId.bind(_this);
     _this.getDesign = _this.getDesign.bind(_this);
     _this.getCustomLayout = _this.getCustomLayout.bind(_this);
-    _this.state = { websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit' };
+    _this.changeSize = _this.changeSize.bind(_this);
+    _this.state = { websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12 };
     return _this;
   }
 
@@ -1714,28 +1769,55 @@ var Designer = function (_React$Component) {
       } else {
         design = this.state.repeatingDesign;
       }
+      var options = [];
+      var select = [];
+      if (this.state.selectedDivID != null) {
+        for (var i = 1; i < 13; i++) {
+          options.push(_react2.default.createElement(
+            'option',
+            { value: i },
+            ' ',
+            i,
+            ' '
+          ));
+        }
+        select.push(_react2.default.createElement(
+          'select',
+          { onChange: this.changeSize, value: this.state.size },
+          options
+        ));
+      }
 
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
           'div',
-          { id: 'designarea' },
-          design
+          { style: { position: 'absolute', width: '200px', right: '0', height: '100%', backgroundColor: 'gray', zIndex: 3 } },
+          select
         ),
         _react2.default.createElement(
-          'button',
-          { onClick: function onClick() {
-              return _this2.onBtnClick('row');
-            } },
-          ' Add New Row'
-        ),
-        _react2.default.createElement(
-          'button',
-          { onClick: this.onSubmit },
-          'Submit'
-        ),
-        websitedesignbuttons
+          'div',
+          { id: 'designarea', style: { marginRight: "210px" } },
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            design
+          ),
+          _react2.default.createElement(
+            'button',
+            { onClick: function onClick() {
+                return _this2.onBtnClick('row');
+              } },
+            ' Add New Row'
+          ),
+          _react2.default.createElement(
+            'button',
+            { onClick: this.onSubmit },
+            'Submit'
+          ),
+          websitedesignbuttons
+        )
       );
     }
   }]);

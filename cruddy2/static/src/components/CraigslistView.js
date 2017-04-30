@@ -26,7 +26,7 @@ class CraigslistView extends React.Component {
     }
 
 
-  
+
     if (cards.length == 0)
     {
       cards.push(<Walkthrough bigText="This is your website" helpText="There's nothing here yet. Go ahead and create the first instance of your Thing." />)

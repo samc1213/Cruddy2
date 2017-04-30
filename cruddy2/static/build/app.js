@@ -1603,6 +1603,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1631,18 +1633,30 @@ var Designer = function (_React$Component) {
 
     _this.onDivClicked = function (id) {
       var newDesign = _this.getDesign();
-      newDesign.forEach(function (design) {
-        design.props.style['outlineColor'] = 'None';
-        design.props.style['outlineStyle'] = 'None';
-        design.props.style['borderColor'] = 'black';
+      newDesign.forEach(function (design, i) {
+        var newDesignStyle = Object.assign({}, design.props.style);
+        newDesignStyle['outlineColor'] = 'None';
+        newDesignStyle['outlineStyle'] = 'None';
+        newDesign[i] = _react2.default.cloneElement(design, { style: newDesignStyle });
       });
       var elementThatClicked = newDesign.filter(function (design) {
         return design.props.id == id;
       })[0];
+      console.log(elementThatClicked);
       var size = elementThatClicked.props.className.slice(7);
+      var borderColor = elementThatClicked.props.style['borderColor'];
+      var color = elementThatClicked.props.style['color'];
+      var backgroundColor = elementThatClicked.props.style['backgroundColor'];
+      var borderStyle = elementThatClicked.props.style['borderStyle'];
+      var borderWidth = elementThatClicked.props.style['borderWidth'];
       _this.setState({
         selectedDivID: id,
-        size: size
+        size: size,
+        borderColor: borderColor,
+        color: color,
+        backgroundColor: backgroundColor,
+        borderStyle: borderStyle,
+        borderWidth: borderWidth
       });
       var newStyle = Object.assign({}, elementThatClicked.props.style);
       newStyle['outlineColor'] = 'red';
@@ -1652,19 +1666,36 @@ var Designer = function (_React$Component) {
       newDesign[newDesign.findIndex(function (design) {
         return design.props.id == id;
       })] = elementThatClickedCopy;
-      _this.updateState(newDesign);
+      _this.updateState(newDesign, function () {
+        return true;
+      });
     };
 
     _this.onSubmit = function () {
       if (_this.state.currentDesignState == 'repeatingunit') {
-        var repeatingUnitCustom = _this.getCustomLayout(_this.state.repeatingDesign);
+        var repeatingDesignCopy = _this.state.repeatingDesign.slice();
+        repeatingDesignCopy.forEach(function (design, i) {
+          var newDesignStyle = Object.assign({}, design.props.style);
+          newDesignStyle['outlineColor'] = 'None';
+          newDesignStyle['outlineStyle'] = 'None';
+          repeatingDesignCopy[i] = _react2.default.cloneElement(design, { style: newDesignStyle });
+        });
+        var repeatingUnitCustom = _this.getCustomLayout(repeatingDesignCopy);
         _this.setState({
           currentDesignState: 'website',
           repeatingUnitCustomLayout: repeatingUnitCustom
         });
       } else {
         var websiteDesignCopy = _this.state.websiteDesign.slice();
-        var repeatingDesignCopy = _this.state.repeatingDesign.slice();
+        websiteDesignCopy.forEach(function (design, i) {
+          var newDesignStyle = Object.assign({}, design.props.style);
+          newDesignStyle['outlineColor'] = 'None';
+          newDesignStyle['outlineStyle'] = 'None';
+          if (design.props.className.includes('repeatingArea')) {
+            newDesignStyle['borderStyle'] = 'None';
+          }
+          websiteDesignCopy[i] = _react2.default.cloneElement(design, { style: newDesignStyle });
+        });
         var result = {};
         result['websitelayout'] = _this.getCustomLayout(websiteDesignCopy);
         result['repeatinglayout'] = _this.state.repeatingUnitCustomLayout;
@@ -1672,15 +1703,15 @@ var Designer = function (_React$Component) {
       }
     };
 
-    _this.updateState = function (design) {
+    _this.updateState = function (design, callback) {
       if (_this.state.currentDesignState == 'website') {
         _this.setState({
           websiteDesign: design
-        });
+        }, callback);
       } else {
         _this.setState({
           repeatingDesign: design
-        });
+        }, callback);
       }
     };
 
@@ -1710,7 +1741,30 @@ var Designer = function (_React$Component) {
         newDesign[newDesign.findIndex(function (design) {
           return design.props.id == _this.state.selectedDivID;
         })] = elementThatClickedCopy;
-        _this.updateState(newDesign);
+        _this.updateState(newDesign, function (state) {
+          return true;
+        });
+      }
+    };
+
+    _this.changeColor = function (event, styleName) {
+      var thingToAppend = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+      _this.setState(_defineProperty({}, styleName, event.target.value));
+      if (_this.state.selectedDivID != null) {
+        var newDesign = _this.getDesign();
+        var elementThatClicked = newDesign.filter(function (design) {
+          return design.props.id == _this.state.selectedDivID;
+        })[0];
+        var newStyle = Object.assign({}, elementThatClicked.props.style);
+        newStyle[styleName] = event.target.value;
+        var elementThatClickedCopy = _react2.default.cloneElement(elementThatClicked, { style: newStyle });
+        newDesign[newDesign.findIndex(function (design) {
+          return design.props.id == _this.state.selectedDivID;
+        })] = elementThatClickedCopy;
+        _this.updateState(newDesign, function () {
+          return true;
+        });
       }
     };
 
@@ -1720,10 +1774,13 @@ var Designer = function (_React$Component) {
           var id = _this.getId();
           var newElement = _react2.default.createElement('div', { onClick: function onClick() {
               return _this.onDivClicked(id);
-            }, id: id, contentEditable: true, className: 'col-md-12', style: { 'borderColor': 'black', 'height': '100px', 'borderStyle': 'solid', 'contentEditable': 'true' } });
+            }, id: id, contentEditable: true, className: 'col-md-12', style: { 'height': '100px', 'borderStyle': 'None', 'contentEditable': 'true', 'borderColor': 'Black', 'color': 'Black', 'backgroundColor': 'None', 'borderWidth': '2px' } });
           var newDesign = _this.getDesign();
           newDesign.push(newElement);
-          _this.updateState(newDesign);
+          _this.updateState(newDesign, function () {
+            return _this.onDivClicked(id);
+          });
+
           break;
         case 'repeatingArea':
           var id = _this.getId();
@@ -1734,7 +1791,9 @@ var Designer = function (_React$Component) {
           );
           var newDesign = _this.getDesign();
           newDesign.push(newElement);
-          _this.updateState(newDesign);
+          _this.updateState(newDesign, function () {
+            return true;
+          });
           break;
       }
     };
@@ -1746,7 +1805,8 @@ var Designer = function (_React$Component) {
     _this.getDesign = _this.getDesign.bind(_this);
     _this.getCustomLayout = _this.getCustomLayout.bind(_this);
     _this.changeSize = _this.changeSize.bind(_this);
-    _this.state = { websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12 };
+    _this.changeColor = _this.changeColor.bind(_this);
+    _this.state = { websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12, borderColor: 'None', color: 'Black', backgroundColor: 'None', borderStyle: 'None', borderWidth: '2px' };
     return _this;
   }
 
@@ -1769,11 +1829,19 @@ var Designer = function (_React$Component) {
       } else {
         design = this.state.repeatingDesign;
       }
-      var options = [];
-      var select = [];
+      var selects = [];
+      var colors = ['AliceBlue', 'AntiqueWhite', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque', 'Black', 'BlanchedAlmond', 'Blue', 'BlueViolet', 'Brown', 'BurlyWood', 'CadetBlue', 'Chartreuse', 'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan', 'DarkBlue', 'DarkCyan', 'DarkGoldenRod', 'DarkGray', 'DarkGrey', 'DarkGreen', 'DarkKhaki', 'DarkMagenta', 'DarkOliveGreen', 'DarkOrange', 'DarkOrchid', 'DarkRed', 'DarkSalmon', 'DarkSeaGreen', 'DarkSlateBlue', 'DarkSlateGray', 'DarkSlateGrey', 'DarkTurquoise', 'DarkViolet', 'DeepPink', 'DeepSkyBlue', 'DimGray', 'DimGrey', 'DodgerBlue', 'FireBrick', 'FloralWhite', 'ForestGreen', 'Fuchsia', 'Gainsboro', 'GhostWhite', 'Gold', 'GoldenRod', 'Gray', 'Grey', 'Green', 'GreenYellow', 'HoneyDew', 'HotPink', 'IndianRed', 'Indigo', 'Ivory', 'Khaki', 'Lavender', 'LavenderBlush', 'LawnGreen', 'LemonChiffon', 'LightBlue', 'LightCoral', 'LightCyan', 'LightGoldenRodYellow', 'LightGray', 'LightGrey', 'LightGreen', 'LightPink', 'LightSalmon', 'LightSeaGreen', 'LightSkyBlue', 'LightSlateGray', 'LightSlateGrey', 'LightSteelBlue', 'LightYellow', 'Lime', 'LimeGreen', 'Linen', 'Magenta', 'Maroon', 'MediumAquaMarine', 'MediumBlue', 'MediumOrchid', 'MediumPurple', 'MediumSeaGreen', 'MediumSlateBlue', 'MediumSpringGreen', 'MediumTurquoise', 'MediumVioletRed', 'MidnightBlue', 'MintCream', 'MistyRose', 'Moccasin', 'NavajoWhite', 'Navy', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'RebeccaPurple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue', 'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'Tan', 'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White', 'WhiteSmoke', 'Yellow', 'YellowGreen'];
+      var nonAbledColors = colors.slice();
+      var borderStyles = ['None', 'Dotted', 'Dashed', 'Solid', 'Double'];
+      nonAbledColors.unshift('None');
       if (this.state.selectedDivID != null) {
+        var divSizeOptions = [];
+        var thicknessOptions = [];
+        var colorOptions = [];
+        var nonAbledColorOptions = [];
+        var borderStyleOptions = [];
         for (var i = 1; i < 13; i++) {
-          options.push(_react2.default.createElement(
+          divSizeOptions.push(_react2.default.createElement(
             'option',
             { value: i },
             ' ',
@@ -1781,10 +1849,113 @@ var Designer = function (_React$Component) {
             ' '
           ));
         }
-        select.push(_react2.default.createElement(
+        for (var i = 1; i < 20; i++) {
+          thicknessOptions.push(_react2.default.createElement(
+            'option',
+            { value: i + 'px' },
+            i + 'px',
+            ' '
+          ));
+        }
+        colors.forEach(function (color) {
+          colorOptions.push(_react2.default.createElement(
+            'option',
+            { value: color },
+            ' ',
+            color,
+            ' '
+          ));
+        });
+        nonAbledColors.forEach(function (color) {
+          nonAbledColorOptions.push(_react2.default.createElement(
+            'option',
+            { value: color },
+            ' ',
+            color,
+            ' '
+          ));
+        });
+        borderStyles.forEach(function (borderStyle) {
+          borderStyleOptions.push(_react2.default.createElement(
+            'option',
+            { value: borderStyle },
+            ' ',
+            borderStyle,
+            ' '
+          ));
+        });
+        selects.push(_react2.default.createElement(
+          'div',
+          null,
+          ' Border Style '
+        ));
+        selects.push(_react2.default.createElement(
+          'select',
+          { onChange: function onChange(e) {
+              return _this2.changeColor(e, 'borderStyle');
+            }, value: this.state.borderStyle },
+          ' ',
+          borderStyleOptions,
+          ' '
+        ));
+        selects.push(_react2.default.createElement(
+          'div',
+          null,
+          'Border Color'
+        ));
+        selects.push(_react2.default.createElement(
+          'select',
+          { onChange: function onChange(e) {
+              return _this2.changeColor(e, 'borderColor');
+            }, value: this.state.borderColor },
+          colorOptions
+        ));
+        selects.push(_react2.default.createElement(
+          'div',
+          null,
+          ' Border Thickness '
+        ));
+        selects.push(_react2.default.createElement(
+          'select',
+          { onChange: function onChange(e) {
+              return _this2.changeColor(e, 'borderWidth');
+            }, value: this.state.borderWidth },
+          ' ',
+          thicknessOptions
+        ));
+        selects.push(_react2.default.createElement(
+          'div',
+          null,
+          'Text Color'
+        ));
+        selects.push(_react2.default.createElement(
+          'select',
+          { onChange: function onChange(e) {
+              return _this2.changeColor(e, 'color');
+            }, value: this.state.color },
+          colorOptions
+        ));
+        selects.push(_react2.default.createElement(
+          'div',
+          null,
+          'Background Color'
+        ));
+        selects.push(_react2.default.createElement(
+          'select',
+          { onChange: function onChange(e) {
+              return _this2.changeColor(e, 'backgroundColor');
+            }, value: this.state.backgroundColor },
+          nonAbledColorOptions
+        ));
+        selects.push(_react2.default.createElement(
+          'div',
+          null,
+          'Width (out of 12)'
+        ));
+        selects.push(_react2.default.createElement(
           'select',
           { onChange: this.changeSize, value: this.state.size },
-          options
+          divSizeOptions
         ));
       }
 
@@ -1794,7 +1965,7 @@ var Designer = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { style: { position: 'absolute', width: '200px', right: '0', height: '100%', backgroundColor: 'gray', zIndex: 3 } },
-          select
+          selects
         ),
         _react2.default.createElement(
           'div',

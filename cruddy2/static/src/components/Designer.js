@@ -33,9 +33,10 @@ class Designer extends React.Component {
      {cssStyle: 'color', choices: colors, title: 'Text Color', default: 'Black'},
      {cssStyle: 'fontSize', choices: this.getPixelsInRange(5, 60), title: 'Text Size', default: '15px'},
      {cssStyle: 'textAlign', choices: ['Left', 'Right', 'Center'], title: 'Text Alignment', default: 'Left'},
-     {cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Font Style', default: 'Arial'},
+     {cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Text Style', default: 'Arial'},
      {cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal'},
-     {cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None'}],
+     {cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None'},
+     {cssStyle: 'height', choices: this.getPixelsInRange(5, 400), title: 'Height', default: '100px'}],
     websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12,
     borderColor: 'None', color: 'Black', backgroundColor: 'None', borderWidth: '2px'};
 
@@ -121,7 +122,7 @@ class Designer extends React.Component {
 
   getPixelsInRange = (start, end) => {
     var options = [];
-    for (var i = start; i < end; i++){
+    for (var i = start; i <= end; i++){
       options.push(i + 'px');
     }
     return options;
@@ -196,7 +197,7 @@ class Designer extends React.Component {
       case 'row':
         var id = this.getId();
         var cssStyle = this.state.options[0].cssStyle;
-        var style = {'height': '100px', 'contentEditable': 'true'}
+        var style = {'contentEditable': 'true', 'overflow':'hidden'}
         this.state.options.forEach((option) =>{
           style[option.cssStyle] = option.default;
         })
@@ -248,18 +249,26 @@ class Designer extends React.Component {
 
     return (
         <div>
-          <div style={{position: 'absolute', width: '200px', right:'0', height: '100%', backgroundColor: 'gray', zIndex: 3}}>
+          <div style={{position: 'absolute', width: '200px', top:'0', bottom:'0', paddingTop:'54px', paddingBottom:'54px', right:'0', backgroundColor: 'gray', zIndex: 1, overflowY: 'scroll', overflowX: 'hidden'}}>
             {selects}
           </div>
-          <div id="designarea" style={{ marginRight: "210px"}}>
+          <div id="designarea" style={{ marginRight: "210px", padding: "20px", position: 'absolute', top:'50px', bottom:'0', right: '0', left: '0', overflowY: 'scroll', overflowX: 'hidden'}}>
             <div className="row">
               {design}
             </div>
-            <button onClick = {() => this.onBtnClick('row')}> Add New Row</button>
-            <button onClick = {this.onSubmit}>Submit</button>
+          </div>
+          <div id="bottomarea" style={{position: 'fixed',
+          zIndex: '5',
+          bottom: '0',
+          left: '0',
+          width: '100%',
+          height: '50px',
+          backgroundColor: 'gray',
+          borderTop: '3px solid black'}}>
+            <button className="btn btn-default" onClick = {() => this.onBtnClick('row')}> Add New Row</button>
+            <button className="btn btn-default" onClick = {this.onSubmit}>Submit</button>
             {websitedesignbuttons}
           </div>
-
         </div>
     );
   }

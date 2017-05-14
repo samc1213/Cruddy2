@@ -42,7 +42,7 @@ class App extends React.Component {
 
     return (
       <div>
-      <nav className="navbar navbar-light bg-faded">
+      <nav className="navbar navbar-light bg-faded" style={{marginBottom: "-50px", zIndex: "90000500"}}>
         <div className="container-fluid">
         <div className="navbar-header">
           <a className="navbar-brand" href="/">Cruddy2</a>
@@ -55,7 +55,7 @@ class App extends React.Component {
         </ul>
         </div>
       </nav>
-    <div>
+    <div style = {{paddingTop: "50px", position: "absolute", top: "0", bottom: "0", left: "0", right: "0", zIndex:"-900000500"}}>
       {this.props.children}
     </div>
     </div>

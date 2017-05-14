@@ -643,7 +643,7 @@ var App = function (_React$Component) {
         null,
         _react2.default.createElement(
           'nav',
-          { className: 'navbar navbar-light bg-faded' },
+          { className: 'navbar navbar-light bg-faded', style: { marginBottom: "-50px", zIndex: "90000500" } },
           _react2.default.createElement(
             'div',
             { className: 'container-fluid' },
@@ -670,7 +670,7 @@ var App = function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          null,
+          { style: { paddingTop: "50px", position: "absolute", top: "0", bottom: "0", left: "0", right: "0", zIndex: "-900000500" } },
           this.props.children
         )
       );
@@ -1700,7 +1700,7 @@ var Designer = function (_React$Component) {
 
     _this.getPixelsInRange = function (start, end) {
       var options = [];
-      for (var i = start; i < end; i++) {
+      for (var i = start; i <= end; i++) {
         options.push(i + 'px');
       }
       return options;
@@ -1776,7 +1776,7 @@ var Designer = function (_React$Component) {
         case 'row':
           var id = _this.getId();
           var cssStyle = _this.state.options[0].cssStyle;
-          var style = { 'height': '100px', 'contentEditable': 'true' };
+          var style = { 'contentEditable': 'true', 'overflow': 'hidden' };
           _this.state.options.forEach(function (option) {
             style[option.cssStyle] = option.default;
           });
@@ -1819,7 +1819,7 @@ var Designer = function (_React$Component) {
     var nonAbledColors = colors.slice();
     nonAbledColors.unshift('None');
 
-    _this.state = { options: [{ cssStyle: 'borderStyle', choices: ['None', 'Dotted', 'Dashed', 'Solid', 'Double'], title: 'Border Style', default: 'None' }, { cssStyle: 'borderColor', choices: colors, title: 'Border Color', default: 'Black' }, { cssStyle: 'borderWidth', choices: _this.getPixelsInRange(1, 20), title: 'Border Thickness', default: '2px' }, { cssStyle: 'borderRadius', choices: _this.getPixelsInRange(0, 200), title: 'Border Radius', default: '0px' }, { cssStyle: 'color', choices: colors, title: 'Text Color', default: 'Black' }, { cssStyle: 'fontSize', choices: _this.getPixelsInRange(5, 60), title: 'Text Size', default: '15px' }, { cssStyle: 'textAlign', choices: ['Left', 'Right', 'Center'], title: 'Text Alignment', default: 'Left' }, { cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Font Style', default: 'Arial' }, { cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal' }, { cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None' }],
+    _this.state = { options: [{ cssStyle: 'borderStyle', choices: ['None', 'Dotted', 'Dashed', 'Solid', 'Double'], title: 'Border Style', default: 'None' }, { cssStyle: 'borderColor', choices: colors, title: 'Border Color', default: 'Black' }, { cssStyle: 'borderWidth', choices: _this.getPixelsInRange(1, 20), title: 'Border Thickness', default: '2px' }, { cssStyle: 'borderRadius', choices: _this.getPixelsInRange(0, 200), title: 'Border Radius', default: '0px' }, { cssStyle: 'color', choices: colors, title: 'Text Color', default: 'Black' }, { cssStyle: 'fontSize', choices: _this.getPixelsInRange(5, 60), title: 'Text Size', default: '15px' }, { cssStyle: 'textAlign', choices: ['Left', 'Right', 'Center'], title: 'Text Alignment', default: 'Left' }, { cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Text Style', default: 'Arial' }, { cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal' }, { cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None' }, { cssStyle: 'height', choices: _this.getPixelsInRange(5, 400), title: 'Height', default: '100px' }],
       websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12,
       borderColor: 'None', color: 'Black', backgroundColor: 'None', borderWidth: '2px' };
 
@@ -1906,27 +1906,38 @@ var Designer = function (_React$Component) {
         null,
         _react2.default.createElement(
           'div',
-          { style: { position: 'absolute', width: '200px', right: '0', height: '100%', backgroundColor: 'gray', zIndex: 3 } },
+          { style: { position: 'absolute', width: '200px', top: '0', bottom: '0', paddingTop: '54px', paddingBottom: '54px', right: '0', backgroundColor: 'gray', zIndex: 1, overflowY: 'scroll', overflowX: 'hidden' } },
           selects
         ),
         _react2.default.createElement(
           'div',
-          { id: 'designarea', style: { marginRight: "210px" } },
+          { id: 'designarea', style: { marginRight: "210px", padding: "20px", position: 'absolute', top: '50px', bottom: '0', right: '0', left: '0', overflowY: 'scroll', overflowX: 'hidden' } },
           _react2.default.createElement(
             'div',
             { className: 'row' },
             design
-          ),
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { id: 'bottomarea', style: { position: 'fixed',
+              zIndex: '5',
+              bottom: '0',
+              left: '0',
+              width: '100%',
+              height: '50px',
+              backgroundColor: 'gray',
+              borderTop: '3px solid black' } },
           _react2.default.createElement(
             'button',
-            { onClick: function onClick() {
+            { className: 'btn btn-default', onClick: function onClick() {
                 return _this2.onBtnClick('row');
               } },
             ' Add New Row'
           ),
           _react2.default.createElement(
             'button',
-            { onClick: this.onSubmit },
+            { className: 'btn btn-default', onClick: this.onSubmit },
             'Submit'
           ),
           websitedesignbuttons

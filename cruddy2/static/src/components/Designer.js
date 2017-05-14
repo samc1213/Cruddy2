@@ -6,15 +6,16 @@ import ThingAttributeTextDisplayer from '../ThingAttributeTextDisplayer'
 class Designer extends React.Component {
   constructor(props) {
     super(props);
-    this.onBtnClick = this.onBtnClick.bind(this);
+    this.onAddNewRow = this.onAddNewRow.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getId = this.getId.bind(this);
     this.getDesign = this.getDesign.bind(this);
     this.getCustomLayout = this.getCustomLayout.bind(this);
     this.changeSize = this.changeSize.bind(this);
-    this.changeColor = this.changeColor.bind(this);
+    this.changeStyle = this.changeStyle.bind(this);
     this.getPixelsInRange = this.getPixelsInRange.bind(this);
+    this.onAddThingAttributeName = this.onAddThingAttributeName.bind(this);
     var colors = ['AliceBlue','AntiqueWhite','Aqua','Aquamarine','Azure','Beige','Bisque','Black','BlanchedAlmond','Blue','BlueViolet','Brown','BurlyWood','CadetBlue','Chartreuse','Chocolate','Coral','CornflowerBlue','Cornsilk','Crimson','Cyan','DarkBlue','DarkCyan','DarkGoldenRod'
     ,'DarkGray','DarkGrey','DarkGreen','DarkKhaki','DarkMagenta','DarkOliveGreen','DarkOrange','DarkOrchid','DarkRed','DarkSalmon','DarkSeaGreen','DarkSlateBlue','DarkSlateGray','DarkSlateGrey','DarkTurquoise','DarkViolet','DeepPink','DeepSkyBlue','DimGray','DimGrey','DodgerBlue','FireBrick','FloralWhite','ForestGreen','Fuchsia'
     ,'Gainsboro','GhostWhite','Gold','GoldenRod','Gray','Grey','Green','GreenYellow','HoneyDew','HotPink','IndianRed','Indigo','Ivory','Khaki','Lavender','LavenderBlush','LawnGreen','LemonChiffon','LightBlue','LightCoral',
@@ -37,13 +38,13 @@ class Designer extends React.Component {
      {cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal'},
      {cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None'},
      {cssStyle: 'height', choices: this.getPixelsInRange(5, 400), title: 'Height', default: '100px'}],
-    websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12,
-    borderColor: 'None', color: 'Black', backgroundColor: 'None', borderWidth: '2px'};
+    websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12};
 
     this.state.options.forEach((option) => {
       this.state[option.cssStyle] = option.default;
     });
   }
+
 
   getCustomLayout = (layout) => {
     var result = []
@@ -57,16 +58,23 @@ class Designer extends React.Component {
     return result;
   }
 
+  onDelete = () => {
+    if (this.state.selectedDivID != null)
+    {
+      var newDesign = this.getDesign();
+        this.updateState(newDesign.filter((design) => design.props.id !== this.state.selectedDivID), () => true);
+    }
+  }
+
   onDivClicked = (id) => {
     var newDesign = this.getDesign();
     newDesign.forEach((design, i) => {
       var newDesignStyle = Object.assign({}, design.props.style)
-      newDesignStyle['outlineColor'] = 'None'
-      newDesignStyle['outlineStyle'] = 'None'
+      newDesignStyle['outlineColor'] = 'WhiteSmoke'
+      newDesignStyle['outlineStyle'] = 'dashed'
       newDesign[i] = React.cloneElement(design, {style: newDesignStyle});
     });
     var elementThatClicked = newDesign.filter(design =>  design.props.id == id)[0];
-    console.log(elementThatClicked);
     var size = elementThatClicked.props.className.slice(7);
     this.state.options.forEach((option) => {
       var style = elementThatClicked.props.style[option.cssStyle];
@@ -84,6 +92,7 @@ class Designer extends React.Component {
     var elementThatClickedCopy = React.cloneElement(elementThatClicked, {style: newStyle});
     newDesign[newDesign.findIndex(design =>  design.props.id == id)] = elementThatClickedCopy;
     this.updateState(newDesign, () => true);
+    $('#designarea').scrollTop($('#designarea')[0].scrollHeight);
   }
 
   onSubmit = () => {
@@ -174,7 +183,7 @@ class Designer extends React.Component {
     }
   }
 
-  changeColor = (event, styleName, thingToAppend='') =>
+  changeStyle = (event, styleName, thingToAppend='') =>
   {
     this.setState({
       [styleName]: event.target.value,
@@ -190,7 +199,7 @@ class Designer extends React.Component {
     }
   }
 
-  onBtnClick = (newItem) =>
+  onAddNewRow = (newItem) =>
   {
     switch (newItem)
     {
@@ -217,16 +226,29 @@ class Designer extends React.Component {
     }
   }
 
+  onAddThingAttributeName = (thingAttributeName) =>
+  {
+    if (this.state.selectedDivID != null){
+      console.log(thingAttributeName)
+      document.getElementById(this.state.selectedDivID).innerText += '{' + thingAttributeName + '}';
+    }
+  }
+
   render() {
     var design;
     var websitedesignbuttons = null;
     if (this.state.currentDesignState == 'website')
     {
       design = this.state.websiteDesign;
-      websitedesignbuttons = [<button onClick = {() => this.onBtnClick('repeatingArea')}> Add New Repeating Unit</button>]
+      websitedesignbuttons = [<button onClick = {() => this.onAddNewRow('repeatingArea')}> Add New Repeating Unit</button>]
     }
     else {
       design = this.state.repeatingDesign;
+      websitedesignbuttons = [<span >Add Thing Attribute:</span>];
+      for (let thingattributeid in this.props.thingAttributes){
+        websitedesignbuttons.push( <button onClick = {() => this.onAddThingAttributeName(this.props.thingAttributes[thingattributeid].name.slice())}> {this.props.thingAttributes[thingattributeid].name.slice()} </button>);
+      }
+      console.log(websitedesignbuttons);
     }
     var selects = [];
 
@@ -237,7 +259,7 @@ class Designer extends React.Component {
           styleChoices.push(<option value = {choice}> {choice} </option>);
         })
         selects.push(<div> {option.title} </div>)
-        selects.push(<select onChange = {(e) => this.changeColor(e, option.cssStyle)} value = {this.state[option.cssStyle]}> {styleChoices} </select>);
+        selects.push(<select onChange = {(e) => this.changeStyle(e, option.cssStyle)} value = {this.state[option.cssStyle]}> {styleChoices} </select>);
       })
       var divSizeOptions = [];
       for (var i = 1; i < 13; i ++){
@@ -245,6 +267,7 @@ class Designer extends React.Component {
       }
       selects.push(<div>Width (out of 12)</div>)
       selects.push(<select onChange = {this.changeSize} value = {this.state.size}>{divSizeOptions}</select>);
+      selects.push(<div><button className="btn btn-danger" onClick = {this.onDelete}>Delete</button></div>);
     }
 
     return (
@@ -252,7 +275,7 @@ class Designer extends React.Component {
           <div style={{position: 'absolute', width: '200px', top:'0', bottom:'0', paddingTop:'54px', paddingBottom:'54px', right:'0', backgroundColor: 'gray', zIndex: 1, overflowY: 'scroll', overflowX: 'hidden'}}>
             {selects}
           </div>
-          <div id="designarea" style={{ marginRight: "210px", padding: "20px", position: 'absolute', top:'50px', bottom:'0', right: '0', left: '0', overflowY: 'scroll', overflowX: 'hidden'}}>
+          <div id="designarea" style={{ marginBottom: '40px', marginRight: "210px", padding: "20px", position: 'absolute', top:'50px', bottom:'0', right: '0', left: '200px', overflowY: 'scroll', overflowX: 'hidden'}}>
             <div className="row">
               {design}
             </div>
@@ -265,7 +288,7 @@ class Designer extends React.Component {
           height: '50px',
           backgroundColor: 'gray',
           borderTop: '3px solid black'}}>
-            <button className="btn btn-default" onClick = {() => this.onBtnClick('row')}> Add New Row</button>
+            <button className="btn btn-default" onClick = {() => this.onAddNewRow('row')}> Add New Row</button>
             <button className="btn btn-default" onClick = {this.onSubmit}>Submit</button>
             {websitedesignbuttons}
           </div>

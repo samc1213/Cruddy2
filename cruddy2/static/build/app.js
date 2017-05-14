@@ -445,7 +445,7 @@ var AdminBar = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { style: { position: 'absolute', width: '200px', height: '100%', backgroundColor: 'gray', zIndex: 3 } },
+        { style: { position: 'absolute', width: '200px', top: '50px', bottom: '0', backgroundColor: 'gray', zIndex: 3 } },
         _react2.default.createElement(_AdminBarTabContainer2.default, { text: 'Apps', link: '' }),
         _react2.default.createElement(_AdminBarTabContainer2.default, { text: 'Create New Website', link: '' }),
         _react2.default.createElement(_AdminBarTabContainer2.default, { text: 'Data', link: '' })
@@ -989,22 +989,11 @@ var CreateThing = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_Walkthrough2.default, { bigText: 'Define Your Data Model', helpText: 'Be sure to put in examples, so that you can see what an instance of your Thing would look like!' }),
+        _react2.default.createElement(_Walkthrough2.default, { bigText: 'Define Your Data Model' }),
         _react2.default.createElement(
           'div',
-          { className: 'col-md-6' },
+          { className: 'col-md-12' },
           _react2.default.createElement(_NewThingFormContainer2.default, null)
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-md-6' },
-          _react2.default.createElement('div', { className: 'col-md-2' }),
-          _react2.default.createElement(
-            'div',
-            { className: 'col-md-8' },
-            _react2.default.createElement(_ThingInstanceViewPreviewContainer2.default, null)
-          ),
-          _react2.default.createElement('div', { className: 'col-md-2' })
         )
       );
     }
@@ -1093,7 +1082,8 @@ var CreateWebsite = function (_React$Component) {
     key: 'handleWebsiteNameKeyDown',
     value: function handleWebsiteNameKeyDown(event) {
       if (event.keyCode == 13) {
-        this.props.changeState('websiteType');
+        this.trueSubmit(event);
+        this.props.changeState('firstThing');
       }
     }
   }, {
@@ -1140,7 +1130,7 @@ var CreateWebsite = function (_React$Component) {
               _react2.default.createElement(
                 'a',
                 { className: 'btn btn-primary', onClick: function onClick() {
-                    _this2.changeState('websiteType');
+                    _this2.trueSubmit();_this2.changeState('firstThing');
                   } },
                 ' Submit '
               )
@@ -1148,68 +1138,6 @@ var CreateWebsite = function (_React$Component) {
           ),
           _react2.default.createElement('input', { type: 'hidden', name: 'username', value: this.props.loggedInUser }),
           _react2.default.createElement('input', { type: 'hidden', name: 'websitetypeid', value: this.state.websiteTypeId }),
-          _react2.default.createElement(
-            _NewWebsiteViewArea2.default,
-            { currentState: this.props.currentState, stateName: 'websiteType' },
-            _react2.default.createElement(
-              'div',
-              { is: true, id: 'myCarousel', 'class': 'carousel slide', style: { width: '30%', margin: 'auto' }, 'data-interval': 'false' },
-              _react2.default.createElement(
-                'h4',
-                { className: 'text-xs-center' },
-                ' What would you like your website to look like? '
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'carousel-inner', role: 'listbox' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'carousel-item active' },
-                  _react2.default.createElement('img', { src: '/images/ExampleCard.png', alt: 'Card' }),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'text-xs-center' },
-                    'Card View'
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'carousel-item' },
-                  _react2.default.createElement('img', { src: '/images/ExampleTable.png', alt: 'Chania' }),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'text-xs-center' },
-                    'Table View'
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'a',
-                { className: 'left carousel-control', style: { left: '-15%', backgroundImage: 'none' }, href: '#myCarousel', role: 'button', 'data-slide': 'prev' },
-                _react2.default.createElement(
-                  'span',
-                  { style: { color: 'black', position: 'absolute', top: '45%', height: '10%', left: '-3px' } },
-                  _react2.default.createElement('i', { className: 'fa fa-caret-square-o-left', 'aria-hidden': 'true' })
-                )
-              ),
-              _react2.default.createElement(
-                'a',
-                { className: 'right carousel-control', style: { right: '-15%', backgroundImage: 'none' }, href: '#myCarousel', role: 'button', 'data-slide': 'next' },
-                _react2.default.createElement(
-                  'span',
-                  { style: { color: 'black', position: 'absolute', top: '45%', height: '10%', right: '-3px' } },
-                  _react2.default.createElement('i', { className: 'fa fa-caret-square-o-right', 'aria-hidden': 'true' })
-                )
-              ),
-              _react2.default.createElement(
-                'a',
-                { style: { position: 'absolute', top: '400px', left: '35%', width: '30%' }, className: 'btn btn-primary', onClick: function onClick() {
-                    _this2.trueSubmit();_this2.changeState('firstThing');
-                  } },
-                ' Submit '
-              )
-            )
-          ),
           _react2.default.createElement(
             _NewWebsiteViewArea2.default,
             { currentState: this.props.currentState, stateName: 'firstThing' },
@@ -1631,18 +1559,28 @@ var Designer = function (_React$Component) {
       return result;
     };
 
+    _this.onDelete = function () {
+      if (_this.state.selectedDivID != null) {
+        var newDesign = _this.getDesign();
+        _this.updateState(newDesign.filter(function (design) {
+          return design.props.id !== _this.state.selectedDivID;
+        }), function () {
+          return true;
+        });
+      }
+    };
+
     _this.onDivClicked = function (id) {
       var newDesign = _this.getDesign();
       newDesign.forEach(function (design, i) {
         var newDesignStyle = Object.assign({}, design.props.style);
-        newDesignStyle['outlineColor'] = 'None';
-        newDesignStyle['outlineStyle'] = 'None';
+        newDesignStyle['outlineColor'] = 'WhiteSmoke';
+        newDesignStyle['outlineStyle'] = 'dashed';
         newDesign[i] = _react2.default.cloneElement(design, { style: newDesignStyle });
       });
       var elementThatClicked = newDesign.filter(function (design) {
         return design.props.id == id;
       })[0];
-      console.log(elementThatClicked);
       var size = elementThatClicked.props.className.slice(7);
       _this.state.options.forEach(function (option) {
         var style = elementThatClicked.props.style[option.cssStyle];
@@ -1664,6 +1602,7 @@ var Designer = function (_React$Component) {
       _this.updateState(newDesign, function () {
         return true;
       });
+      $('#designarea').scrollTop($('#designarea')[0].scrollHeight);
     };
 
     _this.onSubmit = function () {
@@ -1750,7 +1689,7 @@ var Designer = function (_React$Component) {
       }
     };
 
-    _this.changeColor = function (event, styleName) {
+    _this.changeStyle = function (event, styleName) {
       var thingToAppend = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
 
       _this.setState(_defineProperty({}, styleName, event.target.value));
@@ -1771,7 +1710,7 @@ var Designer = function (_React$Component) {
       }
     };
 
-    _this.onBtnClick = function (newItem) {
+    _this.onAddNewRow = function (newItem) {
       switch (newItem) {
         case 'row':
           var id = _this.getId();
@@ -1806,22 +1745,29 @@ var Designer = function (_React$Component) {
       }
     };
 
-    _this.onBtnClick = _this.onBtnClick.bind(_this);
+    _this.onAddThingAttributeName = function (thingAttributeName) {
+      if (_this.state.selectedDivID != null) {
+        console.log(thingAttributeName);
+        document.getElementById(_this.state.selectedDivID).innerText += '{' + thingAttributeName + '}';
+      }
+    };
+
+    _this.onAddNewRow = _this.onAddNewRow.bind(_this);
     _this.onSubmit = _this.onSubmit.bind(_this);
     _this.updateState = _this.updateState.bind(_this);
     _this.getId = _this.getId.bind(_this);
     _this.getDesign = _this.getDesign.bind(_this);
     _this.getCustomLayout = _this.getCustomLayout.bind(_this);
     _this.changeSize = _this.changeSize.bind(_this);
-    _this.changeColor = _this.changeColor.bind(_this);
+    _this.changeStyle = _this.changeStyle.bind(_this);
     _this.getPixelsInRange = _this.getPixelsInRange.bind(_this);
+    _this.onAddThingAttributeName = _this.onAddThingAttributeName.bind(_this);
     var colors = ['AliceBlue', 'AntiqueWhite', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque', 'Black', 'BlanchedAlmond', 'Blue', 'BlueViolet', 'Brown', 'BurlyWood', 'CadetBlue', 'Chartreuse', 'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan', 'DarkBlue', 'DarkCyan', 'DarkGoldenRod', 'DarkGray', 'DarkGrey', 'DarkGreen', 'DarkKhaki', 'DarkMagenta', 'DarkOliveGreen', 'DarkOrange', 'DarkOrchid', 'DarkRed', 'DarkSalmon', 'DarkSeaGreen', 'DarkSlateBlue', 'DarkSlateGray', 'DarkSlateGrey', 'DarkTurquoise', 'DarkViolet', 'DeepPink', 'DeepSkyBlue', 'DimGray', 'DimGrey', 'DodgerBlue', 'FireBrick', 'FloralWhite', 'ForestGreen', 'Fuchsia', 'Gainsboro', 'GhostWhite', 'Gold', 'GoldenRod', 'Gray', 'Grey', 'Green', 'GreenYellow', 'HoneyDew', 'HotPink', 'IndianRed', 'Indigo', 'Ivory', 'Khaki', 'Lavender', 'LavenderBlush', 'LawnGreen', 'LemonChiffon', 'LightBlue', 'LightCoral', 'LightCyan', 'LightGoldenRodYellow', 'LightGray', 'LightGrey', 'LightGreen', 'LightPink', 'LightSalmon', 'LightSeaGreen', 'LightSkyBlue', 'LightSlateGray', 'LightSlateGrey', 'LightSteelBlue', 'LightYellow', 'Lime', 'LimeGreen', 'Linen', 'Magenta', 'Maroon', 'MediumAquaMarine', 'MediumBlue', 'MediumOrchid', 'MediumPurple', 'MediumSeaGreen', 'MediumSlateBlue', 'MediumSpringGreen', 'MediumTurquoise', 'MediumVioletRed', 'MidnightBlue', 'MintCream', 'MistyRose', 'Moccasin', 'NavajoWhite', 'Navy', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'RebeccaPurple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue', 'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'Tan', 'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White', 'WhiteSmoke', 'Yellow', 'YellowGreen'];
     var nonAbledColors = colors.slice();
     nonAbledColors.unshift('None');
 
     _this.state = { options: [{ cssStyle: 'borderStyle', choices: ['None', 'Dotted', 'Dashed', 'Solid', 'Double'], title: 'Border Style', default: 'None' }, { cssStyle: 'borderColor', choices: colors, title: 'Border Color', default: 'Black' }, { cssStyle: 'borderWidth', choices: _this.getPixelsInRange(1, 20), title: 'Border Thickness', default: '2px' }, { cssStyle: 'borderRadius', choices: _this.getPixelsInRange(0, 200), title: 'Border Radius', default: '0px' }, { cssStyle: 'color', choices: colors, title: 'Text Color', default: 'Black' }, { cssStyle: 'fontSize', choices: _this.getPixelsInRange(5, 60), title: 'Text Size', default: '15px' }, { cssStyle: 'textAlign', choices: ['Left', 'Right', 'Center'], title: 'Text Alignment', default: 'Left' }, { cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Text Style', default: 'Arial' }, { cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal' }, { cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None' }, { cssStyle: 'height', choices: _this.getPixelsInRange(5, 400), title: 'Height', default: '100px' }],
-      websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12,
-      borderColor: 'None', color: 'Black', backgroundColor: 'None', borderWidth: '2px' };
+      websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12 };
 
     _this.state.options.forEach(function (option) {
       _this.state[option.cssStyle] = option.default;
@@ -1841,12 +1787,34 @@ var Designer = function (_React$Component) {
         websitedesignbuttons = [_react2.default.createElement(
           'button',
           { onClick: function onClick() {
-              return _this2.onBtnClick('repeatingArea');
+              return _this2.onAddNewRow('repeatingArea');
             } },
           ' Add New Repeating Unit'
         )];
       } else {
         design = this.state.repeatingDesign;
+        websitedesignbuttons = [_react2.default.createElement(
+          'span',
+          null,
+          'Add Thing Attribute:'
+        )];
+
+        var _loop = function _loop(thingattributeid) {
+          websitedesignbuttons.push(_react2.default.createElement(
+            'button',
+            { onClick: function onClick() {
+                return _this2.onAddThingAttributeName(_this2.props.thingAttributes[thingattributeid].name.slice());
+              } },
+            ' ',
+            _this2.props.thingAttributes[thingattributeid].name.slice(),
+            ' '
+          ));
+        };
+
+        for (var thingattributeid in this.props.thingAttributes) {
+          _loop(thingattributeid);
+        }
+        console.log(websitedesignbuttons);
       }
       var selects = [];
 
@@ -1872,7 +1840,7 @@ var Designer = function (_React$Component) {
           selects.push(_react2.default.createElement(
             'select',
             { onChange: function onChange(e) {
-                return _this2.changeColor(e, option.cssStyle);
+                return _this2.changeStyle(e, option.cssStyle);
               }, value: _this2.state[option.cssStyle] },
             ' ',
             styleChoices,
@@ -1899,6 +1867,15 @@ var Designer = function (_React$Component) {
           { onChange: this.changeSize, value: this.state.size },
           divSizeOptions
         ));
+        selects.push(_react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-danger', onClick: this.onDelete },
+            'Delete'
+          )
+        ));
       }
 
       return _react2.default.createElement(
@@ -1911,7 +1888,7 @@ var Designer = function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          { id: 'designarea', style: { marginRight: "210px", padding: "20px", position: 'absolute', top: '50px', bottom: '0', right: '0', left: '0', overflowY: 'scroll', overflowX: 'hidden' } },
+          { id: 'designarea', style: { marginBottom: '40px', marginRight: "210px", padding: "20px", position: 'absolute', top: '50px', bottom: '0', right: '0', left: '200px', overflowY: 'scroll', overflowX: 'hidden' } },
           _react2.default.createElement(
             'div',
             { className: 'row' },
@@ -1931,7 +1908,7 @@ var Designer = function (_React$Component) {
           _react2.default.createElement(
             'button',
             { className: 'btn btn-default', onClick: function onClick() {
-                return _this2.onBtnClick('row');
+                return _this2.onAddNewRow('row');
               } },
             ' Add New Row'
           ),
@@ -3219,12 +3196,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function mapStateToProps(state) {
   return {
-    websiteName: state.websiteName
+    websiteName: state.websiteName,
+    thingAttributes: state.thingAttributes
   };
 }
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
+
     submitWebsiteDesign: function submitWebsiteDesign(data) {
       dispatch(facade.submitWebsiteDesign(data));
     }
@@ -3406,7 +3385,9 @@ function getThingAttributes(websiteName) {
       console.log(response);
       return response.json();
     }).then(function (json) {
-      return dispatch(actions.thingAttributesReceived(json));
+
+      console.log(json);
+      dispatch(actions.thingAttributesReceived(json));
     }).catch(function (err) {
       return console.log(err);
     });
@@ -3465,6 +3446,7 @@ function submitCreateWebsite(websitetypeid, websitename, username) {
       return response.json();
     }).then(function (json) {
       if (json.success == true) {
+        console.log("successfulcreate");
         dispatch(getWebsites(localStorage.getItem('loggedinuser')));
       } else {
         console.log("bad new website");
@@ -3546,6 +3528,7 @@ function submitNewThing(form) {
     }).then(function (json) {
       console.log(json);
       dispatch(actions.newThingReceived(json['thingid']));
+      dispatch(getThingAttributes(json['websitename']));
     }).catch(function (err) {
       return console.log(err);
     });

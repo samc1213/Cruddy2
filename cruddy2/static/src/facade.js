@@ -39,8 +39,11 @@ export function getThingAttributes(websiteName) {
           console.log(response);
           return response.json()
         })
-        .then(json =>
-          dispatch(actions.thingAttributesReceived(json))
+        .then(json => {
+
+            console.log(json);
+            dispatch(actions.thingAttributesReceived(json))
+        }
         )
         .catch(err => console.log(err))
   }
@@ -96,6 +99,7 @@ export function submitCreateWebsite(websitetypeid, websitename, username) {
     }).then(response => response.json())
       .then((json) => {
         if (json.success == true) {
+          console.log("successfulcreate");
           dispatch(getWebsites(localStorage.getItem('loggedinuser')));
         }
         else {
@@ -177,7 +181,8 @@ export function submitNewThing(form) {
         .then(response => response.json())
         .then((json) =>{
           console.log(json);
-          dispatch(actions.newThingReceived(json['thingid']))
+          dispatch(actions.newThingReceived(json['thingid']));
+          dispatch(getThingAttributes(json['websitename']));
         }
         )
         .catch(err => console.log(err))

@@ -32,7 +32,8 @@ class CreateWebsite extends React.Component {
 
   handleWebsiteNameKeyDown(event) {
     if (event.keyCode == 13) {
-      this.props.changeState('websiteType')
+      this.trueSubmit(event);
+      this.props.changeState('firstThing');
     }
   }
 
@@ -57,13 +58,13 @@ class CreateWebsite extends React.Component {
               <input type="text" name="websitename" value={this.props.websiteName} onChange={this.handleWebsiteNameChange} onKeyDown={this.handleWebsiteNameKeyDown}/>
               <p style={{marginBottom: '4px'}}> Your website will be available at: <br />
                 {`http://www.cruddy2.herokuapp.com/${this.props.websiteName}`}</p>
-              <a className="btn btn-primary" onClick={() => { this.changeState('websiteType')}}> Submit </a>
+              <a className="btn btn-primary" onClick={() => { this.trueSubmit(); this.changeState('firstThing')}}> Submit </a>
             </div>
           </NewWebsiteViewArea>
 
             <input type="hidden" name="username" value = {this.props.loggedInUser} />
             <input type="hidden" name="websitetypeid" value={this.state.websiteTypeId} />
-          <NewWebsiteViewArea currentState={this.props.currentState} stateName='websiteType'>
+          {/* <NewWebsiteViewArea currentState={this.props.currentState} stateName='websiteType'>
             <div is id="myCarousel" class="carousel slide" style={{width: '30%', margin:'auto'}} data-interval="false">
               <h4 className="text-xs-center"> What would you like your website to look like? </h4>
 
@@ -86,7 +87,7 @@ class CreateWebsite extends React.Component {
               </a>
               <a style={{position:'absolute', top:'400px', left:'35%', width:'30%'}} className="btn btn-primary" onClick={() => { this.trueSubmit(); this.changeState('firstThing') }}> Submit </a>
             </div>
-            </NewWebsiteViewArea>
+            </NewWebsiteViewArea> */}
             <NewWebsiteViewArea currentState={this.props.currentState} stateName='firstThing'>
               <CreateThingContainer />
             </NewWebsiteViewArea>

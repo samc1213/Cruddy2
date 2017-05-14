@@ -8,14 +8,9 @@ class CreateThing extends React.Component {
   render(){
       return(
         <div>
-          <Walkthrough bigText="Define Your Data Model" helpText="Be sure to put in examples, so that you can see what an instance of your Thing would look like!" />
-          <div className="col-md-6">
+          <Walkthrough bigText="Define Your Data Model" />
+          <div className="col-md-12">
             <NewThingFormContainer />
-          </div>
-          <div className="col-md-6">
-            <div className="col-md-2"></div>
-            <div className="col-md-8"><ThingInstanceViewPreviewContainer /></div>
-            <div className="col-md-2"></div>
           </div>
         </div>
     );

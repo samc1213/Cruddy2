@@ -1644,19 +1644,14 @@ var Designer = function (_React$Component) {
       })[0];
       console.log(elementThatClicked);
       var size = elementThatClicked.props.className.slice(7);
-      var borderColor = elementThatClicked.props.style['borderColor'];
-      var color = elementThatClicked.props.style['color'];
-      var backgroundColor = elementThatClicked.props.style['backgroundColor'];
-      var borderStyle = elementThatClicked.props.style['borderStyle'];
+      _this.state.options.forEach(function (option) {
+        var style = elementThatClicked.props.style[option.cssStyle];
+        _this.setState(_defineProperty({}, option.cssStyle, style));
+      });
       var borderWidth = elementThatClicked.props.style['borderWidth'];
       _this.setState({
         selectedDivID: id,
-        size: size,
-        borderColor: borderColor,
-        color: color,
-        backgroundColor: backgroundColor,
-        borderStyle: borderStyle,
-        borderWidth: borderWidth
+        size: size
       });
       var newStyle = Object.assign({}, elementThatClicked.props.style);
       newStyle['outlineColor'] = 'red';
@@ -1701,6 +1696,14 @@ var Designer = function (_React$Component) {
         result['repeatinglayout'] = _this.state.repeatingUnitCustomLayout;
         _this.props.submitWebsiteDesign({ layout: JSON.stringify(result), websiteName: _this.props.websiteName });
       }
+    };
+
+    _this.getPixelsInRange = function (start, end) {
+      var options = [];
+      for (var i = start; i < end; i++) {
+        options.push(i + 'px');
+      }
+      return options;
     };
 
     _this.updateState = function (design, callback) {
@@ -1772,9 +1775,14 @@ var Designer = function (_React$Component) {
       switch (newItem) {
         case 'row':
           var id = _this.getId();
+          var cssStyle = _this.state.options[0].cssStyle;
+          var style = { 'height': '100px', 'contentEditable': 'true' };
+          _this.state.options.forEach(function (option) {
+            style[option.cssStyle] = option.default;
+          });
           var newElement = _react2.default.createElement('div', { onClick: function onClick() {
               return _this.onDivClicked(id);
-            }, id: id, contentEditable: true, className: 'col-md-12', style: { 'height': '100px', 'borderStyle': 'None', 'contentEditable': 'true', 'borderColor': 'Black', 'color': 'Black', 'backgroundColor': 'None', 'borderWidth': '2px' } });
+            }, id: id, contentEditable: true, className: 'col-md-12', style: style });
           var newDesign = _this.getDesign();
           newDesign.push(newElement);
           _this.updateState(newDesign, function () {
@@ -1806,7 +1814,18 @@ var Designer = function (_React$Component) {
     _this.getCustomLayout = _this.getCustomLayout.bind(_this);
     _this.changeSize = _this.changeSize.bind(_this);
     _this.changeColor = _this.changeColor.bind(_this);
-    _this.state = { websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12, borderColor: 'None', color: 'Black', backgroundColor: 'None', borderStyle: 'None', borderWidth: '2px' };
+    _this.getPixelsInRange = _this.getPixelsInRange.bind(_this);
+    var colors = ['AliceBlue', 'AntiqueWhite', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque', 'Black', 'BlanchedAlmond', 'Blue', 'BlueViolet', 'Brown', 'BurlyWood', 'CadetBlue', 'Chartreuse', 'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan', 'DarkBlue', 'DarkCyan', 'DarkGoldenRod', 'DarkGray', 'DarkGrey', 'DarkGreen', 'DarkKhaki', 'DarkMagenta', 'DarkOliveGreen', 'DarkOrange', 'DarkOrchid', 'DarkRed', 'DarkSalmon', 'DarkSeaGreen', 'DarkSlateBlue', 'DarkSlateGray', 'DarkSlateGrey', 'DarkTurquoise', 'DarkViolet', 'DeepPink', 'DeepSkyBlue', 'DimGray', 'DimGrey', 'DodgerBlue', 'FireBrick', 'FloralWhite', 'ForestGreen', 'Fuchsia', 'Gainsboro', 'GhostWhite', 'Gold', 'GoldenRod', 'Gray', 'Grey', 'Green', 'GreenYellow', 'HoneyDew', 'HotPink', 'IndianRed', 'Indigo', 'Ivory', 'Khaki', 'Lavender', 'LavenderBlush', 'LawnGreen', 'LemonChiffon', 'LightBlue', 'LightCoral', 'LightCyan', 'LightGoldenRodYellow', 'LightGray', 'LightGrey', 'LightGreen', 'LightPink', 'LightSalmon', 'LightSeaGreen', 'LightSkyBlue', 'LightSlateGray', 'LightSlateGrey', 'LightSteelBlue', 'LightYellow', 'Lime', 'LimeGreen', 'Linen', 'Magenta', 'Maroon', 'MediumAquaMarine', 'MediumBlue', 'MediumOrchid', 'MediumPurple', 'MediumSeaGreen', 'MediumSlateBlue', 'MediumSpringGreen', 'MediumTurquoise', 'MediumVioletRed', 'MidnightBlue', 'MintCream', 'MistyRose', 'Moccasin', 'NavajoWhite', 'Navy', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'RebeccaPurple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue', 'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'Tan', 'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White', 'WhiteSmoke', 'Yellow', 'YellowGreen'];
+    var nonAbledColors = colors.slice();
+    nonAbledColors.unshift('None');
+
+    _this.state = { options: [{ cssStyle: 'borderStyle', choices: ['None', 'Dotted', 'Dashed', 'Solid', 'Double'], title: 'Border Style', default: 'None' }, { cssStyle: 'borderColor', choices: colors, title: 'Border Color', default: 'Black' }, { cssStyle: 'borderWidth', choices: _this.getPixelsInRange(1, 20), title: 'Border Thickness', default: '2px' }, { cssStyle: 'borderRadius', choices: _this.getPixelsInRange(0, 200), title: 'Border Radius', default: '0px' }, { cssStyle: 'color', choices: colors, title: 'Text Color', default: 'Black' }, { cssStyle: 'fontSize', choices: _this.getPixelsInRange(5, 60), title: 'Text Size', default: '15px' }, { cssStyle: 'textAlign', choices: ['Left', 'Right', 'Center'], title: 'Text Alignment', default: 'Left' }, { cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Font Style', default: 'Arial' }, { cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal' }, { cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None' }],
+      websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12,
+      borderColor: 'None', color: 'Black', backgroundColor: 'None', borderWidth: '2px' };
+
+    _this.state.options.forEach(function (option) {
+      _this.state[option.cssStyle] = option.default;
+    });
     return _this;
   }
 
@@ -1830,16 +1849,37 @@ var Designer = function (_React$Component) {
         design = this.state.repeatingDesign;
       }
       var selects = [];
-      var colors = ['AliceBlue', 'AntiqueWhite', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque', 'Black', 'BlanchedAlmond', 'Blue', 'BlueViolet', 'Brown', 'BurlyWood', 'CadetBlue', 'Chartreuse', 'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan', 'DarkBlue', 'DarkCyan', 'DarkGoldenRod', 'DarkGray', 'DarkGrey', 'DarkGreen', 'DarkKhaki', 'DarkMagenta', 'DarkOliveGreen', 'DarkOrange', 'DarkOrchid', 'DarkRed', 'DarkSalmon', 'DarkSeaGreen', 'DarkSlateBlue', 'DarkSlateGray', 'DarkSlateGrey', 'DarkTurquoise', 'DarkViolet', 'DeepPink', 'DeepSkyBlue', 'DimGray', 'DimGrey', 'DodgerBlue', 'FireBrick', 'FloralWhite', 'ForestGreen', 'Fuchsia', 'Gainsboro', 'GhostWhite', 'Gold', 'GoldenRod', 'Gray', 'Grey', 'Green', 'GreenYellow', 'HoneyDew', 'HotPink', 'IndianRed', 'Indigo', 'Ivory', 'Khaki', 'Lavender', 'LavenderBlush', 'LawnGreen', 'LemonChiffon', 'LightBlue', 'LightCoral', 'LightCyan', 'LightGoldenRodYellow', 'LightGray', 'LightGrey', 'LightGreen', 'LightPink', 'LightSalmon', 'LightSeaGreen', 'LightSkyBlue', 'LightSlateGray', 'LightSlateGrey', 'LightSteelBlue', 'LightYellow', 'Lime', 'LimeGreen', 'Linen', 'Magenta', 'Maroon', 'MediumAquaMarine', 'MediumBlue', 'MediumOrchid', 'MediumPurple', 'MediumSeaGreen', 'MediumSlateBlue', 'MediumSpringGreen', 'MediumTurquoise', 'MediumVioletRed', 'MidnightBlue', 'MintCream', 'MistyRose', 'Moccasin', 'NavajoWhite', 'Navy', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'RebeccaPurple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue', 'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'Tan', 'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White', 'WhiteSmoke', 'Yellow', 'YellowGreen'];
-      var nonAbledColors = colors.slice();
-      var borderStyles = ['None', 'Dotted', 'Dashed', 'Solid', 'Double'];
-      nonAbledColors.unshift('None');
+
       if (this.state.selectedDivID != null) {
+        this.state.options.forEach(function (option) {
+          var styleChoices = [];
+          option.choices.forEach(function (choice) {
+            styleChoices.push(_react2.default.createElement(
+              'option',
+              { value: choice },
+              ' ',
+              choice,
+              ' '
+            ));
+          });
+          selects.push(_react2.default.createElement(
+            'div',
+            null,
+            ' ',
+            option.title,
+            ' '
+          ));
+          selects.push(_react2.default.createElement(
+            'select',
+            { onChange: function onChange(e) {
+                return _this2.changeColor(e, option.cssStyle);
+              }, value: _this2.state[option.cssStyle] },
+            ' ',
+            styleChoices,
+            ' '
+          ));
+        });
         var divSizeOptions = [];
-        var thicknessOptions = [];
-        var colorOptions = [];
-        var nonAbledColorOptions = [];
-        var borderStyleOptions = [];
         for (var i = 1; i < 13; i++) {
           divSizeOptions.push(_react2.default.createElement(
             'option',
@@ -1849,104 +1889,6 @@ var Designer = function (_React$Component) {
             ' '
           ));
         }
-        for (var i = 1; i < 20; i++) {
-          thicknessOptions.push(_react2.default.createElement(
-            'option',
-            { value: i + 'px' },
-            i + 'px',
-            ' '
-          ));
-        }
-        colors.forEach(function (color) {
-          colorOptions.push(_react2.default.createElement(
-            'option',
-            { value: color },
-            ' ',
-            color,
-            ' '
-          ));
-        });
-        nonAbledColors.forEach(function (color) {
-          nonAbledColorOptions.push(_react2.default.createElement(
-            'option',
-            { value: color },
-            ' ',
-            color,
-            ' '
-          ));
-        });
-        borderStyles.forEach(function (borderStyle) {
-          borderStyleOptions.push(_react2.default.createElement(
-            'option',
-            { value: borderStyle },
-            ' ',
-            borderStyle,
-            ' '
-          ));
-        });
-        selects.push(_react2.default.createElement(
-          'div',
-          null,
-          ' Border Style '
-        ));
-        selects.push(_react2.default.createElement(
-          'select',
-          { onChange: function onChange(e) {
-              return _this2.changeColor(e, 'borderStyle');
-            }, value: this.state.borderStyle },
-          ' ',
-          borderStyleOptions,
-          ' '
-        ));
-        selects.push(_react2.default.createElement(
-          'div',
-          null,
-          'Border Color'
-        ));
-        selects.push(_react2.default.createElement(
-          'select',
-          { onChange: function onChange(e) {
-              return _this2.changeColor(e, 'borderColor');
-            }, value: this.state.borderColor },
-          colorOptions
-        ));
-        selects.push(_react2.default.createElement(
-          'div',
-          null,
-          ' Border Thickness '
-        ));
-        selects.push(_react2.default.createElement(
-          'select',
-          { onChange: function onChange(e) {
-              return _this2.changeColor(e, 'borderWidth');
-            }, value: this.state.borderWidth },
-          ' ',
-          thicknessOptions
-        ));
-        selects.push(_react2.default.createElement(
-          'div',
-          null,
-          'Text Color'
-        ));
-        selects.push(_react2.default.createElement(
-          'select',
-          { onChange: function onChange(e) {
-              return _this2.changeColor(e, 'color');
-            }, value: this.state.color },
-          colorOptions
-        ));
-        selects.push(_react2.default.createElement(
-          'div',
-          null,
-          'Background Color'
-        ));
-        selects.push(_react2.default.createElement(
-          'select',
-          { onChange: function onChange(e) {
-              return _this2.changeColor(e, 'backgroundColor');
-            }, value: this.state.backgroundColor },
-          nonAbledColorOptions
-        ));
         selects.push(_react2.default.createElement(
           'div',
           null,

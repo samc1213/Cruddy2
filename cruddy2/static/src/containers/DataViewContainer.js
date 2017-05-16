@@ -3,10 +3,9 @@ import DataView from '../components/DataView'
 import * as facade from '../facade'
 
 const mapStateToProps = (state) => {
-  var tempwebsitenames = [];
-  var tempwebsitetypeids = [];
-  var tempwebsiteids = [];
-  var tempthingids = [];
+  var tempwebsitenames = ["Please Select a Website"];
+  var tempwebsitetypeids = [0];
+  var tempwebsiteids = [-1];
 
   for (var websiteid in state.websites){
     tempwebsitenames.push(state.websites[websiteid].websitename)

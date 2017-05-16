@@ -6,7 +6,7 @@ class DataView extends React.Component {
   constructor(props) {
     super(props);
     if (this.props.websiteIds.length > 0) {
-      this.state = {websiteName: this.props.websiteIds[0]}
+      this.state = {websiteName: this.props.websiteNames[0]}
     }
     else {
       this.state = {websiteName: ''}
@@ -18,7 +18,7 @@ class DataView extends React.Component {
     this.props.getWebsites(localStorage.getItem('loggedinuser'));
     document.title = 'Dashboard - Cruddy2';
     if (this.props.websiteIds.length > 0) {
-      this.state = {websiteName: this.props.websiteIds[0]}
+      this.state = {websiteName: this.props.websiteNames[0]}
     }
     else {
       this.state = {websiteName: ''}
@@ -58,7 +58,6 @@ class DataView extends React.Component {
           <select value={this.state.websiteName} onChange={this.handleChange}>
             {spans}
           </select>
-          <div>{this.state.websiteName}</div>
           {tab}
         </div>
     );

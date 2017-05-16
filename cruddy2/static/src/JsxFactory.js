@@ -33,9 +33,9 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance)
   if (props.hasOwnProperty('style'))
   {
     style = props['style']
+    console.log(style)
   }
   var replacedString = text.slice(0);
-
   if (repeatinglayout == null && thinginstances == null)
   {
         var thingAttributeNames = Object.keys(thingInstance)
@@ -45,10 +45,16 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance)
             replacedString = replacedString.replace(new RegExp(magicBracketString, 'g'), thingAttributeValue);
           })
   }
+  var finalstring = []
+  replacedString.split('\n').map((item, key) =>{
+    finalstring.push(<span key={key}>{item}<br/></span>);
+  })
+
+
 
   if (repLayout == null)
   {
-    return (<div className={className} style={style}>{replacedString}</div>)
+    return (<div className={className} style={style}>{finalstring}</div>)
   }
   else {
      return (<div className={className} style={style}>{repLayout}</div>)

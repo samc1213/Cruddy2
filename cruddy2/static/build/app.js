@@ -39,9 +39,9 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance) {
   var style = null;
   if (props.hasOwnProperty('style')) {
     style = props['style'];
+    console.log(style);
   }
   var replacedString = text.slice(0);
-
   if (repeatinglayout == null && thinginstances == null) {
     var thingAttributeNames = Object.keys(thingInstance);
     thingAttributeNames.forEach(function (thingAttributeName) {
@@ -50,12 +50,21 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance) {
       replacedString = replacedString.replace(new RegExp(magicBracketString, 'g'), thingAttributeValue);
     });
   }
+  var finalstring = [];
+  replacedString.split('\n').map(function (item, key) {
+    finalstring.push(_react2.default.createElement(
+      'span',
+      { key: key },
+      item,
+      _react2.default.createElement('br', null)
+    ));
+  });
 
   if (repLayout == null) {
     return _react2.default.createElement(
       'div',
       { className: className, style: style },
-      replacedString
+      finalstring
     );
   } else {
     return _react2.default.createElement(
@@ -1431,7 +1440,7 @@ var DataView = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (DataView.__proto__ || Object.getPrototypeOf(DataView)).call(this, props));
 
     if (_this.props.websiteIds.length > 0) {
-      _this.state = { websiteName: _this.props.websiteIds[0] };
+      _this.state = { websiteName: _this.props.websiteNames[0] };
     } else {
       _this.state = { websiteName: '' };
     }
@@ -1445,7 +1454,7 @@ var DataView = function (_React$Component) {
       this.props.getWebsites(localStorage.getItem('loggedinuser'));
       document.title = 'Dashboard - Cruddy2';
       if (this.props.websiteIds.length > 0) {
-        this.state = { websiteName: this.props.websiteIds[0] };
+        this.state = { websiteName: this.props.websiteNames[0] };
       } else {
         this.state = { websiteName: '' };
       }
@@ -1490,11 +1499,6 @@ var DataView = function (_React$Component) {
           'select',
           { value: this.state.websiteName, onChange: this.handleChange },
           spans
-        ),
-        _react2.default.createElement(
-          'div',
-          null,
-          this.state.websiteName
         ),
         tab
       );
@@ -3135,10 +3139,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
-  var tempwebsitenames = [];
-  var tempwebsitetypeids = [];
-  var tempwebsiteids = [];
-  var tempthingids = [];
+  var tempwebsitenames = ["Please Select a Website"];
+  var tempwebsitetypeids = [0];
+  var tempwebsiteids = [-1];
 
   for (var websiteid in state.websites) {
     tempwebsitenames.push(state.websites[websiteid].websitename);

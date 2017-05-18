@@ -16,6 +16,7 @@ class Designer extends React.Component {
     this.changeStyle = this.changeStyle.bind(this);
     this.getPixelsInRange = this.getPixelsInRange.bind(this);
     this.onAddThingAttributeName = this.onAddThingAttributeName.bind(this);
+    this.getDesignBarSelects = this.getDesignBarSelects.bind(this);
     var colors = ['AliceBlue','AntiqueWhite','Aqua','Aquamarine','Azure','Beige','Bisque','Black','BlanchedAlmond','Blue','BlueViolet','Brown','BurlyWood','CadetBlue','Chartreuse','Chocolate','Coral','CornflowerBlue','Cornsilk','Crimson','Cyan','DarkBlue','DarkCyan','DarkGoldenRod'
     ,'DarkGray','DarkGrey','DarkGreen','DarkKhaki','DarkMagenta','DarkOliveGreen','DarkOrange','DarkOrchid','DarkRed','DarkSalmon','DarkSeaGreen','DarkSlateBlue','DarkSlateGray','DarkSlateGrey','DarkTurquoise','DarkViolet','DeepPink','DeepSkyBlue','DimGray','DimGrey','DodgerBlue','FireBrick','FloralWhite','ForestGreen','Fuchsia'
     ,'Gainsboro','GhostWhite','Gold','GoldenRod','Gray','Grey','Green','GreenYellow','HoneyDew','HotPink','IndianRed','Indigo','Ivory','Khaki','Lavender','LavenderBlush','LawnGreen','LemonChiffon','LightBlue','LightCoral',
@@ -27,7 +28,10 @@ class Designer extends React.Component {
     var nonAbledColors = colors.slice();
     nonAbledColors.unshift('None');
 
-    this.state = { options: [{cssStyle: 'borderStyle', choices: ['None', 'Dotted', 'Dashed', 'Solid', 'Double'], title: 'Border Style', default: 'None'},
+    this.state = {
+      buttonDivOptions: [{cssStyle: 'color', choices:['Black', 'Blue'], title: 'Color', default: 'Blue', affectsButton: 'true'}],
+
+      divOptions: [{cssStyle: 'borderStyle', choices: ['None', 'Dotted', 'Dashed', 'Solid', 'Double'], title: 'Border Style', default: 'None'},
      {cssStyle: 'borderColor', choices: colors, title: 'Border Color', default: 'Black'},
      {cssStyle: 'borderWidth', choices: this.getPixelsInRange(1, 20), title: 'Border Thickness', default: '2px'},
      {cssStyle: 'borderRadius', choices: this.getPixelsInRange(0, 200), title: 'Border Radius', default: '0px'},
@@ -38,9 +42,9 @@ class Designer extends React.Component {
      {cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal'},
      {cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None'},
      {cssStyle: 'height', choices: this.getPixelsInRange(5, 400), title: 'Height', default: '100px'}],
-    websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, size: 12};
+    websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, selectedDivIsButtonDiv: false, size: 12};
 
-    this.state.options.forEach((option) => {
+    this.state.divOptions.forEach((option) => {
       this.state[option.cssStyle] = option.default;
     });
   }
@@ -66,7 +70,7 @@ class Designer extends React.Component {
     }
   }
 
-  onDivClicked = (id) => {
+  onDivClicked = (id, isButtonDiv = false) => {
     var newDesign = this.getDesign();
     newDesign.forEach((design, i) => {
       var newDesignStyle = Object.assign({}, design.props.style)
@@ -76,13 +80,22 @@ class Designer extends React.Component {
     });
     var elementThatClicked = newDesign.filter(design =>  design.props.id == id)[0];
     var size = elementThatClicked.props.className.slice(7);
-    this.state.options.forEach((option) => {
-      var style = elementThatClicked.props.style[option.cssStyle];
-      this.setState({[option.cssStyle]: style});
-    })
-    var borderWidth = elementThatClicked.props.style['borderWidth'];
+    if (!isButtonDiv)
+    {
+      this.state.divOptions.forEach((option) => {
+        var style = elementThatClicked.props.style[option.cssStyle];
+        this.setState({[option.cssStyle]: style});
+      })
+    }
+    else {
+      this.state.buttonDivOptions.forEach((option) => {
+        var style = elementThatClicked.props.style[option.cssStyle];
+        this.setState({[option.cssStyle]: style});
+      })
+    }
     this.setState({
       selectedDivID: id,
+      selectedDivIsButtonDiv: isButtonDiv,
       size: size,
     });
     var newStyle = Object.assign({}, elementThatClicked.props.style);
@@ -183,19 +196,32 @@ class Designer extends React.Component {
     }
   }
 
-  changeStyle = (event, styleName, thingToAppend='') =>
+  changeStyle = (event, styleName, affectsButton, thingToAppend='') =>
   {
     this.setState({
       [styleName]: event.target.value,
     })
     if (this.state.selectedDivID !=null){
-      var newDesign = this.getDesign();
-      var elementThatClicked = newDesign.filter(design =>  design.props.id == this.state.selectedDivID)[0];
-      var newStyle = Object.assign({}, elementThatClicked.props.style);
-      newStyle[styleName] = event.target.value;
-      var elementThatClickedCopy = React.cloneElement(elementThatClicked, {style: newStyle});
-      newDesign[newDesign.findIndex(design =>  design.props.id == this.state.selectedDivID)] = elementThatClickedCopy;
-      this.updateState(newDesign, () => true);
+      if (!affectsButton){
+        var newDesign = this.getDesign();
+        var elementThatClicked = newDesign.filter(design =>  design.props.id == this.state.selectedDivID)[0];
+        var newStyle = Object.assign({}, elementThatClicked.props.style);
+        newStyle[styleName] = event.target.value;
+        var elementThatClickedCopy = React.cloneElement(elementThatClicked, {style: newStyle});
+        newDesign[newDesign.findIndex(design =>  design.props.id == this.state.selectedDivID)] = elementThatClickedCopy;
+        this.updateState(newDesign, () => true);
+      }
+      else{
+        var newDesign = this.getDesign();
+        var elementThatClicked = newDesign.filter(design =>  design.props.id == this.state.selectedDivID)[0];
+        console.log("inhere")
+        var newStyle = Object.assign({}, elementThatClicked.props.style);
+        newStyle[styleName] = event.target.value;
+        var elementThatClickedCopy = React.cloneElement(elementThatClicked, {style: newStyle});
+        newDesign[newDesign.findIndex(design =>  design.props.id == this.state.selectedDivID)] = elementThatClickedCopy;
+        this.updateState(newDesign, () => true);
+      }
+
     }
   }
 
@@ -205,9 +231,8 @@ class Designer extends React.Component {
     {
       case 'row':
         var id = this.getId();
-        var cssStyle = this.state.options[0].cssStyle;
         var style = {'contentEditable': 'true', 'overflow':'hidden'}
-        this.state.options.forEach((option) =>{
+        this.state.divOptions.forEach((option) =>{
           style[option.cssStyle] = option.default;
         })
         var newElement = <div onClick={() => this.onDivClicked(id)} id={id} contentEditable className="col-md-12" style={style}></div>;
@@ -223,6 +248,17 @@ class Designer extends React.Component {
         newDesign.push(newElement);
         this.updateState(newDesign, () => true);
         break;
+      case 'button':
+        var id = this.getId();
+        var divStyle = {'overflow':'hidden'}
+        this.state.buttonDivOptions.forEach((option) =>{
+          divStyle[option.cssStyle] = option.default;
+        })
+        var newElement = <div onClick={() => this.onDivClicked(id, true)} id={id} className="col-md-12" style={divStyle}><button style={{width: '100%', height:'100%%'}} className="btn btn-default">btnttn</button></div>;
+        var newDesign = this.getDesign();
+        newDesign.push(newElement);
+        this.updateState(newDesign, () => this.onDivClicked(id, true));
+        break;
     }
   }
 
@@ -234,11 +270,31 @@ class Designer extends React.Component {
     }
   }
 
+  getDesignBarSelects(options) {
+    var selects = [];
+    options.forEach((option) => {
+      var styleChoices = [];
+      option.choices.forEach((choice) => {
+        styleChoices.push(<option value = {choice}> {choice} </option>);
+      })
+      selects.push(<div> {option.title} </div>)
+      let affectsButton = false
+      if( 'affectsButton' in option){
+        affectsButton = option.affectsButton;
+      }
+
+      selects.push(<select onChange = {(e) => this.changeStyle(e, option.cssStyle, affectsButton)} value = {this.state[option.cssStyle]}> {styleChoices} </select>);
+    })
+
+    return selects;
+  }
+
   render() {
     var design;
     var websitedesignbuttons = null;
     if (this.state.currentDesignState == 'website')
     {
+      console.log("inwebsitedesign")
       design = this.state.websiteDesign;
       websitedesignbuttons = [<button onClick = {() => this.onAddNewRow('repeatingArea')}> Add New Repeating Unit</button>]
     }
@@ -246,21 +302,22 @@ class Designer extends React.Component {
       design = this.state.repeatingDesign;
       websitedesignbuttons = [<span >Add Thing Attribute:</span>];
       for (let thingattributeid in this.props.thingAttributes){
-        websitedesignbuttons.push( <button onClick = {() => this.onAddThingAttributeName(this.props.thingAttributes[thingattributeid].name.slice())}> {this.props.thingAttributes[thingattributeid].name.slice()} </button>);
+        websitedesignbuttons.push( <button className="btn btn-secondary" onClick = {() => this.onAddThingAttributeName(this.props.thingAttributes[thingattributeid].name.slice())}> {this.props.thingAttributes[thingattributeid].name.slice()} </button>);
       }
-      console.log(websitedesignbuttons);
+      websitedesignbuttons.push(<button className="btn btn-secondary" onClick = {() => this.onAddNewRow('button')}> Add New Button </button>);
     }
-    var selects = [];
 
+    let selects = [];
     if (this.state.selectedDivID != null){
-      this.state.options.forEach((option) => {
-        var styleChoices = [];
-        option.choices.forEach((choice) => {
-          styleChoices.push(<option value = {choice}> {choice} </option>);
-        })
-        selects.push(<div> {option.title} </div>)
-        selects.push(<select onChange = {(e) => this.changeStyle(e, option.cssStyle)} value = {this.state[option.cssStyle]}> {styleChoices} </select>);
-      })
+
+      if (!this.state.selectedDivIsButtonDiv)
+      {
+        selects = this.getDesignBarSelects(this.state.divOptions);
+      }
+      else {
+        selects = this.getDesignBarSelects(this.state.buttonDivOptions);
+      }
+
       var divSizeOptions = [];
       for (var i = 1; i < 13; i ++){
         divSizeOptions.push(<option value ={i}> {i} </option>);
@@ -268,6 +325,10 @@ class Designer extends React.Component {
       selects.push(<div>Width (out of 12)</div>)
       selects.push(<select onChange = {this.changeSize} value = {this.state.size}>{divSizeOptions}</select>);
       selects.push(<div><button className="btn btn-danger" onClick = {this.onDelete}>Delete</button></div>);
+    }
+    else if (this.state.selectedButtonID != null)
+    {
+      console.log(this.state.selectedButtonID);
     }
 
     return (
@@ -289,8 +350,8 @@ class Designer extends React.Component {
           backgroundColor: 'gray',
           borderTop: '3px solid black'}}>
             <button className="btn btn-default" onClick = {() => this.onAddNewRow('row')}> Add New Row</button>
-            <button className="btn btn-default" onClick = {this.onSubmit}>Submit</button>
             {websitedesignbuttons}
+            <button style={{float: 'right'}} className="btn btn-default" onClick = {this.onSubmit}>Submit</button>
           </div>
         </div>
     );

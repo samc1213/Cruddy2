@@ -33,7 +33,6 @@ function getDiv(props, text, repeatinglayout, thinginstances, thingInstance)
   if (props.hasOwnProperty('style'))
   {
     style = props['style']
-    console.log(style)
   }
   var replacedString = text.slice(0);
   if (repeatinglayout == null && thinginstances == null)

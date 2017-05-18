@@ -40,7 +40,7 @@ class Dashboard extends React.Component {
         }
 
         return (
-            <div style={{height: '100%', width: '100%'}}>
+            <div onClick= {() => console.log("absorb")} style={{height: '100%', width: '100%'}}>
 
               <AdminBarContainer />
               <DashboardArea selectedTab={this.props.selectedDashboardTab} tabName='Apps'>

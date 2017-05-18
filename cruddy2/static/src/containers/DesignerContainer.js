@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Designer from '../components/Designer'
+import Designer from '../components/NewDesigner'
 
 import * as facade from '../facade'
 
@@ -13,7 +13,7 @@ function mapStateToProps(state) {
 
  const mapDispatchToProps = (dispatch) => (
   {
-    
+
     submitWebsiteDesign: (data) => {
       dispatch(facade.submitWebsiteDesign(data))
     }

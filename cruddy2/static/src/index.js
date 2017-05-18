@@ -18,8 +18,7 @@ import { getThingAttributeTypes } from './actions'
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
 import CreateThingInstanceViewContainer from './containers/CreateThingInstanceViewContainer'
 import CreateWebsiteViewContainer from './containers/CreateWebsiteViewContainer'
-import Designer from './components/Designer'
-
+import Designer from './components/NewDesigner'
 
 const store = createStore(reducer,
   applyMiddleware(thunkMiddleware),

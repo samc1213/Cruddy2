@@ -4,23 +4,31 @@ export function GetJSX(websitelayout, onDivClicked, repeatinglayout, thinginstan
 {
   var result = []
   websitelayout.forEach((description) => {
-    var newElement = getElement(result, onDivClicked, description.id, description.className, description.element, description.contentEditable, description.style,  description.text, repeatinglayout, thinginstances, null);
+    var newElement = getElement(result, onDivClicked, description.id, description.className, description.element, description.contentEditable, description.style,  description.text, description.children, repeatinglayout, thinginstances, null);
     result = result.slice().concat(newElement);
   })
   return result;
 }
 
-function getElement(result, onDivClicked, id, className, element, contentEditable, style, text, repeatinglayout, thinginstances, thingInstance)
+function getElement(result, onDivClicked, id, className, element, contentEditable, style, text, children, repeatinglayout, thinginstances, thingInstance)
 {
   switch(element)
   {
     case 'div':
       console.log("indiv")
-      return getDiv(id, onDivClicked, className, contentEditable, style, text, repeatinglayout, thinginstances, thingInstance);
+      return getDiv(id, onDivClicked, className, contentEditable, style, text, children, repeatinglayout, thinginstances, thingInstance);
+    case 'button':
+      console.log("inbutton")
+      return getButton(false, id, onDivClicked, className, style, text);
   }
 }
 
-function getDiv(id, onDivClicked, className, contentEditable, style, text, repeatinglayout, thinginstances, thingInstance)
+function getButton(contentEditable, id, onDivClicked, className, style, text){
+  return(<button id ={id} className ={className} contentEditable={contentEditable} onClick = {(e) => onDivClicked(e, id, true)} style={style}>{text}</button>)
+
+}
+
+function getDiv(id, onDivClicked, className, contentEditable, style, text, children, repeatinglayout, thinginstances, thingInstance)
 {
   if (className != null)
   {
@@ -29,6 +37,13 @@ function getDiv(id, onDivClicked, className, contentEditable, style, text, repea
     }
   }
   var replacedString = text.slice(0);
+  var childrenElements = [];
+  if (children != null && children.length >0){
+    children.forEach((child) => {
+      var newChildElement = getElement(null, onDivClicked, child.id, child.className, child.element, null, child.style, child.text, child.children, null, null, null);
+      childrenElements.push(newChildElement);
+    })
+  }
   if (repeatinglayout == null && thinginstances == null && thingInstance != null)
   {
         var thingAttributeNames = Object.keys(thingInstance)
@@ -39,9 +54,11 @@ function getDiv(id, onDivClicked, className, contentEditable, style, text, repea
           })
   }
   var finalstring = []
-  replacedString.split('\n').map((item, key) =>{
-    finalstring.push(<span key={key}>{item}<br/></span>);
-  })
+  if (replacedString !=''){
+    replacedString.split('\n').map((item, key) =>{
+      finalstring.push(<span key={key}>{item}<br/></span>);
+    })
+  }
   if (repLayout == null)
   {
     if (!contentEditable){
@@ -50,7 +67,7 @@ function getDiv(id, onDivClicked, className, contentEditable, style, text, repea
     }
     else{
       console.log("dn1")
-      return (<div className={className} id={id} contentEditable onClick = {(e) => onDivClicked(e, id)} style={style}>{finalstring}</div>)
+      return (<div className={className} id={id} contentEditable onClick = {(e) => onDivClicked(e, id)} style={style}>{finalstring}{childrenElements}</div>)
 
     }
   }

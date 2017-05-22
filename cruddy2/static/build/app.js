@@ -682,7 +682,9 @@ var CraigslistView = function (_React$Component) {
         console.log(this.props.layout.data);
         var data = JSON.parse(this.props.layout.data);
         console.log(data);
-        var website = JsxFactory.GetJSX(data.websitelayout, data.repeatinglayout, this.props.thingInstances);
+        console.log(data.repeatinglayout);
+        console.log(this.props.thingInstances);
+        var website = JsxFactory.GetJSX(data.websitelayout, null, data.repeatinglayout, this.props.thingInstances);
         console.log(website);
 
         return _react2.default.createElement(
@@ -1789,6 +1791,8 @@ var Designer = function (_React$Component) {
     };
 
     _this.appendChildInDesign = function (parentId, newChild) {
+      var selectItem = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
       var design = _this.getDesign();
       if (parentId == null) {
         design.push(newChild);
@@ -1800,9 +1804,15 @@ var Designer = function (_React$Component) {
           return _this.updateElementInDesign(parentId, updateCallback);
         });
       }
-      _this.updateDesignState(design, function () {
-        return _this.onElementClicked(null, newChild.id);
-      });
+      if (selectItem) {
+        _this.updateDesignState(design, function () {
+          return _this.onElementClicked(null, newChild.id, newChild.element);
+        });
+      } else {
+        _this.updateDesignState(design, function () {
+          return true;
+        });
+      }
     };
 
     _this.wipeSelectionStyle = function (callback) {
@@ -1954,7 +1964,7 @@ var Designer = function (_React$Component) {
       _this.wipeSelectionStyle(function () {
         return _this.updateElementInDesign(id, updateCallback, false);
       });
-      if (e == null) {
+      if (e == null && elementType == 'div') {
         $('#designarea').scrollTop($('#designarea')[0].scrollHeight);
       }
     };
@@ -2064,9 +2074,9 @@ var Designer = function (_React$Component) {
         case 'repeatingArea':
           _this.getAndIncrementId(function (id) {
             var style = { 'borderColor': 'green', 'borderStyle': 'solid' };
-            var customElementRepresentation = { style: style, id: id, text: "repeatingArea", className: "repeatingArea col-md-12", element: "div", children: [] };
+            var customElementRepresentation = { style: style, id: id, text: "repeatingArea", className: "repeatingArea col-md-12", element: "repeatingArea", children: [] };
             var newDesign = _this.getDesign();
-            _this.appendChildInDesign(_this.state.selectedElementID, customElementRepresentation);
+            _this.appendChildInDesign(_this.state.selectedElementID, customElementRepresentation, false);
           });
           break;
         case 'button':
@@ -2093,8 +2103,16 @@ var Designer = function (_React$Component) {
     };
 
     _this.onAddThingAttributeName = function (thingAttributeName) {
-      if (_this.state.selectedElementID != null) {
-        document.getElementById(_this.state.selectedElementID).insertAdjacentHTML('beforeend', '{' + thingAttributeName + '}');
+      if (_this.state.selectedElementID != null && (_this.state.selectedElementType == 'text' || _this.state.selectedElementType == 'button')) {
+        var updateCallback = function updateCallback(element, parent) {
+          var newText = element.text.slice(0);
+          newText = newText + '{' + thingAttributeName + '}';
+          element.text = newText;
+          _this.setState({
+            elementInnerText: newText
+          });
+        };
+        _this.updateElementInDesign(_this.state.selectedElementID, updateCallback);
       }
     };
 
@@ -2170,55 +2188,133 @@ var Designer = function (_React$Component) {
       var _this2 = this;
 
       var design;
-      var websitedesignbuttons = null;
+      var websitedesignbuttons = [];
       if (this.state.currentDesignState == 'website') {
         design = NewJsxFactory.GetJSX(this.state.websiteDesign, this.onElementClicked, null, null);
         console.log(design);
-        websitedesignbuttons = [_react2.default.createElement(
-          'button',
-          { onClick: function onClick() {
-              return _this2.onAddNewRow('repeatingArea');
-            } },
-          ' Add New Repeating Unit'
-        )];
-      } else {
-        design = NewJsxFactory.GetJSX(this.state.repeatingDesign, this.onElementClicked, null, null);
-        console.log(design);
-        if (this.state.selectedElementID != null && this.state.selectedElementType == 'div') {
-          websitedesignbuttons = [_react2.default.createElement(
-            'span',
-            null,
-            'Add Thing Attribute:'
-          )];
-
-          var _loop = function _loop(thingattributeid) {
-            websitedesignbuttons.push(_react2.default.createElement(
-              'button',
-              { className: 'btn btn-secondary', onClick: function onClick() {
-                  return _this2.onAddThingAttributeName(_this2.props.thingAttributes[thingattributeid].name.slice());
-                } },
-              ' ',
-              _this2.props.thingAttributes[thingattributeid].name.slice(),
-              ' '
-            ));
-          };
-
-          for (var thingattributeid in this.props.thingAttributes) {
-            _loop(thingattributeid);
+        if (this.state.selectedElementID != null) {
+          switch (this.state.selectedElementType) {
+            case 'div':
+              websitedesignbuttons.push(_react2.default.createElement(
+                'button',
+                { className: 'btn btn-secondary', onClick: function onClick() {
+                    return _this2.onAddNewRow('text');
+                  } },
+                ' Add New Text '
+              ));
+              websitedesignbuttons.push(_react2.default.createElement(
+                'button',
+                { className: 'btn btn-default', onClick: function onClick() {
+                    return _this2.onAddNewRow('div');
+                  } },
+                ' Add New Row'
+              ));
+              websitedesignbuttons.push(_react2.default.createElement(
+                'button',
+                { onClick: function onClick() {
+                    return _this2.onAddNewRow('repeatingArea');
+                  } },
+                ' Add New Repeating Unit'
+              ));
+              break;
           }
+        } else {
           websitedesignbuttons.push(_react2.default.createElement(
             'button',
-            { className: 'btn btn-secondary', onClick: function onClick() {
-                return _this2.onAddNewRow('button');
+            { className: 'btn btn-default', onClick: function onClick() {
+                return _this2.onAddNewRow('div');
               } },
-            ' Add New Button '
+            ' Add New Row'
           ));
           websitedesignbuttons.push(_react2.default.createElement(
             'button',
-            { className: 'btn btn-secondary', onClick: function onClick() {
-                return _this2.onAddNewRow('text');
+            { onClick: function onClick() {
+                return _this2.onAddNewRow('repeatingArea');
               } },
-            ' Add New Text '
+            ' Add New Repeating Unit'
+          ));
+        }
+      } else {
+        design = NewJsxFactory.GetJSX(this.state.repeatingDesign, this.onElementClicked, null, null);
+        if (this.state.selectedElementID != null) {
+          switch (this.state.selectedElementType) {
+            case 'text':
+              websitedesignbuttons.push(_react2.default.createElement(
+                'span',
+                null,
+                'Add Thing Attribute:'
+              ));
+
+              var _loop = function _loop(thingattributeid) {
+                websitedesignbuttons.push(_react2.default.createElement(
+                  'button',
+                  { className: 'btn btn-secondary', onClick: function onClick() {
+                      return _this2.onAddThingAttributeName(_this2.props.thingAttributes[thingattributeid].name.slice());
+                    } },
+                  ' ',
+                  _this2.props.thingAttributes[thingattributeid].name.slice(),
+                  ' '
+                ));
+              };
+
+              for (var thingattributeid in this.props.thingAttributes) {
+                _loop(thingattributeid);
+              }
+              break;
+            case 'button':
+              websitedesignbuttons.push(_react2.default.createElement(
+                'span',
+                null,
+                'Add Thing Attribute:'
+              ));
+
+              var _loop2 = function _loop2(_thingattributeid) {
+                websitedesignbuttons.push(_react2.default.createElement(
+                  'button',
+                  { className: 'btn btn-secondary', onClick: function onClick() {
+                      return _this2.onAddThingAttributeName(_this2.props.thingAttributes[_thingattributeid].name.slice());
+                    } },
+                  ' ',
+                  _this2.props.thingAttributes[_thingattributeid].name.slice(),
+                  ' '
+                ));
+              };
+
+              for (var _thingattributeid in this.props.thingAttributes) {
+                _loop2(_thingattributeid);
+              }
+              break;
+            case 'div':
+              websitedesignbuttons.push(_react2.default.createElement(
+                'button',
+                { className: 'btn btn-default', onClick: function onClick() {
+                    return _this2.onAddNewRow('div');
+                  } },
+                ' Add New Row'
+              ));
+              websitedesignbuttons.push(_react2.default.createElement(
+                'button',
+                { className: 'btn btn-secondary', onClick: function onClick() {
+                    return _this2.onAddNewRow('button');
+                  } },
+                ' Add New Button '
+              ));
+              websitedesignbuttons.push(_react2.default.createElement(
+                'button',
+                { className: 'btn btn-secondary', onClick: function onClick() {
+                    return _this2.onAddNewRow('text');
+                  } },
+                ' Add New Text '
+              ));
+              break;
+          }
+        } else {
+          websitedesignbuttons.push(_react2.default.createElement(
+            'button',
+            { className: 'btn btn-default', onClick: function onClick() {
+                return _this2.onAddNewRow('div');
+              } },
+            ' Add New Row'
           ));
         }
       }
@@ -2235,41 +2331,44 @@ var Designer = function (_React$Component) {
             ' '
           ));
         }
-
-        if (this.state.selectedElementType == 'div') {
-          selects = this.getDesignBarSelects(this.state.divOptions);
-          selects.push(_react2.default.createElement(
-            'div',
-            null,
-            'Width (out of 12)'
-          ));
-          selects.push(_react2.default.createElement(
-            'select',
-            { onChange: this.changeSize, value: this.state.size },
-            divSizeOptions
-          ));
-        } else if (this.state.selectedElementType == 'button') {
-          selects = this.getDesignBarSelects(this.state.buttonOptions);
-          selects.push(_react2.default.createElement(
-            'div',
-            null,
-            ' Button Text '
-          ));
-          selects.push(_react2.default.createElement('input', { type: 'text', value: this.state.elementInnerText, onChange: function onChange(e) {
-              return _this2.changeElementInnerText(e);
-            } }));
-        } else if (this.state.selectedElementType == 'text') {
-          selects = this.getDesignBarSelects(this.state.textOptions);
-          selects.push(_react2.default.createElement(
-            'div',
-            null,
-            ' Text Field '
-          ));
-          selects.push(_react2.default.createElement('input', { type: 'text', value: this.state.elementInnerText, onChange: function onChange(e) {
-              return _this2.changeElementInnerText(e);
-            } }));
+        switch (this.state.selectedElementType) {
+          case 'div':
+            selects = this.getDesignBarSelects(this.state.divOptions);
+            selects.push(_react2.default.createElement(
+              'div',
+              null,
+              'Width (out of 12)'
+            ));
+            selects.push(_react2.default.createElement(
+              'select',
+              { onChange: this.changeSize, value: this.state.size },
+              divSizeOptions
+            ));
+            break;
+          case 'button':
+            selects = this.getDesignBarSelects(this.state.buttonOptions);
+            selects.push(_react2.default.createElement(
+              'div',
+              null,
+              ' Button Text '
+            ));
+            selects.push(_react2.default.createElement('input', { type: 'text', value: this.state.elementInnerText, onChange: function onChange(e) {
+                return _this2.changeElementInnerText(e);
+              } }));
+            break;
+          case 'text':
+            selects = this.getDesignBarSelects(this.state.textOptions);
+            selects.push(_react2.default.createElement(
+              'div',
+              null,
+              ' Text Field '
+            ));
+            selects.push(_react2.default.createElement('input', { type: 'text', value: this.state.elementInnerText, onChange: function onChange(e) {
+                return _this2.changeElementInnerText(e);
+              } }));
+            break;
+          default:
         }
-
         selects.push(_react2.default.createElement(
           'div',
           null,
@@ -2279,10 +2378,7 @@ var Designer = function (_React$Component) {
             'Delete'
           )
         ));
-      } else if (this.state.selectedButtonID != null) {
-        console.log(this.state.selectedButtonID);
       }
-
       return _react2.default.createElement(
         'div',
         null,
@@ -2312,13 +2408,6 @@ var Designer = function (_React$Component) {
               height: '50px',
               backgroundColor: 'gray',
               borderTop: '3px solid black' } },
-          _react2.default.createElement(
-            'button',
-            { className: 'btn btn-default', onClick: function onClick() {
-                return _this2.onAddNewRow('div');
-              } },
-            ' Add New Row'
-          ),
           websitedesignbuttons,
           _react2.default.createElement(
             'button',
@@ -2353,85 +2442,114 @@ function GetJSX(websitelayout, onDivClicked, repeatinglayout, thinginstances) {
   var result = [];
   websitelayout.forEach(function (description) {
 
-    var newElement = getElement(result, onDivClicked, description.id, description.className, description.element, description.style, description.text, description.children, repeatinglayout, thinginstances, null);
+    var newElement = getElement(onDivClicked, description.id, description.className, description.element, description.style, description.text, description.children, repeatinglayout, thinginstances, null);
     result = result.slice().concat(newElement);
   });
   return result;
 }
 
-function getElement(result, onDivClicked, id, className, element, style, text, children, repeatinglayout, thinginstances, thingInstance) {
+function convertString(text, thingInstance) {
+  var replacedString = text.slice(0);
+  var thingAttributeNames = Object.keys(thingInstance);
+  console.log("yello");
+  thingAttributeNames.forEach(function (thingAttributeName) {
+    var thingAttributeValue = thingInstance[thingAttributeName].value;
+    var magicBracketString = '{' + thingAttributeName + '}';
+    replacedString = replacedString.replace(new RegExp(magicBracketString, 'g'), thingAttributeValue);
+  });
+  return replacedString;
+}
+
+function getElement(onDivClicked, id, className, element, style, text, children, repeatinglayout, thinginstances, thingInstance) {
   switch (element) {
     case 'div':
       console.log("indiv");
       return getDiv(id, onDivClicked, className, style, text, children, repeatinglayout, thinginstances, thingInstance);
+    case 'repeatingArea':
+      console.log("inRepeatingArea");
+      return getDiv(id, onDivClicked, className, style, text, children, repeatinglayout, thinginstances, thingInstance);
     case 'button':
       console.log("inbutton");
-      return getButton(id, onDivClicked, className, style, text);
+      return getButton(id, onDivClicked, className, style, text, thingInstance);
     case 'text':
-      return getSpan(id, onDivClicked, style, text);
+      return getSpan(id, onDivClicked, style, text, thingInstance);
   }
 }
 
-function getButton(id, onDivClicked, className, style, text) {
+function getButton(id, onDivClicked, className, style, text, thingInstance) {
+  var replacedString = text.slice(0);
+  console.log(thingInstance);
+  console.log("please");
+  if (thingInstance != null) {
+    console.log("hey");
+    replacedString = convertString(replacedString, thingInstance);
+  }
+
   console.log("BUTTONTEXT" + text);
   return _react2.default.createElement(
     'button',
     { id: id, className: className, onClick: function onClick(e) {
         return onDivClicked(e, id, true);
       }, style: style },
-    text
+    replacedString
   );
 }
 
-function getSpan(id, onDivClicked, style, text) {
+function getSpan(id, onDivClicked, style, text, thingInstance) {
+  var replacedString = text.slice(0);
+  if (thingInstance != null) {
+    replacedString = convertString(replacedString, thingInstance);
+  }
+
   return _react2.default.createElement(
     'span',
     { id: id, onClick: function onClick(e) {
         return onDivClicked(e, id, true);
       }, style: style },
     ' ',
-    text,
+    replacedString,
     ' '
   );
 }
 
 function getDiv(id, onDivClicked, className, style, text, children, repeatinglayout, thinginstances, thingInstance) {
   if (className != null) {
-    if (className.includes('repeatingArea') && repeatinglayout != null && thinginstances != null) {
-      var repLayout = getRepeatingLayout(repeatinglayout, thinginstances);
+    if (className.includes('repeatingArea')) {
+      if (repeatinglayout != null && thinginstances != null) {
+        console.log("inheredoh");
+        var repLayout = getRepeatingLayout(repeatinglayout, thinginstances);
+      } else {
+        return _react2.default.createElement(
+          'div',
+          { className: className, id: id, style: style },
+          text
+        );
+      }
     }
-  }
-  var replacedString = text.slice(0);
-  var childrenElements = [];
-  if (children != null && children.length > 0) {
-    children.forEach(function (child) {
-      var newChildElement = getElement(null, onDivClicked, child.id, child.className, child.element, child.style, child.text, child.children, null, null, null);
-      childrenElements.push(newChildElement);
-    });
-  }
-  if (repeatinglayout == null && thinginstances == null && thingInstance != null) {
-    var thingAttributeNames = Object.keys(thingInstance);
-    thingAttributeNames.forEach(function (thingAttributeName) {
-      var thingAttributeValue = thingInstance[thingAttributeName].value;
-      var magicBracketString = '{' + thingAttributeName + '}';
-      replacedString = replacedString.replace(new RegExp(magicBracketString, 'g'), thingAttributeValue);
-    });
-  }
+    var replacedString = text.slice(0);
+    var childrenElements = [];
+    if (children != null && children.length > 0) {
+      children.forEach(function (child) {
+        var newChildElement = getElement(onDivClicked, child.id, child.className, child.element, child.style, child.text, child.children, repeatinglayout, thinginstances, thingInstance);
+        childrenElements.push(newChildElement);
+      });
+    }
 
-  if (repLayout == null) {
-    return _react2.default.createElement(
-      'div',
-      { className: className, id: id, onClick: function onClick(e) {
-          return onDivClicked(e, id);
-        }, style: style },
-      childrenElements
-    );
-  } else {
-    return _react2.default.createElement(
-      'div',
-      { className: className, style: style },
-      repLayout
-    );
+    if (repLayout == null) {
+      return _react2.default.createElement(
+        'div',
+        { className: className, id: id, onClick: function onClick(e) {
+            return onDivClicked(e, id);
+          }, style: style },
+        childrenElements
+      );
+    } else {
+      return _react2.default.createElement(
+        'div',
+        { className: className },
+        repLayout
+      );
+    }
   }
 }
 
@@ -2441,7 +2559,7 @@ function getRepeatingLayout(repeatinglayout, thinginstances) {
     console.log("SAMYOUFUCKER");
     var thingInstance = thinginstances[index];
     repeatinglayout.forEach(function (description) {
-      var newElement = getElement(result, description.element, description.props, description.text, null, null, thingInstance);
+      var newElement = getElement(null, description.id, description.className, description.element, description.style, description.text, description.children, null, null, thingInstance);
       result = result.slice().concat(newElement);
     });
   }

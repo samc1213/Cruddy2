@@ -89,7 +89,7 @@ class Designer extends React.Component {
       }
   }
 
-  appendChildInDesign = (parentId, newChild) => {
+  appendChildInDesign = (parentId, newChild, selectItem = true) => {
     var design = this.getDesign();
     if (parentId == null){
       design.push(newChild);
@@ -101,7 +101,12 @@ class Designer extends React.Component {
       this.wipeSelectionStyle(() =>this.updateElementInDesign(parentId, updateCallback));
 
     }
-    this.updateDesignState(design, () => this.onElementClicked(null, newChild.id));
+    if (selectItem){
+      this.updateDesignState(design, () => this.onElementClicked(null, newChild.id, newChild.element));
+    }
+    else{
+      this.updateDesignState(design, () => true);
+    }
   }
 
   wipeSelectionStyle = (callback, onSubmit = false) => {
@@ -251,7 +256,7 @@ class Designer extends React.Component {
 
     }
     this.wipeSelectionStyle(() => this.updateElementInDesign(id, updateCallback, false));
-    if (e == null){
+    if (e == null && elementType == 'div'){
       $('#designarea').scrollTop($('#designarea')[0].scrollHeight);
     }
   }
@@ -367,9 +372,9 @@ class Designer extends React.Component {
       case 'repeatingArea':
         this.getAndIncrementId((id) => {
           var style = {'borderColor': 'green', 'borderStyle': 'solid'}
-          var customElementRepresentation = {style: style, id: id, text:"repeatingArea", className:"repeatingArea col-md-12", element:"div", children:[]}
+          var customElementRepresentation = {style: style, id: id, text:"repeatingArea", className:"repeatingArea col-md-12", element:"repeatingArea", children:[]}
           var newDesign = this.getDesign();
-          this.appendChildInDesign(this.state.selectedElementID, customElementRepresentation)
+          this.appendChildInDesign(this.state.selectedElementID, customElementRepresentation, false)
         });
         break;
       case 'button':
@@ -397,9 +402,19 @@ class Designer extends React.Component {
 
   onAddThingAttributeName = (thingAttributeName) =>
   {
-    if (this.state.selectedElementID != null){
-      document.getElementById(this.state.selectedElementID).insertAdjacentHTML('beforeend', '{' + thingAttributeName + '}')
+    if (this.state.selectedElementID != null && (this.state.selectedElementType == 'text' || this.state.selectedElementType == 'button')){
+      var updateCallback = (element, parent) =>  {
+        var newText = element.text.slice(0);
+        newText = newText + '{'+ thingAttributeName+'}';
+        element.text = newText;
+        this.setState({
+          elementInnerText: newText,
+        });
+
+      }
+      this.updateElementInDesign(this.state.selectedElementID, updateCallback);
     }
+
   }
 
   getDesignBarSelects = (options) => {
@@ -419,24 +434,52 @@ class Designer extends React.Component {
 
   render() {
     var design;
-    var websitedesignbuttons = null;
+    var websitedesignbuttons = [];
     if (this.state.currentDesignState == 'website')
     {
       design = NewJsxFactory.GetJSX(this.state.websiteDesign, this.onElementClicked, null, null);
       console.log(design);
-      websitedesignbuttons = [<button onClick = {() => this.onAddNewRow('repeatingArea')}> Add New Repeating Unit</button>]
+      if (this.state.selectedElementID !=null){
+        switch (this.state.selectedElementType) {
+          case 'div':
+            websitedesignbuttons.push(<button className="btn btn-secondary" onClick = {() => this.onAddNewRow('text')}> Add New Text </button>);
+            websitedesignbuttons.push(<button className="btn btn-default" onClick = {() => this.onAddNewRow('div')}> Add New Row</button>);
+            websitedesignbuttons.push(<button onClick = {() => this.onAddNewRow('repeatingArea')}> Add New Repeating Unit</button>);
+            break;
+        }
+      }
+      else{
+        websitedesignbuttons.push(<button className="btn btn-default" onClick = {() => this.onAddNewRow('div')}> Add New Row</button>);
+        websitedesignbuttons.push(<button onClick = {() => this.onAddNewRow('repeatingArea')}> Add New Repeating Unit</button>);
+      }
     }
     else {
       design = NewJsxFactory.GetJSX(this.state.repeatingDesign, this.onElementClicked, null, null);
-      console.log(design);
-      if (this.state.selectedElementID != null && this.state.selectedElementType == 'div'){
-        websitedesignbuttons = [<span >Add Thing Attribute:</span>];
-        for (let thingattributeid in this.props.thingAttributes){
-          websitedesignbuttons.push( <button className="btn btn-secondary" onClick = {() => this.onAddThingAttributeName(this.props.thingAttributes[thingattributeid].name.slice())}> {this.props.thingAttributes[thingattributeid].name.slice()} </button>);
+      if (this.state.selectedElementID != null){
+        switch (this.state.selectedElementType) {
+          case 'text':
+            websitedesignbuttons.push(<span >Add Thing Attribute:</span>);
+            for (let thingattributeid in this.props.thingAttributes){
+              websitedesignbuttons.push( <button className="btn btn-secondary" onClick = {() => this.onAddThingAttributeName(this.props.thingAttributes[thingattributeid].name.slice())}> {this.props.thingAttributes[thingattributeid].name.slice()} </button>);
+            }
+            break;
+          case 'button':
+            websitedesignbuttons.push(<span >Add Thing Attribute:</span>);
+            for (let thingattributeid in this.props.thingAttributes){
+              websitedesignbuttons.push( <button className="btn btn-secondary" onClick = {() => this.onAddThingAttributeName(this.props.thingAttributes[thingattributeid].name.slice())}> {this.props.thingAttributes[thingattributeid].name.slice()} </button>);
+            }
+            break;
+          case 'div':
+            websitedesignbuttons.push(<button className="btn btn-default" onClick = {() => this.onAddNewRow('div')}> Add New Row</button>);
+            websitedesignbuttons.push(<button className="btn btn-secondary" onClick = {() => this.onAddNewRow('button')}> Add New Button </button>);
+            websitedesignbuttons.push(<button className="btn btn-secondary" onClick = {() => this.onAddNewRow('text')}> Add New Text </button>);
+            break;
         }
-        websitedesignbuttons.push(<button className="btn btn-secondary" onClick = {() => this.onAddNewRow('button')}> Add New Button </button>);
-        websitedesignbuttons.push(<button className="btn btn-secondary" onClick = {() => this.onAddNewRow('text')}> Add New Text </button>);
       }
+      else {
+        websitedesignbuttons.push(<button className="btn btn-default" onClick = {() => this.onAddNewRow('div')}> Add New Row</button>);
+      }
+
     }
 
     let selects = [];
@@ -445,33 +488,26 @@ class Designer extends React.Component {
       for (var i = 1; i < 13; i ++){
         divSizeOptions.push(<option value ={i}> {i} </option>);
       }
-
-      if (this.state.selectedElementType == 'div')
-      {
-        selects = this.getDesignBarSelects(this.state.divOptions);
-        selects.push(<div>Width (out of 12)</div>)
-        selects.push(<select onChange = {this.changeSize} value = {this.state.size}>{divSizeOptions}</select>);
-
+      switch (this.state.selectedElementType) {
+        case 'div':
+          selects = this.getDesignBarSelects(this.state.divOptions);
+          selects.push(<div>Width (out of 12)</div>)
+          selects.push(<select onChange = {this.changeSize} value = {this.state.size}>{divSizeOptions}</select>);
+          break;
+        case 'button':
+          selects = this.getDesignBarSelects(this.state.buttonOptions);
+          selects.push(<div> Button Text </div>);
+          selects.push(<input type = 'text' value ={this.state.elementInnerText} onChange = {(e) => this.changeElementInnerText(e)}></input>)
+          break;
+        case 'text':
+          selects = this.getDesignBarSelects(this.state.textOptions);
+          selects.push(<div> Text Field </div>);
+          selects.push(<input type = 'text' value ={this.state.elementInnerText} onChange = {(e) => this.changeElementInnerText(e)}></input>)
+          break;
+        default:
       }
-      else if (this.state.selectedElementType == 'button') {
-        selects = this.getDesignBarSelects(this.state.buttonOptions);
-        selects.push(<div> Button Text </div>);
-        selects.push(<input type = 'text' value ={this.state.elementInnerText} onChange = {(e) => this.changeElementInnerText(e)}></input>)
-      }
-      else if (this.state.selectedElementType == 'text'){
-        selects = this.getDesignBarSelects(this.state.textOptions);
-        selects.push(<div> Text Field </div>);
-        selects.push(<input type = 'text' value ={this.state.elementInnerText} onChange = {(e) => this.changeElementInnerText(e)}></input>)
-
-      }
-
       selects.push(<div><button className="btn btn-danger" onClick = {this.onDelete}>Delete</button></div>);
     }
-    else if (this.state.selectedButtonID != null)
-    {
-      console.log(this.state.selectedButtonID);
-    }
-
     return (
         <div>
           <div style={{position: 'absolute', width: '200px', top:'0', bottom:'0', paddingTop:'54px', paddingBottom:'54px', right:'0', backgroundColor: 'gray', zIndex: 1, overflowY: 'scroll', overflowX: 'hidden'}}>
@@ -490,7 +526,6 @@ class Designer extends React.Component {
           height: '50px',
           backgroundColor: 'gray',
           borderTop: '3px solid black'}}>
-            <button className="btn btn-default" onClick = {() => this.onAddNewRow('div')}> Add New Row</button>
             {websitedesignbuttons}
             <button style={{float: 'right'}} className="btn btn-default" onClick = {this.onSubmit}>Submit</button>
           </div>

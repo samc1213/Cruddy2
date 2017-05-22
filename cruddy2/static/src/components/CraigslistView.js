@@ -1,7 +1,7 @@
 import React from 'react'
 import CustomCard from './CustomCard'
 import Walkthrough from './Walkthrough'
-import * as JsxFactory from '../JsxFactory'
+import * as JsxFactory from './NewJsxFactory'
 
 class CraigslistView extends React.Component {
   componentDidMount() {

@@ -9,15 +9,18 @@ class Designer extends React.Component {
     super(props);
     this.onAddNewRow = this.onAddNewRow.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.updateState = this.updateState.bind(this);
-    this.getId = this.getId.bind(this);
+    this.updateDesignState = this.updateDesignState.bind(this);
+    this.getAndIncrementId = this.getAndIncrementId.bind(this);
     this.getDesign = this.getDesign.bind(this);
     this.changeSize = this.changeSize.bind(this);
     this.changeStyle = this.changeStyle.bind(this);
     this.getPixelsInRange = this.getPixelsInRange.bind(this);
     this.onAddThingAttributeName = this.onAddThingAttributeName.bind(this);
     this.getDesignBarSelects = this.getDesignBarSelects.bind(this);
-    this.changeButtonText = this.changeButtonText.bind(this);
+    this.changeElementInnerText = this.changeElementInnerText.bind(this);
+    this.updateElementInDesign = this.updateElementInDesign.bind(this);
+    this.appendChildInDesign = this.appendChildInDesign.bind(this);
+    this.wipeSelectionStyle = this.wipeSelectionStyle.bind(this);
     var colors = ['AliceBlue','AntiqueWhite','Aqua','Aquamarine','Azure','Beige','Bisque','Black','BlanchedAlmond','Blue','BlueViolet','Brown','BurlyWood','CadetBlue','Chartreuse','Chocolate','Coral','CornflowerBlue','Cornsilk','Crimson','Cyan','DarkBlue','DarkCyan','DarkGoldenRod'
     ,'DarkGray','DarkGrey','DarkGreen','DarkKhaki','DarkMagenta','DarkOliveGreen','DarkOrange','DarkOrchid','DarkRed','DarkSalmon','DarkSeaGreen','DarkSlateBlue','DarkSlateGray','DarkSlateGrey','DarkTurquoise','DarkViolet','DeepPink','DeepSkyBlue','DimGray','DimGrey','DodgerBlue','FireBrick','FloralWhite','ForestGreen','Fuchsia'
     ,'Gainsboro','GhostWhite','Gold','GoldenRod','Gray','Grey','Green','GreenYellow','HoneyDew','HotPink','IndianRed','Indigo','Ivory','Khaki','Lavender','LavenderBlush','LawnGreen','LemonChiffon','LightBlue','LightCoral',
@@ -30,8 +33,12 @@ class Designer extends React.Component {
     nonAbledColors.unshift('None');
 
     this.state = {
-      buttonOptions: [{cssStyle: 'color', choices:['Black', 'Blue'], title: 'Color', default: 'Blue', affectsButton:'true'},
+      buttonOptions: [{cssStyle: 'color', choices:['Black', 'Blue'], title: 'Color', default: 'Blue'},
       ],
+      textOptions: [{cssStyle: 'color', choices: colors, title: 'Text Color', default: 'Black'},
+      {cssStyle: 'fontSize', choices: this.getPixelsInRange(5, 60), title: 'Text Size', default: '15px'},
+      {cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Text Style', default: 'Arial'},
+      {cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal'},],
 
       divOptions: [{cssStyle: 'borderStyle', choices: ['None', 'Dotted', 'Dashed', 'Solid', 'Double'], title: 'Border Style', default: 'None'},
      {cssStyle: 'borderColor', choices: colors, title: 'Border Color', default: 'Black'},
@@ -44,120 +51,206 @@ class Designer extends React.Component {
      {cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal'},
      {cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None'},
      {cssStyle: 'height', choices: this.getPixelsInRange(5, 400), title: 'Height', default: '100px'}],
-    websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedDivID: null, buttonText:'button', selectedDivIsButtonDiv: false, size: 12};
+    websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedElementID: null, elementInnerText:'button', selectedElementType: 'div', size: 12, idCount: 0};
 
     this.state.divOptions.forEach((option) => {
       this.state[option.cssStyle] = option.default;
     });
   }
 
-  changeButtonText = (e) =>{
-    if (this.state.selectedDivID != null && this.state.selectedDivIsButtonDiv){
-      var newDesign = this.getDesign();
-      var id = this.state.selectedDivID.slice(0);
-      var divID = id.slice(0, id.length -3);
-      var divThatClicked = newDesign.filter(design =>  design.id == divID)[0];
-      newDesign[newDesign.findIndex(design =>  design.id == divID)].children[divThatClicked.children.findIndex(child => child.id == id)].text = e.target.value;
+  changeElementInnerText = (e) =>{
+    if (this.state.selectedElementID != null && (this.state.selectedElementType == 'button' || this.state.selectedElementType == 'text')){
+      var updateCallback = (element, parent) =>  {
+        element.text = e.target.value;
+      }
+      this.updateElementInDesign(this.state.selectedElementID, updateCallback);
       this.setState({
-        buttonText: e.target.value
+        elementInnerText: e.target.value
       })
-
-
     }
   }
 
   onDelete = () => {
-    if (this.state.selectedDivID != null)
+    if (this.state.selectedElementID != null)
     {
-      if (this.state.selectedDivIsButtonDiv){
-        var newDesign = this.getDesign();
-        var id = this.state.selectedDivID.slice(0);
-        var divID = id.slice(0, id.length -3);
-        var divThatClicked = newDesign.filter(design =>  design.id == divID)[0];
-        console.log("what");
+        var updateCallback = (element, parent) =>{
+          if ('children' in parent)
+          {
+            parent.children.splice(parent.children.indexOf((child) => child.id == element.id), 1);
+            this.onElementClicked(null, parent.id, () => true);
+          }
+          else {
+            parent.splice(parent.indexOf((child) => child.id == element.id), 1);
+            this.setState({selectedElementID: null});
+          }
+        };
+        this.updateElementInDesign(this.state.selectedElementID, updateCallback);
 
-        newDesign[newDesign.findIndex(design =>  design.id == divID)].children = divThatClicked.children.filter((child) => child.id !== id);
-        this.updateState(newDesign, ()=>this.onDivClicked(null, null));
       }
-      else{
-        var newDesign = this.getDesign();
-        this.updateState(newDesign.filter((design) => design.id !== this.state.selectedDivID), ()=>this.onDivClicked(null, null));
-
-      }
-    }
   }
 
-  onDivClicked = (e, id, isButtonDiv = false) => {
+  appendChildInDesign = (parentId, newChild) => {
+    var design = this.getDesign();
+    if (parentId == null){
+      design.push(newChild);
+    }
+    else{
+      var updateCallback = (element) => {
+        element.children.push(newChild);
+      }
+      this.wipeSelectionStyle(() =>this.updateElementInDesign(parentId, updateCallback));
+
+    }
+    this.updateDesignState(design, () => this.onElementClicked(null, newChild.id));
+  }
+
+  wipeSelectionStyle = (callback, onSubmit = false) => {
+    var stack = [];
+    var design = this.getDesign();
+    design.forEach((topLevelElement, index) => {
+      var newStyle = Object.assign({}, topLevelElement.style)
+      if (onSubmit){
+        newStyle['outlineColor'] = 'transparent'
+        newStyle['outlineStyle'] = 'None'
+
+      }
+      else{
+        newStyle['outlineColor'] = 'WhiteSmoke'
+        newStyle['outlineStyle'] = 'dashed'
+
+      }
+      topLevelElement.style = newStyle;
+      stack.push(topLevelElement)
+    })
+    while (stack.length != 0) {
+      var element = stack.pop();
+        element.children.forEach((child, index) =>{
+        var newStyle = Object.assign({}, child.style)
+        if (onSubmit){
+          newStyle['outlineColor'] = 'transparent'
+          newStyle['outlineStyle'] = 'None'
+        }
+        else{
+          newStyle['outlineColor'] = 'WhiteSmoke'
+          newStyle['outlineStyle'] = 'dashed'
+        }
+        child.style = newStyle;
+        stack.push(child);
+        });
+    }
+
+    this.updateDesignState(design, callback);
+  }
+
+  wipeSelectionStyleClear = (callback) => {
+    var stack = [];
+    var design = this.getDesign();
+    design.forEach((topLevelElement, index) => {
+      var newStyle = Object.assign({}, topLevelElement.style)
+      newStyle['outlineColor'] = 'transparent'
+      newStyle['outlineStyle'] = 'None'
+      topLevelElement.style = newStyle;
+      stack.push(topLevelElement)
+    })
+    while (stack.length != 0) {
+      var element = stack.pop();
+        element.children.forEach((child, index) =>{
+        var newStyle = Object.assign({}, child.style)
+        newStyle['outlineColor'] = 'transparent'
+        newStyle['outlineStyle'] = 'None'
+        child.style = newStyle;
+        stack.push(child);
+        });
+    }
+
+    this.updateDesignState(design, callback);
+  }
+
+  updateElementInDesign = (id, elementUpdateCallback) => {
+   var stack = [];
+   var design = this.getDesign();
+   design.forEach((topLevelElement, index) => {
+     stack.push({element: topLevelElement, index: index, parentIndexTracker: [index], parent: design})
+   });
+   while (stack.length != 0) {
+     var elementIndex = stack.pop();
+     if (elementIndex.element.id != id) {
+       elementIndex.element.children.forEach((child, index) =>{
+         var currentParentIndexTracker = elementIndex.parentIndexTracker.slice();
+         currentParentIndexTracker.push(index);
+         stack.push({element: child, index: index, parentIndexTracker: currentParentIndexTracker, parent: elementIndex.element})
+       })
+     }
+     else {
+       var pathToElement = elementIndex.parentIndexTracker.slice();
+       var index = pathToElement.shift();
+       var element = design[index];
+       while (pathToElement.length > 0) {
+         index = pathToElement.shift();
+         element = element.children[index];
+       }
+       elementUpdateCallback(element, elementIndex.parent);
+       this.updateDesignState(design, () => true);
+       return true;
+     }
+   }
+    return false;
+  }
+
+  onElementClicked = (e, id, elementType = 'div') => {
     if (e != null)
     {
       e.stopPropagation();
     }
 
     var newDesign = this.getDesign();
-    newDesign.forEach((design, i) => {
-      var newDesignStyle = Object.assign({}, design.style)
-      newDesignStyle['outlineColor'] = 'WhiteSmoke'
-      newDesignStyle['outlineStyle'] = 'dashed'
-      newDesign[i].style = newDesignStyle;
-      design.children.forEach((child, j) =>{
-        var newDesignStyle = Object.assign({}, child.style)
-        newDesignStyle['outlineColor'] = 'transparent'
-        newDesignStyle['outineStyle'] = 'none'
-        newDesign[i].children[j].style = newDesignStyle;
-      })
-    });
     if (id == null)
     {
       this.setState({
-        selectedDivID: id,
-        selectedDivIsButtonDiv: false,
+        selectedElementID: id,
+        selectedElementType: elementType,
         size: 12,
       });
+      this.wipeSelectionStyle(()=> true);
       return;
     }
-    let divID = id;
-    if(isButtonDiv){
-      divID = id.slice(0, id.length-3);
-    }
-    let buttonText = '';
-    var divThatClicked = newDesign.filter(design =>  design.id == divID)[0];
-    var size = divThatClicked.className.slice(7);
-    if (!isButtonDiv)
-    {
-      this.state.divOptions.forEach((option) => {
-        var style = divThatClicked.style[option.cssStyle];
-        this.setState({[option.cssStyle]: style});
-      })
-      var newStyle = Object.assign({}, divThatClicked.style);
+    let elementInnerText = '';
+    var updateCallback = (element, parent) => {
+      switch (element.element) {
+        case 'div':
+          this.state.divOptions.forEach((option) => {
+            var style = element.style[option.cssStyle];
+            this.setState({[option.cssStyle]: style});
+          })
+        break;
+        case 'button':
+          this.state.buttonOptions.forEach((option) =>{
+            var style = element.style[option.cssStyle];
+            this.setState({[option.cssStyle]: style})
+          })
+        break;
+        case 'text':
+          this.state.textOptions.forEach((option) =>{
+            var style = element.style[option.cssStyle];
+            this.setState({[option.cssStyle]: style})
+          })
+        break;
+      }
+      var newStyle = Object.assign({}, element.style);
       newStyle['outlineColor'] = 'red';
       newStyle['outlineStyle'] = 'dashed';
       newStyle['outlineWidth'] = '2.5px';
-      newDesign[newDesign.findIndex(design =>  design.id == divID)].style = newStyle;
+      element.style = newStyle;
+      var size = element.className.slice(7);
+      this.setState({
+        selectedElementID: element.id,
+        selectedElementType: element.element,
+        elementInnerText: element.text,
+        size: size,
+      });
 
     }
-    else {
-      var elementThatClicked = divThatClicked.children.filter(child => child.id == id)[0];
-      console.log(elementThatClicked);
-      this.state.buttonOptions.forEach((option) => {
-        var style = elementThatClicked.style[option.cssStyle];
-        this.setState({[option.cssStyle]: style});
-      })
-      var newStyle = Object.assign({}, elementThatClicked.style);
-      newStyle['outlineColor'] = 'red';
-      newStyle['outlineStyle'] = 'dashed';
-      newStyle['outlineWidth'] = '2.5px';
-      buttonText = elementThatClicked.text;
-      newDesign[newDesign.findIndex(design =>  design.id == divID)].children[divThatClicked.children.findIndex(design => design.id == id)].style = newStyle;
-
-    }
-    this.setState({
-      selectedDivID: id,
-      selectedDivIsButtonDiv: isButtonDiv,
-      buttonText: buttonText,
-      size: size,
-    });
-    console.log(this.state.buttonText);
-    this.updateState(newDesign, () => true);
+    this.wipeSelectionStyle(() => this.updateElementInDesign(id, updateCallback, false));
     if (e == null){
       $('#designarea').scrollTop($('#designarea')[0].scrollHeight);
     }
@@ -165,36 +258,24 @@ class Designer extends React.Component {
 
   onSubmit = () => {
     if (this.state.currentDesignState == 'repeatingunit'){
-      var repeatingDesignCopy = this.state.repeatingDesign.slice();
-      repeatingDesignCopy.forEach((design, i) => {
-        var newDesign = Object.assign({}, design);
-        newDesign.style['outlineColor'] = 'None'
-        newDesign.style['outlineStyle'] = 'None'
-        newDesign.contentEditable = false;
-        repeatingDesignCopy[i] = newDesign
-      });
-      this.setState({
-        currentDesignState: 'website',
-        repeatingUnitCustomLayout: repeatingDesignCopy
-      })
+      var callback = () =>{
+        this.setState({
+          currentDesignState: 'website',
+          repeatingUnitCustomLayout: this.getDesign(),
+          selectedElementID: null
+        })
+      }
+      this.wipeSelectionStyle(callback, true);
     }
     else{
-      var websiteDesignCopy = this.state.websiteDesign.slice();
-      websiteDesignCopy.forEach((design, i) => {
-        var newDesign = Object.assign({}, design);
-        newDesign.style['outlineColor'] = 'None'
-        newDesign.style['outlineStyle'] = 'None'
-        newDesign.contentEditable = false;
-        if (design.props.className.includes('repeatingArea'))
-        {
-          newDesign.style['borderStyle'] = 'None';
-        }
-        websiteDesignCopy[i] = newDesign;
-      });
-      var result = {};
-      result['websitelayout'] = websiteDesignCopy;
-      result['repeatinglayout'] = this.state.repeatingUnitCustomLayout;
-      this.props.submitWebsiteDesign({layout: JSON.stringify(result), websiteName: this.props.websiteName});
+      var callback = () =>{
+        var websiteDesignCopy = this.state.websiteDesign.slice();
+        var result = {};
+        result['websitelayout'] = websiteDesignCopy;
+        result['repeatinglayout'] = this.state.repeatingUnitCustomLayout;
+        this.props.submitWebsiteDesign({layout: JSON.stringify(result), websiteName: this.props.websiteName});
+      }
+      this.wipeSelectionStyle(callback, true);
     }
   }
 
@@ -206,7 +287,7 @@ class Designer extends React.Component {
     return options;
   }
 
-  updateState = (design, callback) => {
+  updateDesignState = (design, callback) => {
     if (this.state.currentDesignState == 'website')
     {
       this.setState({
@@ -217,22 +298,21 @@ class Designer extends React.Component {
       this.setState({
         repeatingDesign: design,
       }, callback)
-
     }
-
   }
 
-  getId = () =>{
-    return this.state.currentDesignState + this.getDesign().length;
+  getAndIncrementId = (callback) => {
+    var idString = this.state.currentDesignState.slice() + this.state.idCount;
+    this.setState({idCount: this.state.idCount+ 1}, callback(idString))
   }
 
   getDesign = () => {
     if(this.state.currentDesignState == 'website')
     {
-      return this.state.websiteDesign.slice();
+      return this.state.websiteDesign.map(d => Object.assign({}, d));
     }
     else{
-      return this.state.repeatingDesign.slice();
+      return this.state.repeatingDesign.map(d => Object.assign({}, d));
     }
   }
 
@@ -241,94 +321,88 @@ class Designer extends React.Component {
     this.setState({
       size: event.target.value,
     })
-    if (this.state.selectedDivID != null)
+    if (this.state.selectedElementID != null)
     {
-      var newDesign = this.getDesign();
-      var elementThatClicked = newDesign.filter(design =>  design.id == this.state.selectedDivID)[0];
-      var newClassName = "col-md-" + event.target.value;
-      elementThatClicked.className = newClassName;
-      newDesign[newDesign.findIndex(design =>  design.id == this.state.selectedDivID)] = elementThatClicked;
-      this.updateState(newDesign, (state) => true);
+      var updateCallback = (element, parent) => {
+        var newClassName = "col-md-" + event.target.value;
+        element.className = newClassName;
+      }
+      this.updateElementInDesign(this.state.selectedElementID, updateCallback);
     }
   }
 
-  changeStyle = (event, styleName, affectsButton, thingToAppend='') =>
+  changeStyle = (event, styleName, thingToAppend='') =>
   {
     this.setState({
       [styleName]: event.target.value,
     })
-    if (this.state.selectedDivID !=null){
-      if (!affectsButton){
-        var newDesign = this.getDesign();
-        var elementThatClicked = newDesign.filter(design =>  design.id == this.state.selectedDivID)[0];
-        var newStyle = Object.assign({}, elementThatClicked.style);
+    if (this.state.selectedElementID !=null){
+      var updateCallback = (element, parent) => {
+        var newStyle = Object.assign({}, element.style);
         newStyle[styleName] = event.target.value;
-        newDesign[newDesign.findIndex(design =>  design.id == this.state.selectedDivID)].style = newStyle;
-        this.updateState(newDesign, () => true);
+        element.style = newStyle;
       }
-      else{
-        var id = this.state.selectedDivID.slice(0);
-        var divID = id.slice(0, id.length-3);
-        var newDesign = this.getDesign();
-        var divThatClicked = newDesign.filter(design =>  design.id == divID)[0];
-        var elementThatClicked = divThatClicked.children.filter(child => child.id = id)[0];
-        var newStyle = Object.assign({}, elementThatClicked.style);
-        newStyle[styleName] = event.target.value;
-        newDesign[newDesign.findIndex(design =>  design.id == divID)].children[divThatClicked.children.findIndex(child => child.id == id)].style = newStyle;
-        this.updateState(newDesign, () => true);
-      }
-
+      this.updateElementInDesign(this.state.selectedElementID, updateCallback);
     }
   }
 
   onAddNewRow = (newItem) =>
   {
+    this.setState({
+      selectedElementType: newItem,
+    })
     switch (newItem)
     {
-      case 'row':
-        var id = this.getId();
-        var style = {'contentEditable': 'true', 'overflow':'hidden'}
-        this.state.divOptions.forEach((option) =>{
-          style[option.cssStyle] = option.default;
-        })
-        var customElementRepresentation = { style: style, id: id, contentEditable: true, text:"", className: "col-md-12", element: "div", children: [] }
-        // var newElement = <div onClick={() => this.onDivClicked(id)} id={id} contentEditable className="col-md-12" style={style}></div>;
-        var newDesign = this.getDesign();
-        newDesign.push(customElementRepresentation);
-        this.updateState(newDesign, () => this.onDivClicked(null, id));
-
+      case 'div':
+        this.getAndIncrementId((id) => {
+          var style = { 'overflow':'hidden'}
+          this.state.divOptions.forEach((option) =>{
+            style[option.cssStyle] = option.default;
+          })
+          var customElementRepresentation = { style: style, id: id, text:"", className: "col-md-12", element: "div", children: [] }
+          // var newElement = <div onClick={() => this.onElementClicked(id)} id={id} contentEditable className="col-md-12" style={style}></div>;
+          this.appendChildInDesign(this.state.selectedElementID, customElementRepresentation)
+        });
         break;
       case 'repeatingArea':
-        var id = this.getId();
-        var newElement = <div id={id} className="col-md-12 repeatingArea" style={{'borderColor': 'green', 'borderStyle': 'solid', 'contentEditable': 'true'}}> Repeating Area Bitch</div>;
-        var newDesign = this.getDesign();
-        newDesign.push(newElement);
-        this.updateState(newDesign, () => true);
+        this.getAndIncrementId((id) => {
+          var style = {'borderColor': 'green', 'borderStyle': 'solid'}
+          var customElementRepresentation = {style: style, id: id, text:"repeatingArea", className:"repeatingArea col-md-12", element:"div", children:[]}
+          var newDesign = this.getDesign();
+          this.appendChildInDesign(this.state.selectedElementID, customElementRepresentation)
+        });
         break;
       case 'button':
-
-        var id = this.state.selectedDivID.slice()+'but';
+        this.getAndIncrementId((id) => {
+          var style = {'overflow':'hidden'}
+          this.state.buttonOptions.forEach((option) =>{
+            style[option.cssStyle] = option.default;
+          });
+          var customElementRepresentation = { style: style, id: id, text:'button', className: "btn btn-default", element: "button", children:[]};
+          this.appendChildInDesign(this.state.selectedElementID, customElementRepresentation);
+        });
+        break;
+      case 'text':
+      this.getAndIncrementId((id) => {
         var style = {'overflow':'hidden'}
-        this.state.buttonOptions.forEach((option) =>{
+        this.state.textOptions.forEach((option) =>{
           style[option.cssStyle] = option.default;
         });
-        var customElementRepresentation = { style: style, id: id, text:"button", className: "btn btn-default", contentEditable:false, element: "button"}
-        var newDesign = this.getDesign();
-        newDesign[newDesign.findIndex(design =>  design.id == this.state.selectedDivID)].children.push(customElementRepresentation);
-        this.updateState(newDesign, () => true);
-        break;
+        var customElementRepresentation = { style: style, id: id, text:'text', className: '', element: "text", children: []}
+        this.appendChildInDesign(this.state.selectedElementID, customElementRepresentation);
+      });
+      break;
     }
   }
 
   onAddThingAttributeName = (thingAttributeName) =>
   {
-    if (this.state.selectedDivID != null){
-      console.log(thingAttributeName)
-      document.getElementById(this.state.selectedDivID).innerText += '{' + thingAttributeName + '}';
+    if (this.state.selectedElementID != null){
+      document.getElementById(this.state.selectedElementID).insertAdjacentHTML('beforeend', '{' + thingAttributeName + '}')
     }
   }
 
-  getDesignBarSelects(options) {
+  getDesignBarSelects = (options) => {
     var selects = [];
     options.forEach((option) => {
       var styleChoices = [];
@@ -336,59 +410,59 @@ class Designer extends React.Component {
         styleChoices.push(<option value = {choice}> {choice} </option>);
       })
       selects.push(<div> {option.title} </div>)
-      let affectsButton = false
-      if( 'affectsButton' in option){
-        affectsButton = option.affectsButton;
-      }
 
-      selects.push(<select onChange = {(e) => this.changeStyle(e, option.cssStyle, affectsButton)} value = {this.state[option.cssStyle]}> {styleChoices} </select>);
+      selects.push(<select onChange = {(e) => this.changeStyle(e, option.cssStyle)} value = {this.state[option.cssStyle]}> {styleChoices} </select>);
     })
 
     return selects;
   }
 
   render() {
-    console.log("yothisadumbbitch")
     var design;
     var websitedesignbuttons = null;
     if (this.state.currentDesignState == 'website')
     {
-      console.log("inwebsitedesign")
-      design = NewJsxFactory.GetJSX(this.state.websiteDesign, this.onDivClicked, null, null);
-
+      design = NewJsxFactory.GetJSX(this.state.websiteDesign, this.onElementClicked, null, null);
+      console.log(design);
       websitedesignbuttons = [<button onClick = {() => this.onAddNewRow('repeatingArea')}> Add New Repeating Unit</button>]
     }
     else {
-      console.log(this.state.repeatingDesign)
-      design = NewJsxFactory.GetJSX(this.state.repeatingDesign, this.onDivClicked, null, null);
-      console.log(design)
-      if (this.state.selectedDivID != null && !this.state.selectedDivIsButtonDiv){
+      design = NewJsxFactory.GetJSX(this.state.repeatingDesign, this.onElementClicked, null, null);
+      console.log(design);
+      if (this.state.selectedElementID != null && this.state.selectedElementType == 'div'){
         websitedesignbuttons = [<span >Add Thing Attribute:</span>];
         for (let thingattributeid in this.props.thingAttributes){
           websitedesignbuttons.push( <button className="btn btn-secondary" onClick = {() => this.onAddThingAttributeName(this.props.thingAttributes[thingattributeid].name.slice())}> {this.props.thingAttributes[thingattributeid].name.slice()} </button>);
         }
         websitedesignbuttons.push(<button className="btn btn-secondary" onClick = {() => this.onAddNewRow('button')}> Add New Button </button>);
+        websitedesignbuttons.push(<button className="btn btn-secondary" onClick = {() => this.onAddNewRow('text')}> Add New Text </button>);
       }
     }
 
     let selects = [];
-    if (this.state.selectedDivID != null){
+    if (this.state.selectedElementID != null){
       var divSizeOptions = [];
       for (var i = 1; i < 13; i ++){
         divSizeOptions.push(<option value ={i}> {i} </option>);
       }
 
-      if (!this.state.selectedDivIsButtonDiv)
+      if (this.state.selectedElementType == 'div')
       {
         selects = this.getDesignBarSelects(this.state.divOptions);
         selects.push(<div>Width (out of 12)</div>)
         selects.push(<select onChange = {this.changeSize} value = {this.state.size}>{divSizeOptions}</select>);
 
       }
-      else {
+      else if (this.state.selectedElementType == 'button') {
         selects = this.getDesignBarSelects(this.state.buttonOptions);
         selects.push(<div> Button Text </div>);
-        selects.push(<input type = 'text' value ={this.state.buttonText} onChange = {(e) => this.changeButtonText(e)}></input>)
+        selects.push(<input type = 'text' value ={this.state.elementInnerText} onChange = {(e) => this.changeElementInnerText(e)}></input>)
+      }
+      else if (this.state.selectedElementType == 'text'){
+        selects = this.getDesignBarSelects(this.state.textOptions);
+        selects.push(<div> Text Field </div>);
+        selects.push(<input type = 'text' value ={this.state.elementInnerText} onChange = {(e) => this.changeElementInnerText(e)}></input>)
+
       }
 
       selects.push(<div><button className="btn btn-danger" onClick = {this.onDelete}>Delete</button></div>);
@@ -403,7 +477,7 @@ class Designer extends React.Component {
           <div style={{position: 'absolute', width: '200px', top:'0', bottom:'0', paddingTop:'54px', paddingBottom:'54px', right:'0', backgroundColor: 'gray', zIndex: 1, overflowY: 'scroll', overflowX: 'hidden'}}>
             {selects}
           </div>
-          <div id="designarea" onClick = {(e) => this.onDivClicked(e, null)} style={{ marginBottom: '40px', marginRight: "210px", padding: "20px", position: 'absolute', top:'50px', bottom:'0', right: '0', left: '200px', overflowY: 'scroll', overflowX: 'hidden'}}>
+          <div id="designarea" onClick = {(e) => this.onElementClicked(e, null)} style={{ marginBottom: '40px', marginRight: "210px", padding: "20px", position: 'absolute', top:'50px', bottom:'0', right: '0', left: '200px', overflowY: 'scroll', overflowX: 'hidden'}}>
             <div className="row">
               {design}
             </div>
@@ -416,7 +490,7 @@ class Designer extends React.Component {
           height: '50px',
           backgroundColor: 'gray',
           borderTop: '3px solid black'}}>
-            <button className="btn btn-default" onClick = {() => this.onAddNewRow('row')}> Add New Row</button>
+            <button className="btn btn-default" onClick = {() => this.onAddNewRow('div')}> Add New Row</button>
             {websitedesignbuttons}
             <button style={{float: 'right'}} className="btn btn-default" onClick = {this.onSubmit}>Submit</button>
           </div>

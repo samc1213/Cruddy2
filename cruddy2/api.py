@@ -192,6 +192,15 @@ class api:
         thing = db.session.query(Thing).filter_by(thingname=thingName).first()
         return thing
 
-    def incrementThingAttribute(self, thingInstanceId, thingAttributeId):
-        thingInstance = db.session.query(ThingInstance).filter_by(thinginstanceid=thingInstanceId).first()
-        app.logger.debug(thingInstance.thingattributes)
+    def incrementThingAttribute(self, thingAttributeId, thingInstanceId):
+        thingInstance = db.session.query(ThingInstance).filter_by(thinginstanceid=thingInstanceId).first();
+        tempThingInstanceInfo = json.loads(thingInstance.thinginstanceinfo);
+        tempThingInstanceInfo[thingAttributeId] = int(tempThingInstanceInfo[thingAttributeId]) + 1;
+        thingInstance.thinginstanceinfo = json.dumps(tempThingInstanceInfo);
+        tempThingInstanceInfo = thingInstance.thinginstanceinfo
+        try:
+            self.sessionManager.CommitToSession([thingInstance])
+            app.logger.debug('success');
+            return True
+        except:
+            return False

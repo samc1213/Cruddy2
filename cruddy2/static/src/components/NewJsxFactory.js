@@ -48,7 +48,7 @@ function getButton(id, onDivClicked, className, style, text, thingInstance, acti
     replacedString = convertString(replacedString, thingInstance);
   }
 
-  let A = getCustomAction(id, onDivClicked, actionInfo, thingInstance);
+  let A = getCustomAction(id, onDivClicked, actionInfo, thingInstance, websiteName);
   return(<button id ={id} className={className} onClick ={A} style={style}>{replacedString}</button>)
 }
 
@@ -66,6 +66,7 @@ function getCustomAction(id, onDivClicked, actionInfo, thingInstance) {
   }
   else if (actionInfo.type == "incrementBy1") {
     console.log("INCRRR")
+    console.log(actionInfo)
     return (e) => facade.incrementThingAttribute(actionInfo.affectedThingAttributeId, thingInstance.thinginstanceid);
   }
 }

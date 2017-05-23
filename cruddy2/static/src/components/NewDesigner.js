@@ -54,7 +54,7 @@ class Designer extends React.Component {
      {cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal'},
      {cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None'},
      {cssStyle: 'height', choices: this.getPixelsInRange(5, 400), title: 'Height', default: '100px'}],
-    websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedElementID: null, elementInnerText:'button', selectedElementType: 'div', size: 12, idCount: 0};
+    selectedAction: 'none', websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedElementID: null, elementInnerText:'button', selectedElementType: 'div', size: 12, idCount: 0};
 
     this.state.divOptions.forEach((option) => {
       this.state[option.cssStyle] = option.default;
@@ -386,7 +386,7 @@ class Designer extends React.Component {
           this.state.buttonOptions.forEach((option) =>{
             style[option.cssStyle] = option.default;
           });
-          var customElementRepresentation = { style: style, id: id, text:'button', className: "btn btn-default", element: "button", children:[], actionInfo: {type: 'None'}};
+          var customElementRepresentation = { style: style, id: id, text:'button', className: "btn btn-default", element: "button", children:[], actionInfo: {type: 'None', affectedThingAttributeId: 'None'}};
           this.appendChildInDesign(this.state.selectedElementID, customElementRepresentation);
         });
         break;

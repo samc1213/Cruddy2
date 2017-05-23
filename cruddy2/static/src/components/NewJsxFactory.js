@@ -1,11 +1,12 @@
 import React from 'react'
+import * as facade from '../facade'
 
 export function GetJSX(websitelayout, onDivClicked, repeatinglayout, thinginstances)
 {
   var result = []
   websitelayout.forEach((description) => {
-
-    var newElement = getElement(onDivClicked, description.id, description.className, description.element, description.style,  description.text, description.children, repeatinglayout, thinginstances, null);
+    console.log(onDivClicked);
+    var newElement = getElement(onDivClicked, description.id, description.className, description.element, description.style,  description.text, description.children, repeatinglayout, thinginstances, null, description.actionInfo);
     result = result.slice().concat(newElement);
   })
   return result;
@@ -14,17 +15,15 @@ export function GetJSX(websitelayout, onDivClicked, repeatinglayout, thinginstan
 function convertString(text, thingInstance){
   var replacedString = text.slice(0)
   var thingAttributeNames = Object.keys(thingInstance)
-  console.log("yello");
   thingAttributeNames.forEach((thingAttributeName) => {
       var thingAttributeValue = thingInstance[thingAttributeName].value;
       var magicBracketString = '{' + thingAttributeName + '}';
       replacedString = replacedString.replace(new RegExp(magicBracketString, 'g'), thingAttributeValue);
     })
   return replacedString;
-
 }
 
-function getElement(onDivClicked, id, className, element, style, text, children, repeatinglayout, thinginstances, thingInstance)
+function getElement(onDivClicked, id, className, element, style, text, children, repeatinglayout, thinginstances, thingInstance, actionInfo)
 {
   switch(element)
   {
@@ -35,26 +34,40 @@ function getElement(onDivClicked, id, className, element, style, text, children,
       console.log("inRepeatingArea")
       return getDiv(id, onDivClicked, className, style, text, children, repeatinglayout, thinginstances, thingInstance);
     case 'button':
-      console.log("inbutton")
-      return getButton(id, onDivClicked, className, style, text, thingInstance);
+      console.log("inbutton");
+      return getButton(id, onDivClicked, className, style, text, thingInstance, actionInfo);
     case 'text':
       return getSpan(id, onDivClicked, style, text, thingInstance)
   }
 }
 
-function getButton(id, onDivClicked, className, style, text, thingInstance){
+function getButton(id, onDivClicked, className, style, text, thingInstance, actionInfo){
   var replacedString = text.slice(0);
-  console.log(thingInstance);
-  console.log("please");
   if (thingInstance != null)
   {
-    console.log("hey");
     replacedString = convertString(replacedString, thingInstance);
   }
 
-  console.log("BUTTONTEXT" + text)
-  return(<button id ={id} className ={className} onClick = {(e) => onDivClicked(e, id, true)} style={style}>{replacedString}</button>)
+  let A = getCustomAction(id, onDivClicked, actionInfo, thingInstance);
+  return(<button id ={id} className={className} onClick ={A} style={style}>{replacedString}</button>)
+}
 
+function getCustomAction(id, onDivClicked, actionInfo, thingInstance) {
+  console.log('getcustttyy')
+  console.log(actionInfo)
+  console.log(thingInstance);
+  console.log(onDivClicked);
+  if (onDivClicked != null)
+  {
+    return (e) => onDivClicked(e, id, 'button');
+  }
+  else if (actionInfo.type == "None") {
+    return (e) => true
+  }
+  else if (actionInfo.type == "incrementBy1") {
+    console.log("INCRRR")
+    return (e) => facade.incrementThingAttribute(actionInfo.affectedThingAttributeId, thingInstance.thinginstanceid);
+  }
 }
 
 function getSpan(id, onDivClicked, style, text, thingInstance){
@@ -63,8 +76,13 @@ function getSpan(id, onDivClicked, style, text, thingInstance){
   {
     replacedString = convertString(replacedString, thingInstance);
   }
+  if (onDivClicked == null){
+    return(<span id = {id} style={style}> {replacedString} </span>)
 
-  return(<span id = {id} onClick = {(e) => onDivClicked(e, id, true)} style={style}> {replacedString} </span>)
+  }
+  else{
+    return(<span id = {id} onClick = {(e) => onDivClicked(e, id, 'text')} style={style}> {replacedString} </span>);
+  }
 }
 
 function getDiv(id, onDivClicked, className, style, text, children, repeatinglayout, thinginstances, thingInstance)
@@ -84,15 +102,20 @@ function getDiv(id, onDivClicked, className, style, text, children, repeatinglay
     var childrenElements = [];
     if (children != null && children.length >0){
       children.forEach((child) => {
-        var newChildElement = getElement(onDivClicked, child.id, child.className, child.element, child.style, child.text, child.children, repeatinglayout, thinginstances, thingInstance);
+        var newChildElement = getElement(onDivClicked, child.id, child.className, child.element, child.style, child.text, child.children, repeatinglayout, thinginstances, thingInstance, child.actionInfo);
         childrenElements.push(newChildElement);
       })
     }
 
     if (repLayout == null)
     {
-        return (<div className={className} id={id} onClick = {(e) => onDivClicked(e, id)} style={style}>{childrenElements}</div>)
+      if (onDivClicked == null){
+        return (<div className={className} id={id} style={style}>{childrenElements}</div>)
 
+      }
+      else{
+        return (<div className={className} id={id} onClick = {(e) => onDivClicked(e, id)} style={style}>{childrenElements}</div>)
+      }
     }
     else {
        return (<div className={className}>{repLayout}</div>)
@@ -110,7 +133,7 @@ function getRepeatingLayout(repeatinglayout, thinginstances)
     console.log("SAMYOUFUCKER")
       var thingInstance = thinginstances[index];
       repeatinglayout.forEach((description) => {
-        var newElement = getElement(null, description.id, description.className, description.element, description.style, description.text, description.children, null, null, thingInstance);
+        var newElement = getElement(null, description.id, description.className, description.element, description.style, description.text, description.children, null, null, thingInstance, description.actionInfo);
         result = result.slice().concat(newElement);
     })
   }

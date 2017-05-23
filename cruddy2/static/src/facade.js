@@ -3,8 +3,6 @@ import * as actions from './actions/index'
 import {browserHistory} from 'react-router'
 import 'whatwg-fetch'
 
-
-
 export function getThingInstances(websiteName) {
   return function (dispatch) {
         return fetch(`/api/getthinginstances/${websiteName}`)
@@ -15,6 +13,23 @@ export function getThingInstances(websiteName) {
             dispatch(actions.thingInstancesReceived(json))
           )
           .catch(err => console.log(err))
+  }
+}
+
+export function incrementThingAttribute(thingAttributeId, thingInstanceId) {
+  return fetch(`/api/incrementthingattribute/${thingAttributeId}/${thingInstanceId}`)
+    .then(function(response) {
+      return response.json()
+    })
+    .then(json => console.log(json)
+    )
+    .catch(err => console.log(err))
+}
+
+export function doIT(thingAttributeId, thingInstanceId) {
+  return function (dispatch) {
+    console.log("willthislogidk");
+
   }
 }
 

@@ -35,6 +35,12 @@ def getThingAttributes(websiteName):
     else:
         return ''
 
+@app.route('/api/incrementthingattribute/<thingAttributeId>/<thingInstanceId>')
+def incrementThingAttribute(thingAttributeId, thingInstanceId):
+    app.logger.debug("INCREMENET")
+    api.incrementThingAttribute(thingInstanceId, thingInstanceId)
+    return json.dumps({'success': True}), 200, {'ContentType':'application/json'}
+
 @app.route('/api/getthinginstances/<websiteName>')
 def getThingInstances(websiteName):
     app.logger.debug(websiteName)
@@ -45,14 +51,16 @@ def getThingInstances(websiteName):
         thingAttributes = api.getThingAttributes(thingId)
         results = []
 
-        thingInstanceInfos = [json.loads(thingInstance.thinginstanceinfo) for thingInstance in thingInstances]
-        for thingInstanceInfo in thingInstanceInfos:
+        for thingInstance in thingInstances:
+            thingInstanceInfo = json.loads(thingInstance.thinginstanceinfo)
             newThingInstance = {}
             for thingAttributeId, value in thingInstanceInfo.iteritems():
                 thingAttributeName = thingAttributes[int(thingAttributeId)]['name']
                 thingAttributeTypeId = thingAttributes[int(thingAttributeId)]['typeid']
                 newThingInstance[thingAttributeName] = {'value': value, 'typeid': thingAttributeTypeId}
+                newThingInstance['thinginstanceid'] = thingInstance.thinginstanceid
             results.append(newThingInstance)
+        app.logger.debug(results)
         return json.dumps({'thingInstances': results})
     else:
         app.logger.debug('boobs')

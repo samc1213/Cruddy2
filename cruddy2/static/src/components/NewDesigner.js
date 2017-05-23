@@ -21,6 +21,9 @@ class Designer extends React.Component {
     this.updateElementInDesign = this.updateElementInDesign.bind(this);
     this.appendChildInDesign = this.appendChildInDesign.bind(this);
     this.wipeSelectionStyle = this.wipeSelectionStyle.bind(this);
+    this.getActionSelects = this.getActionSelects.bind(this);
+    this.changeAction = this.changeAction.bind(this);
+    this.getThingAttributeSelects = this.getThingAttributeSelects.bind(this);
     var colors = ['AliceBlue','AntiqueWhite','Aqua','Aquamarine','Azure','Beige','Bisque','Black','BlanchedAlmond','Blue','BlueViolet','Brown','BurlyWood','CadetBlue','Chartreuse','Chocolate','Coral','CornflowerBlue','Cornsilk','Crimson','Cyan','DarkBlue','DarkCyan','DarkGoldenRod'
     ,'DarkGray','DarkGrey','DarkGreen','DarkKhaki','DarkMagenta','DarkOliveGreen','DarkOrange','DarkOrchid','DarkRed','DarkSalmon','DarkSeaGreen','DarkSlateBlue','DarkSlateGray','DarkSlateGrey','DarkTurquoise','DarkViolet','DeepPink','DeepSkyBlue','DimGray','DimGrey','DodgerBlue','FireBrick','FloralWhite','ForestGreen','Fuchsia'
     ,'Gainsboro','GhostWhite','Gold','GoldenRod','Gray','Grey','Green','GreenYellow','HoneyDew','HotPink','IndianRed','Indigo','Ivory','Khaki','Lavender','LavenderBlush','LawnGreen','LemonChiffon','LightBlue','LightCoral',
@@ -34,12 +37,12 @@ class Designer extends React.Component {
 
     this.state = {
       buttonOptions: [{cssStyle: 'color', choices:['Black', 'Blue'], title: 'Color', default: 'Blue'},
-      ],
+    ],
+      buttonActions: {'none': 'None', 'incrementBy1': 'Increment Field By 1'},
       textOptions: [{cssStyle: 'color', choices: colors, title: 'Text Color', default: 'Black'},
       {cssStyle: 'fontSize', choices: this.getPixelsInRange(5, 60), title: 'Text Size', default: '15px'},
       {cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Text Style', default: 'Arial'},
       {cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal'},],
-
       divOptions: [{cssStyle: 'borderStyle', choices: ['None', 'Dotted', 'Dashed', 'Solid', 'Double'], title: 'Border Style', default: 'None'},
      {cssStyle: 'borderColor', choices: colors, title: 'Border Color', default: 'Black'},
      {cssStyle: 'borderWidth', choices: this.getPixelsInRange(1, 20), title: 'Border Thickness', default: '2px'},
@@ -383,7 +386,7 @@ class Designer extends React.Component {
           this.state.buttonOptions.forEach((option) =>{
             style[option.cssStyle] = option.default;
           });
-          var customElementRepresentation = { style: style, id: id, text:'button', className: "btn btn-default", element: "button", children:[]};
+          var customElementRepresentation = { style: style, id: id, text:'button', className: "btn btn-default", element: "button", children:[], actionInfo: {type: 'None'}};
           this.appendChildInDesign(this.state.selectedElementID, customElementRepresentation);
         });
         break;
@@ -430,6 +433,43 @@ class Designer extends React.Component {
     })
 
     return selects;
+  }
+
+  changeAction = (event) => {
+    var updateCallback = (button) => {
+        button.actionInfo.type = event.target.value;
+        this.setState({selectedAction: event.target.value});
+    }
+    this.updateElementInDesign(this.state.selectedElementID, updateCallback);
+  }
+
+  changeAffectedThingAttribute = (event) => {
+    var updateCallback = (button) => {
+      button.actionInfo.affectedThingAttributeId = event.target.value;
+      this.setState({selectedAffectedThingAttributeId: event.target.value});
+    }
+
+    this.updateElementInDesign(this.state.selectedElementID, updateCallback);
+  }
+
+  getThingAttributeSelects = (thingAttributes) => {
+    var choices = [];
+    console.log("SELECTS")
+    console.log(thingAttributes);
+    for (let thingAttributeId in thingAttributes) {
+      choices.push(<option value = {thingAttributeId}> {thingAttributes[thingAttributeId].name} </option>);
+    }
+
+    return (<select onChange = {(e) => this.changeAffectedThingAttribute(e)} value = {this.state.selectedAffectedThingAttributeId}> {choices} </select>);
+  }
+
+  getActionSelects = (actions) => {
+    var choices = [];
+    Object.keys(actions).forEach((type) => {
+        choices.push(<option value = {type}> {this.state.buttonActions[type]} </option>);
+    })
+
+    return (<select onChange = {(e) => this.changeAction(e)} value = {this.state.selectedAction}> {choices} </select>);
   }
 
   render() {
@@ -498,6 +538,10 @@ class Designer extends React.Component {
           selects = this.getDesignBarSelects(this.state.buttonOptions);
           selects.push(<div> Button Text </div>);
           selects.push(<input type = 'text' value ={this.state.elementInnerText} onChange = {(e) => this.changeElementInnerText(e)}></input>)
+          selects.push(<div> Button Action </div>);
+          selects.push(this.getActionSelects(this.state.buttonActions))
+          selects.push(<div> Affected ThingAttribute </div>);
+          selects.push(this.getThingAttributeSelects(this.props.thingAttributes))
           break;
         case 'text':
           selects = this.getDesignBarSelects(this.state.textOptions);
@@ -508,6 +552,7 @@ class Designer extends React.Component {
       }
       selects.push(<div><button className="btn btn-danger" onClick = {this.onDelete}>Delete</button></div>);
     }
+
     return (
         <div>
           <div style={{position: 'absolute', width: '200px', top:'0', bottom:'0', paddingTop:'54px', paddingBottom:'54px', right:'0', backgroundColor: 'gray', zIndex: 1, overflowY: 'scroll', overflowX: 'hidden'}}>

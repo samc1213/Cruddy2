@@ -133,7 +133,6 @@ class api:
 
     def getThingInstances(self, thingId):
         thing = self.getThing(thingId)
-
         return thing.thinginstances
 
     def getLayoutData(self, thingId):
@@ -192,3 +191,7 @@ class api:
     def getThingFromThingName(self, thingName):
         thing = db.session.query(Thing).filter_by(thingname=thingName).first()
         return thing
+
+    def incrementThingAttribute(self, thingInstanceId, thingAttributeId):
+        thingInstance = db.session.query(ThingInstance).filter_by(thinginstanceid=thingInstanceId).first()
+        app.logger.debug(thingInstance.thingattributes)

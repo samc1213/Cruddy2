@@ -17,7 +17,7 @@ class CraigslistView extends React.Component {
       console.log(data)
       console.log(data.repeatinglayout);
       console.log(this.props.thingInstances)
-      var website = JsxFactory.GetJSX(data.websitelayout, null, data.repeatinglayout, this.props.thingInstances);
+      var website = JsxFactory.GetJSX(data.websitelayout, () => true, data.repeatinglayout, this.props.thingInstances);
       console.log(website);
 
       return (

@@ -17,13 +17,18 @@ export function getThingInstances(websiteName) {
 }
 
 export function incrementThingAttribute(thingAttributeId, thingInstanceId) {
-  return fetch(`/api/incrementthingattribute/${thingAttributeId}/${thingInstanceId}`)
-    .then(function(response) {
-      return response.json()
-    })
-    .then(json => console.log(json)
-    )
-    .catch(err => console.log(err))
+  console.log('hello');
+  return function (dispatch) {
+    return fetch(`/api/incrementthingattribute/${thingAttributeId}/${thingInstanceId}`)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(json =>{
+        console.log(json);
+        dispatch(getThingInstances(json))
+      })
+      .catch(err => console.log(err))
+    }
 }
 
 export function doIT(thingAttributeId, thingInstanceId) {

@@ -54,11 +54,18 @@ class Designer extends React.Component {
      {cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal'},
      {cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None'},
      {cssStyle: 'height', choices: this.getPixelsInRange(5, 400), title: 'Height', default: '100px'}],
-    selectedAction: 'none', websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedElementID: null, elementInnerText:'button', selectedElementType: 'div', size: 12, idCount: 0};
-
+    selectedAction: 'none', websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedElementID: null, elementInnerText:'button', selectedElementType: 'div', size: 12, idCount: 0, selectedAffectedThingAttributeId: 'none', defaultAffectedthingAttributeId: 'none'};
     this.state.divOptions.forEach((option) => {
       this.state[option.cssStyle] = option.default;
     });
+    for (let thingAttributeId in this.props.thingAttributes){
+      this.setState({
+        selectedAffectedThingAttributeId: thingAttributeId,
+        defaultAffectedthingAttributeId: thingAttributeId
+      });
+      break;
+    }
+
   }
 
   changeElementInnerText = (e) =>{
@@ -250,10 +257,18 @@ class Designer extends React.Component {
       newStyle['outlineWidth'] = '2.5px';
       element.style = newStyle;
       var size = element.className.slice(7);
+      let buttonAction = 'none';
+      let selectedAffectedThingAttributeId = this.state.defaultAffectedthingAttributeId;
+      if ('actionInfo' in element){
+        buttonAction = element.actionInfo.type;
+        selectedAffectedThingAttributeId = element.actionInfo.affectedThingAttributeId;
+      }
       this.setState({
         selectedElementID: element.id,
         selectedElementType: element.element,
         elementInnerText: element.text,
+        selectedAffectedThingAttributeId: selectedAffectedThingAttributeId,
+        selectedAction: buttonAction,
         size: size,
       });
 
@@ -386,7 +401,7 @@ class Designer extends React.Component {
           this.state.buttonOptions.forEach((option) =>{
             style[option.cssStyle] = option.default;
           });
-          var customElementRepresentation = { style: style, id: id, text:'button', className: "btn btn-default", element: "button", children:[], actionInfo: {type: 'None', affectedThingAttributeId: 'None'}};
+          var customElementRepresentation = { style: style, id: id, text:'button', className: "btn btn-default", element: "button", children:[], actionInfo: {type: 'none', affectedThingAttributeId: this.state.defaultAffectedthingAttributeId}};
           this.appendChildInDesign(this.state.selectedElementID, customElementRepresentation);
         });
         break;

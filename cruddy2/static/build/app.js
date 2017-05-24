@@ -678,15 +678,14 @@ var CraigslistView = function (_React$Component) {
     key: 'render',
     value: function render() {
       var cards = [];
+      var functions = { incrementBy1: this.props.incrementThingAttribute };
       if (this.props.layout.data != null) {
         console.log(this.props.layout.data);
         var data = JSON.parse(this.props.layout.data);
         console.log(data);
         console.log(data.repeatinglayout);
         console.log(this.props.thingInstances);
-        var website = JsxFactory.GetJSX(data.websitelayout, function () {
-          return true;
-        }, data.repeatinglayout, this.props.thingInstances);
+        var website = JsxFactory.GetJSX(data.websitelayout, functions, data.repeatinglayout, this.props.thingInstances);
         console.log(website);
 
         return _react2.default.createElement(
@@ -1956,10 +1955,18 @@ var Designer = function (_React$Component) {
         newStyle['outlineWidth'] = '2.5px';
         element.style = newStyle;
         var size = element.className.slice(7);
+        var buttonAction = 'none';
+        var selectedAffectedThingAttributeId = _this.state.defaultAffectedthingAttributeId;
+        if ('actionInfo' in element) {
+          buttonAction = element.actionInfo.type;
+          selectedAffectedThingAttributeId = element.actionInfo.affectedThingAttributeId;
+        }
         _this.setState({
           selectedElementID: element.id,
           selectedElementType: element.element,
           elementInnerText: element.text,
+          selectedAffectedThingAttributeId: selectedAffectedThingAttributeId,
+          selectedAction: buttonAction,
           size: size
         });
       };
@@ -2087,7 +2094,7 @@ var Designer = function (_React$Component) {
             _this.state.buttonOptions.forEach(function (option) {
               style[option.cssStyle] = option.default;
             });
-            var customElementRepresentation = { style: style, id: id, text: 'button', className: "btn btn-default", element: "button", children: [], actionInfo: { type: 'None', affectedThingAttributeId: 'None' } };
+            var customElementRepresentation = { style: style, id: id, text: 'button', className: "btn btn-default", element: "button", children: [], actionInfo: { type: 'none', affectedThingAttributeId: _this.state.defaultAffectedthingAttributeId } };
             _this.appendChildInDesign(_this.state.selectedElementID, customElementRepresentation);
           });
           break;
@@ -2244,11 +2251,18 @@ var Designer = function (_React$Component) {
       buttonActions: { 'none': 'None', 'incrementBy1': 'Increment Field By 1' },
       textOptions: [{ cssStyle: 'color', choices: colors, title: 'Text Color', default: 'Black' }, { cssStyle: 'fontSize', choices: _this.getPixelsInRange(5, 60), title: 'Text Size', default: '15px' }, { cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Text Style', default: 'Arial' }, { cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal' }],
       divOptions: [{ cssStyle: 'borderStyle', choices: ['None', 'Dotted', 'Dashed', 'Solid', 'Double'], title: 'Border Style', default: 'None' }, { cssStyle: 'borderColor', choices: colors, title: 'Border Color', default: 'Black' }, { cssStyle: 'borderWidth', choices: _this.getPixelsInRange(1, 20), title: 'Border Thickness', default: '2px' }, { cssStyle: 'borderRadius', choices: _this.getPixelsInRange(0, 200), title: 'Border Radius', default: '0px' }, { cssStyle: 'color', choices: colors, title: 'Text Color', default: 'Black' }, { cssStyle: 'fontSize', choices: _this.getPixelsInRange(5, 60), title: 'Text Size', default: '15px' }, { cssStyle: 'textAlign', choices: ['Left', 'Right', 'Center'], title: 'Text Alignment', default: 'Left' }, { cssStyle: 'fontFamily', choices: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'], title: 'Text Style', default: 'Arial' }, { cssStyle: 'fontWeight', choices: ['Normal', 'Bold'], title: 'Text Weight', default: 'normal' }, { cssStyle: 'backgroundColor', choices: nonAbledColors, title: 'Background Color', default: 'None' }, { cssStyle: 'height', choices: _this.getPixelsInRange(5, 400), title: 'Height', default: '100px' }],
-      selectedAction: 'none', websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedElementID: null, elementInnerText: 'button', selectedElementType: 'div', size: 12, idCount: 0 };
-
+      selectedAction: 'none', websiteDesign: [], repeatingDesign: [], currentDesignState: 'repeatingunit', selectedElementID: null, elementInnerText: 'button', selectedElementType: 'div', size: 12, idCount: 0, selectedAffectedThingAttributeId: 'none', defaultAffectedthingAttributeId: 'none' };
     _this.state.divOptions.forEach(function (option) {
       _this.state[option.cssStyle] = option.default;
     });
+    for (var thingAttributeId in _this.props.thingAttributes) {
+      _this.setState({
+        selectedAffectedThingAttributeId: thingAttributeId,
+        defaultAffectedthingAttributeId: thingAttributeId
+      });
+      break;
+    }
+
     return _this;
   }
 
@@ -2513,6 +2527,9 @@ exports.default = Designer;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 exports.GetJSX = GetJSX;
 
 var _react = require('react');
@@ -2531,6 +2548,7 @@ function GetJSX(websitelayout, onDivClicked, repeatinglayout, thinginstances) {
   var result = [];
   websitelayout.forEach(function (description) {
     console.log(onDivClicked);
+    console.log(typeof onDivClicked === 'undefined' ? 'undefined' : _typeof(onDivClicked));
     var newElement = getElement(onDivClicked, description.id, description.className, description.element, description.style, description.text, description.children, repeatinglayout, thinginstances, null, description.actionInfo);
     result = result.slice().concat(newElement);
   });
@@ -2569,8 +2587,8 @@ function getButton(id, onDivClicked, className, style, text, thingInstance, acti
   if (thingInstance != null) {
     replacedString = convertString(replacedString, thingInstance);
   }
-
-  var A = getCustomAction(id, onDivClicked, actionInfo, thingInstance, websiteName);
+  console.log(onDivClicked);
+  var A = getCustomAction(id, onDivClicked, actionInfo, thingInstance);
   return _react2.default.createElement(
     'button',
     { id: id, className: className, onClick: A, style: style },
@@ -2583,7 +2601,7 @@ function getCustomAction(id, onDivClicked, actionInfo, thingInstance) {
   console.log(actionInfo);
   console.log(thingInstance);
   console.log(onDivClicked);
-  if (onDivClicked != null) {
+  if (thingInstance == null) {
     return function (e) {
       return onDivClicked(e, id, 'button');
     };
@@ -2594,8 +2612,9 @@ function getCustomAction(id, onDivClicked, actionInfo, thingInstance) {
   } else if (actionInfo.type == "incrementBy1") {
     console.log("INCRRR");
     console.log(actionInfo);
+    var returnfunction = onDivClicked[actionInfo.type];
     return function (e) {
-      return facade.incrementThingAttribute(actionInfo.affectedThingAttributeId, thingInstance.thinginstanceid);
+      return onDivClicked[actionInfo.type](actionInfo.affectedThingAttributeId, thingInstance.thinginstanceid);
     };
   }
 }
@@ -2605,7 +2624,7 @@ function getSpan(id, onDivClicked, style, text, thingInstance) {
   if (thingInstance != null) {
     replacedString = convertString(replacedString, thingInstance);
   }
-  if (onDivClicked == null) {
+  if (thingInstance != null) {
     return _react2.default.createElement(
       'span',
       { id: id, style: style },
@@ -2631,7 +2650,7 @@ function getDiv(id, onDivClicked, className, style, text, children, repeatinglay
     if (className.includes('repeatingArea')) {
       if (repeatinglayout != null && thinginstances != null) {
         console.log("inheredoh");
-        var repLayout = getRepeatingLayout(repeatinglayout, thinginstances);
+        var repLayout = getRepeatingLayout(onDivClicked, repeatinglayout, thinginstances);
       } else {
         return _react2.default.createElement(
           'div',
@@ -2650,13 +2669,15 @@ function getDiv(id, onDivClicked, className, style, text, children, repeatinglay
     }
 
     if (repLayout == null) {
-      if (onDivClicked == null) {
+      if (typeof onDivClicked != 'function') {
         return _react2.default.createElement(
           'div',
           { className: className, id: id, style: style },
           childrenElements
         );
       } else {
+        console.log('outside');
+        console.log(typeof onDivClicked === 'undefined' ? 'undefined' : _typeof(onDivClicked));
         return _react2.default.createElement(
           'div',
           { className: className, id: id, onClick: function onClick(e) {
@@ -2675,13 +2696,13 @@ function getDiv(id, onDivClicked, className, style, text, children, repeatinglay
   }
 }
 
-function getRepeatingLayout(repeatinglayout, thinginstances) {
+function getRepeatingLayout(onDivClicked, repeatinglayout, thinginstances) {
   var result = [];
   for (var index in thinginstances) {
     console.log("SAMYOUFUCKER");
     var thingInstance = thinginstances[index];
     repeatinglayout.forEach(function (description) {
-      var newElement = getElement(null, description.id, description.className, description.element, description.style, description.text, description.children, null, null, thingInstance, description.actionInfo);
+      var newElement = getElement(onDivClicked, description.id, description.className, description.element, description.style, description.text, description.children, null, null, thingInstance, description.actionInfo);
       result = result.slice().concat(newElement);
     });
   }
@@ -3363,6 +3384,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     getLayout: function getLayout(thingId) {
       dispatch(facade.getLayout(thingId));
+    },
+    incrementThingAttribute: function incrementThingAttribute(thingAttributeId, thingInstanceId) {
+      dispatch(facade.incrementThingAttribute(thingAttributeId, thingInstanceId));
     }
   };
 };
@@ -3852,13 +3876,17 @@ function getThingInstances(websiteName) {
   };
 } // LETS MOVE ALL API CALLS INTO THIS!
 function incrementThingAttribute(thingAttributeId, thingInstanceId) {
-  return fetch('/api/incrementthingattribute/' + thingAttributeId + '/' + thingInstanceId).then(function (response) {
-    return response.json();
-  }).then(function (json) {
-    return console.log(json);
-  }).catch(function (err) {
-    return console.log(err);
-  });
+  console.log('hello');
+  return function (dispatch) {
+    return fetch('/api/incrementthingattribute/' + thingAttributeId + '/' + thingInstanceId).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      console.log(json);
+      dispatch(getThingInstances(json));
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
 }
 
 function doIT(thingAttributeId, thingInstanceId) {

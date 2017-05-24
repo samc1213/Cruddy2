@@ -198,9 +198,13 @@ class api:
         tempThingInstanceInfo[thingAttributeId] = int(tempThingInstanceInfo[thingAttributeId]) + 1;
         thingInstance.thinginstanceinfo = json.dumps(tempThingInstanceInfo);
         tempThingInstanceInfo = thingInstance.thinginstanceinfo
+        app.logger.debug(thingInstance.thing.websiteid)
+        websitename = self.getWebsiteByID(thingInstance.thing.websiteid).websitename
+        app.logger.debug(websitename)
         try:
             self.sessionManager.CommitToSession([thingInstance])
+
             app.logger.debug('success');
-            return True
+            return str(websitename)
         except:
-            return False
+            return str(websitename)

@@ -14,6 +14,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     getLayout: (thingId) =>{
       dispatch(facade.getLayout(thingId))
+    },
+    incrementThingAttribute: (thingAttributeId, thingInstanceId) =>{
+      dispatch(facade.incrementThingAttribute(thingAttributeId, thingInstanceId))
     }
 })
 

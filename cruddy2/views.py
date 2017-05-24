@@ -38,8 +38,11 @@ def getThingAttributes(websiteName):
 @app.route('/api/incrementthingattribute/<thingAttributeId>/<thingInstanceId>')
 def incrementThingAttribute(thingAttributeId, thingInstanceId):
     app.logger.debug("INCREMENET")
-    api.incrementThingAttribute(thingAttributeId, thingInstanceId)
-    return json.dumps({'success': True}), 200, {'ContentType':'application/json'}
+    returnvalue = api.incrementThingAttribute(thingAttributeId, thingInstanceId)
+    if returnvalue:
+        app.logger.debug('true');
+        return json.dumps(returnvalue), 200, {'ContentType':'application/json'}
+
 
 @app.route('/api/getthinginstances/<websiteName>')
 def getThingInstances(websiteName):

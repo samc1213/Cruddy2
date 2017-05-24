@@ -10,6 +10,7 @@ class CraigslistView extends React.Component {
   }
   render() {
     var cards = [];
+    var functions = {incrementBy1: this.props.incrementThingAttribute}
     if (this.props.layout.data != null)
     {
       console.log(this.props.layout.data)
@@ -17,7 +18,7 @@ class CraigslistView extends React.Component {
       console.log(data)
       console.log(data.repeatinglayout);
       console.log(this.props.thingInstances)
-      var website = JsxFactory.GetJSX(data.websitelayout, () => true, data.repeatinglayout, this.props.thingInstances);
+      var website = JsxFactory.GetJSX(data.websitelayout, functions, data.repeatinglayout, this.props.thingInstances);
       console.log(website);
 
       return (

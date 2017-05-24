@@ -6,6 +6,7 @@ export function GetJSX(websitelayout, onDivClicked, repeatinglayout, thinginstan
   var result = []
   websitelayout.forEach((description) => {
     console.log(onDivClicked);
+    console.log(typeof(onDivClicked))
     var newElement = getElement(onDivClicked, description.id, description.className, description.element, description.style,  description.text, description.children, repeatinglayout, thinginstances, null, description.actionInfo);
     result = result.slice().concat(newElement);
   })
@@ -47,8 +48,8 @@ function getButton(id, onDivClicked, className, style, text, thingInstance, acti
   {
     replacedString = convertString(replacedString, thingInstance);
   }
-
-  let A = getCustomAction(id, onDivClicked, actionInfo, thingInstance, websiteName);
+  console.log(onDivClicked);
+  let A = getCustomAction(id, onDivClicked, actionInfo, thingInstance);
   return(<button id ={id} className={className} onClick ={A} style={style}>{replacedString}</button>)
 }
 
@@ -57,7 +58,7 @@ function getCustomAction(id, onDivClicked, actionInfo, thingInstance) {
   console.log(actionInfo)
   console.log(thingInstance);
   console.log(onDivClicked);
-  if (onDivClicked != null)
+  if (thingInstance == null)
   {
     return (e) => onDivClicked(e, id, 'button');
   }
@@ -67,7 +68,8 @@ function getCustomAction(id, onDivClicked, actionInfo, thingInstance) {
   else if (actionInfo.type == "incrementBy1") {
     console.log("INCRRR")
     console.log(actionInfo)
-    return (e) => facade.incrementThingAttribute(actionInfo.affectedThingAttributeId, thingInstance.thinginstanceid);
+    var returnfunction = onDivClicked[actionInfo.type];
+    return (e) => onDivClicked[actionInfo.type](actionInfo.affectedThingAttributeId, thingInstance.thinginstanceid);
   }
 }
 
@@ -77,7 +79,7 @@ function getSpan(id, onDivClicked, style, text, thingInstance){
   {
     replacedString = convertString(replacedString, thingInstance);
   }
-  if (onDivClicked == null){
+  if (thingInstance != null){
     return(<span id = {id} style={style}> {replacedString} </span>)
 
   }
@@ -93,7 +95,7 @@ function getDiv(id, onDivClicked, className, style, text, children, repeatinglay
     if (className.includes('repeatingArea')){
       if (repeatinglayout != null && thinginstances != null) {
         console.log("inheredoh");
-        var repLayout = getRepeatingLayout(repeatinglayout, thinginstances);
+        var repLayout = getRepeatingLayout(onDivClicked, repeatinglayout, thinginstances);
       }
       else{
         return (<div className={className} id={id} style={style}>{text}</div>)
@@ -110,11 +112,13 @@ function getDiv(id, onDivClicked, className, style, text, children, repeatinglay
 
     if (repLayout == null)
     {
-      if (onDivClicked == null){
+      if (typeof(onDivClicked)!='function'){
         return (<div className={className} id={id} style={style}>{childrenElements}</div>)
 
       }
       else{
+        console.log('outside')
+        console.log(typeof(onDivClicked));
         return (<div className={className} id={id} onClick = {(e) => onDivClicked(e, id)} style={style}>{childrenElements}</div>)
       }
     }
@@ -126,7 +130,7 @@ function getDiv(id, onDivClicked, className, style, text, children, repeatinglay
 }
 
 
-function getRepeatingLayout(repeatinglayout, thinginstances)
+function getRepeatingLayout(onDivClicked, repeatinglayout, thinginstances)
 {
   var result = [];
   for (var index in thinginstances)
@@ -134,7 +138,7 @@ function getRepeatingLayout(repeatinglayout, thinginstances)
     console.log("SAMYOUFUCKER")
       var thingInstance = thinginstances[index];
       repeatinglayout.forEach((description) => {
-        var newElement = getElement(null, description.id, description.className, description.element, description.style, description.text, description.children, null, null, thingInstance, description.actionInfo);
+        var newElement = getElement(onDivClicked, description.id, description.className, description.element, description.style, description.text, description.children, null, null, thingInstance, description.actionInfo);
         result = result.slice().concat(newElement);
     })
   }

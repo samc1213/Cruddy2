@@ -469,12 +469,20 @@ class Designer extends React.Component {
 
   getThingAttributeSelects = (thingAttributes) => {
     var choices = [];
-    console.log("SELECTS")
     console.log(thingAttributes);
-    for (let thingAttributeId in thingAttributes) {
-      choices.push(<option value = {thingAttributeId}> {thingAttributes[thingAttributeId].name} </option>);
-    }
+    switch (this.state.selectedAction) {
+      case 'incrementBy1':
+        Object.keys(thingAttributes).filter((a)=> thingAttributes[a].typeid == 2).forEach((thingAttributeId) => {
+          choices.push(<option value = {thingAttributeId}> {thingAttributes[thingAttributeId].name} </option>);
+        });
+        break;
+      default:
+        for (let thingAttributeId in thingAttributes) {
+          choices.push(<option value = {thingAttributeId}> {thingAttributes[thingAttributeId].name} </option>);
+        }
+        break;
 
+    }
     return (<select onChange = {(e) => this.changeAffectedThingAttribute(e)} value = {this.state.selectedAffectedThingAttributeId}> {choices} </select>);
   }
 
